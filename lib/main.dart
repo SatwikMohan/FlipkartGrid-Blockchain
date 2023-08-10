@@ -1,4 +1,4 @@
-import 'package:flipgrid/login.dart';
+import 'package:flipgrid/daily_checkin_dialog.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginScreen(),
+      home: const DailyCheckDialog(),
       // home: const FollowToEarn(title: 'Flutter Demo Home Page'),
     );
   }
