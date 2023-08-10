@@ -9,7 +9,8 @@ class User with _$User {
     required String name,
     required String password,
     required String address,
-    int? loginStreak,
+    @Default(0) int loyalityPoints,
+    @Default(0) int loginStreak,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

@@ -1,7 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flipgrid/bakchodi.dart';
 import 'package:flipgrid/firebase_options.dart';
-import 'package:flipgrid/login_signup/signup.dart';
 import 'package:flipgrid/models/user.dart';
+import 'package:flipgrid/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,7 +15,10 @@ void main() async {
 }
 
 final userProvider = Provider((ref) => const User(
-    name: "Test User", password: "Test Password", address: "Test Adress"));
+    name: "Test User",
+    password: "Test Password",
+    address: "Test Adress",
+    loyalityPoints: 0));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -22,6 +26,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -43,7 +48,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const RegisterScreen(),
+      home: ProductListView(),
+      // home: DetailsScreen(
+      //   product: demoCarts[0].product,
+      // ),
       // home: const FollowToEarn(title: 'Flutter Demo Home Page'),
     );
   }

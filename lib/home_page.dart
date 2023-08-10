@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flipgrid/bakchodi.dart';
 import 'package:flipgrid/follow_to_earn.dart';
 import 'package:flipgrid/main.dart';
 import 'package:flutter/material.dart';
@@ -74,8 +75,27 @@ class _HomePageState extends ConsumerState<HomePage> {
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.normal),
                     ),
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      const Text("Loyality Points : "),
+                      Text(
+                        employeeModel.loyalityPoints.toString(),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ]),
                     // const FollowToEarn(),
                     const FollowOnSocials(),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return ProductListView();
+                          }));
+                        },
+                        child: const Text("Buy with points!")),
                   ],
                 ),
               ),

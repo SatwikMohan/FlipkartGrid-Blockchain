@@ -23,7 +23,8 @@ mixin _$User {
   String get name => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
   String get address => throw _privateConstructorUsedError;
-  int? get loginStreak => throw _privateConstructorUsedError;
+  int get loyalityPoints => throw _privateConstructorUsedError;
+  int get loginStreak => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,12 @@ abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res, User>;
   @useResult
-  $Res call({String name, String password, String address, int? loginStreak});
+  $Res call(
+      {String name,
+      String password,
+      String address,
+      int loyalityPoints,
+      int loginStreak});
 }
 
 /// @nodoc
@@ -54,7 +60,8 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? name = null,
     Object? password = null,
     Object? address = null,
-    Object? loginStreak = freezed,
+    Object? loyalityPoints = null,
+    Object? loginStreak = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -69,10 +76,14 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
               as String,
-      loginStreak: freezed == loginStreak
+      loyalityPoints: null == loyalityPoints
+          ? _value.loyalityPoints
+          : loyalityPoints // ignore: cast_nullable_to_non_nullable
+              as int,
+      loginStreak: null == loginStreak
           ? _value.loginStreak
           : loginStreak // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
     ) as $Val);
   }
 }
@@ -83,7 +94,12 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       __$$_UserCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String name, String password, String address, int? loginStreak});
+  $Res call(
+      {String name,
+      String password,
+      String address,
+      int loyalityPoints,
+      int loginStreak});
 }
 
 /// @nodoc
@@ -98,7 +114,8 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
     Object? name = null,
     Object? password = null,
     Object? address = null,
-    Object? loginStreak = freezed,
+    Object? loyalityPoints = null,
+    Object? loginStreak = null,
   }) {
     return _then(_$_User(
       name: null == name
@@ -113,10 +130,14 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
               as String,
-      loginStreak: freezed == loginStreak
+      loyalityPoints: null == loyalityPoints
+          ? _value.loyalityPoints
+          : loyalityPoints // ignore: cast_nullable_to_non_nullable
+              as int,
+      loginStreak: null == loginStreak
           ? _value.loginStreak
           : loginStreak // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
     ));
   }
 }
@@ -128,7 +149,8 @@ class _$_User implements _User {
       {required this.name,
       required this.password,
       required this.address,
-      this.loginStreak});
+      this.loyalityPoints = 0,
+      this.loginStreak = 0});
 
   factory _$_User.fromJson(Map<String, dynamic> json) => _$$_UserFromJson(json);
 
@@ -139,11 +161,15 @@ class _$_User implements _User {
   @override
   final String address;
   @override
-  final int? loginStreak;
+  @JsonKey()
+  final int loyalityPoints;
+  @override
+  @JsonKey()
+  final int loginStreak;
 
   @override
   String toString() {
-    return 'User(name: $name, password: $password, address: $address, loginStreak: $loginStreak)';
+    return 'User(name: $name, password: $password, address: $address, loyalityPoints: $loyalityPoints, loginStreak: $loginStreak)';
   }
 
   @override
@@ -155,14 +181,16 @@ class _$_User implements _User {
             (identical(other.password, password) ||
                 other.password == password) &&
             (identical(other.address, address) || other.address == address) &&
+            (identical(other.loyalityPoints, loyalityPoints) ||
+                other.loyalityPoints == loyalityPoints) &&
             (identical(other.loginStreak, loginStreak) ||
                 other.loginStreak == loginStreak));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, name, password, address, loginStreak);
+  int get hashCode => Object.hash(
+      runtimeType, name, password, address, loyalityPoints, loginStreak);
 
   @JsonKey(ignore: true)
   @override
@@ -183,7 +211,8 @@ abstract class _User implements User {
       {required final String name,
       required final String password,
       required final String address,
-      final int? loginStreak}) = _$_User;
+      final int loyalityPoints,
+      final int loginStreak}) = _$_User;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
 
@@ -194,7 +223,9 @@ abstract class _User implements User {
   @override
   String get address;
   @override
-  int? get loginStreak;
+  int get loyalityPoints;
+  @override
+  int get loginStreak;
   @override
   @JsonKey(ignore: true)
   _$$_UserCopyWith<_$_User> get copyWith => throw _privateConstructorUsedError;
