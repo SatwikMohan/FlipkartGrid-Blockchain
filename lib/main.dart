@@ -1,13 +1,18 @@
-import 'package:flipgrid/daily_checkin_dialog.dart';
+import 'package:flipgrid/home_page.dart';
+import 'package:flipgrid/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
+
+final userProvider = Provider((ref) => const User(
+    name: "Test User", password: "Test Password", address: "Test Adress"));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -36,7 +41,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const DailyCheckDialog(),
+      home: const HomePage(),
       // home: const FollowToEarn(title: 'Flutter Demo Home Page'),
     );
   }

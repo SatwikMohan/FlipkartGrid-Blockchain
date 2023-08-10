@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -111,8 +112,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               GestureDetector(
-                                onTap: () {
-                                  //TODO : IMPLEMENT LOGIN
+                                onTap: () async {
+                                  final userCredential = await FirebaseAuth
+                                      .instance
+                                      .createUserWithEmailAndPassword(
+                                          email: emailTextController.text,
+                                          password:
+                                              passwordTextController.text);
+                                  await userCredential.user
+                                      ?.updatePhotoURL("FakeETHid");
                                   // registerScreenVM.emailRegister();
                                 },
                                 child: Container(

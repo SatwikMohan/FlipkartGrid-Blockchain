@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flipgrid/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -97,7 +98,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             children: [
                               GestureDetector(
                                 //TODO:IMPLEMENT LOGIN
-                                // onTap: emailLogin,
+                                onTap: () async {
+                                  await FirebaseAuth.instance
+                                      .signInWithEmailAndPassword(
+                                          email: emailTextController.text,
+                                          password:
+                                              passwordTextController.text);
+                                },
                                 child: Container(
                                   alignment: Alignment.center,
                                   width: width * 0.55,
