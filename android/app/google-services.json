@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "938340211910",
+    "project_id": "fungible-rewards",
+    "storage_bucket": "fungible-rewards.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:938340211910:android:8b64fc6ddc9984f70f4bc7",
+        "android_client_info": {
+          "package_name": "com.example.flipgrid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "938340211910-5oqjvj79rjs7n74s316kkuiuvll0dfgp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtgBaeUYOrFjH4Em5QS4L4ijiPZfQI6KM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "938340211910-5oqjvj79rjs7n74s316kkuiuvll0dfgp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
