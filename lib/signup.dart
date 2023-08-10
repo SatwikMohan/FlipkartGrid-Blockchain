@@ -1,6 +1,13 @@
+import 'dart:html';
+import 'dart:js_interop';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flipgrid/services/functions.dart';
+import 'package:flipgrid/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:http/http.dart';
+import 'package:web3dart/web3dart.dart';
 
 import '../text_field.dart';
 import 'login.dart';
@@ -20,6 +27,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   // final TextEditingController confirmPasswordTextController =
   //     TextEditingController();
   bool loadingState = false;
+  Client? client;
+  Web3Client? ethClient;
+  @override
+  void initState() {
+    // TODO: implement initState
+    client=Client();
+    ethClient=Web3Client(infura_url, client!);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +137,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                               passwordTextController.text);
                                   await userCredential.user
                                       ?.updatePhotoURL("FakeETHid");
+                                  if(!userCredential.isNull){
+                                    addCustomer(userNameTextController.text, emailTextController.text, passwordTextController.text,ethidcontroller.text , ethClient!);
+                                  }
                                   // registerScreenVM.emailRegister();
                                 },
                                 child: Container(
