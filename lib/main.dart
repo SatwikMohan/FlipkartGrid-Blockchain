@@ -1,5 +1,5 @@
 import 'package:flipgrid/home_page.dart';
-import 'package:flipgrid/user.dart';
+import 'package:flipgrid/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
