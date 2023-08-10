@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flipgrid/firebase_options.dart';
+import 'package:flipgrid/login_signup/signup.dart';
 import 'package:flipgrid/models/user.dart';
-import 'package:flipgrid/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
