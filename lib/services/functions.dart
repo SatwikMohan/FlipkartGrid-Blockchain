@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flipgrid/utils/constants.dart';
 import 'package:flutter/services.dart';
 import 'package:web3dart/web3dart.dart';
@@ -29,4 +31,22 @@ String getUserData(String email,Web3Client ethClient){
   print('Function getUserData Called Successfully');
   print(response);
   return response.toString();
+}
+
+Future<String> mintDailyCheckInLoyaltyPoints(String customerAddress,Web3Client ethClient){
+  var response=callFunction('mintDailyCheckInLoyaltyPoints', [EthereumAddress.fromHex(customerAddress)], ethClient, owner_private_key);
+  print('Function mintDailyCheckInLoyaltyPoints Called Successfully');
+  return response;
+}
+
+Future<String> mintLoyaltyPoints(String customerAddress,UnsignedInt points,Web3Client ethClient){
+  var response=callFunction('mintLoyaltyPoints', [EthereumAddress.fromHex(customerAddress),points], ethClient, owner_private_key);
+  print('Function mintLoyaltyPoints Called Successfully');
+  return response;
+}
+
+Future<String> makeCustomerLoyal(String customerAddress,Web3Client ethClient){
+  var response=callFunction('makeCustomerLoyal', [EthereumAddress.fromHex(customerAddress)], ethClient, owner_private_key);
+  print('Function makeCustomerLoyal Called Successfully');
+  return response;
 }
