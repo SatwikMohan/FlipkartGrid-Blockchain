@@ -29,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool loadingState = false;
   Client? client;
   Web3Client? ethClient;
+  ServiceClass serviceClass=ServiceClass();
   @override
   void initState() {
     // TODO: implement initState
@@ -120,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           password:
                                               passwordTextController.text);
                                   if(!credential.isNull){
-                                    getUserData(emailTextController.text, ethClient!);
+                                    serviceClass.getUserData(emailTextController.text, ethClient!);
                                   }
                                 },
                                 child: Container(

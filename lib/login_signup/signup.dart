@@ -28,6 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool loadingState = false;
   Client? client;
   Web3Client? ethClient;
+  ServiceClass serviceClass=ServiceClass();
   @override
   void initState() {
     // TODO: implement initState
@@ -137,7 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   await userCredential.user
                                       ?.updatePhotoURL("FakeETHid");
                                   if (!userCredential.isNull) {
-                                    addCustomer(
+                                    serviceClass.addCustomer(
                                         userNameTextController.text,
                                         emailTextController.text,
                                         passwordTextController.text,
