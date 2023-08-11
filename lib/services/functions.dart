@@ -1,4 +1,5 @@
-import 'dart:ffi';
+
+import 'dart:convert';
 
 import 'package:flipgrid/utils/constants.dart';
 import 'package:flutter/services.dart';
@@ -26,11 +27,18 @@ Future<String> addCustomer(String name,String email,String password,String custo
   return response;
 }
 
-String getUserData(String email,Web3Client ethClient){
-  var response=callFunction('getUserData', [email], ethClient, owner_private_key);
+Future<List<dynamic>> ask(String functionName,List<dynamic> args,Web3Client ethClient) async{
+  DeployedContract contract=await loadContract();
+  final ethFunction=contract.function(functionName);
+  final result=await ethClient.call(contract: contract, function: ethFunction, params: args);
+  return result;
+}
+
+Future<List<dynamic>> getUserData(String email,Web3Client ethClient) async{
+  var response=await ask('getUserData', [email], ethClient);
   print('Function getUserData Called Successfully');
-  print(response);
-  return response.toString();
+  print("=>"+response[0].toString());
+  return response;
 }
 
 Future<String> mintDailyCheckInLoyaltyPoints(String customerAddress,Web3Client ethClient){
@@ -39,7 +47,7 @@ Future<String> mintDailyCheckInLoyaltyPoints(String customerAddress,Web3Client e
   return response;
 }
 
-Future<String> mintLoyaltyPoints(String customerAddress,UnsignedInt points,Web3Client ethClient){
+Future<String> mintLoyaltyPoints(String customerAddress,int points,Web3Client ethClient){
   var response=callFunction('mintLoyaltyPoints', [EthereumAddress.fromHex(customerAddress),points], ethClient, owner_private_key);
   print('Function mintLoyaltyPoints Called Successfully');
   return response;
