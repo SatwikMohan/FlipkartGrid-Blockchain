@@ -1,3 +1,4 @@
+import 'package:flipgrid/product_details.dart';
 import 'package:flutter/material.dart';
 
 class ProductListView extends StatelessWidget {
@@ -19,7 +20,7 @@ class ProductListView extends StatelessWidget {
           'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
       rating: 4.0,
       image:
-          'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg',
+          'https://e0.pxfuel.com/wallpapers/692/714/desktop-wallpaper-beautiful-nature-latest-beauty-nature.jpg',
     ),
     // Add more products as needed
   ];
@@ -28,13 +29,12 @@ class ProductListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView.builder(
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          return ProductCard(product: products[index]);
-        },
-      ),
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: products.length,
+      itemBuilder: (context, index) {
+        return ProductCard(product: products[index]);
+      },
     );
   }
 }
@@ -66,31 +66,38 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      child: ListTile(
-        contentPadding: const EdgeInsets.all(15),
-        leading: Image.network(
-          product.image,
-          width: 60,
-          height: 60,
-          fit: BoxFit.cover,
-        ),
-        title: Text(product.name),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(product.company),
-            Text(product.description),
-            Row(
-              children: [
-                const Icon(Icons.star, color: Colors.yellow),
-                Text('${product.rating}'),
-              ],
-            ),
-          ],
-        ),
-        trailing: Text(
-          product.price,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            return ProductDetailsScreen(product: product);
+          }));
+        },
+        child: ListTile(
+          contentPadding: const EdgeInsets.all(15),
+          leading: Image.network(
+            product.image,
+            width: 60,
+            height: 60,
+            fit: BoxFit.cover,
+          ),
+          title: Text(product.name),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(product.company),
+              Text(product.description),
+              Row(
+                children: [
+                  const Icon(Icons.star, color: Colors.yellow),
+                  Text('${product.rating}'),
+                ],
+              ),
+            ],
+          ),
+          trailing: Text(
+            product.price,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
         ),
       ),
     );

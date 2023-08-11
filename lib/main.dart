@@ -1,10 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flipgrid/bakchodi.dart';
+import 'package:flipgrid/explore.dart';
 import 'package:flipgrid/firebase_options.dart';
-import 'package:flipgrid/models/user.dart';
-import 'package:flipgrid/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'models/user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    // SizeConfig().init(context);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -48,7 +48,18 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: ProductListView(),
+      home: const Explore(),
+      // home: ProductCard(
+      //   product: Product(
+      //     name: 'Example Product',
+      //     company: 'Example Company',
+      //     price: '99.99',
+      //     description: 'This is an example product description.',
+      //     rating: 4.5,
+      //     image:
+      //         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT07rBgmmDf044uLXn2m7qaqA3iJoRw7g5xoem8860JNw&s',
+      //   ),
+      // ),
       // home: DetailsScreen(
       //   product: demoCarts[0].product,
       // ),
