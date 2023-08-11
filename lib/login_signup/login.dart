@@ -1,13 +1,7 @@
-import 'dart:js_interop';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flipgrid/services/functions.dart';
 import 'package:flipgrid/signup.dart';
-import 'package:flipgrid/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:http/http.dart';
-import 'package:web3dart/web3dart.dart';
 
 import '../text_field.dart';
 
@@ -27,15 +21,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController ethidcontroller = TextEditingController();
 
   bool loadingState = false;
-  Client? client;
-  Web3Client? ethClient;
-  @override
-  void initState() {
-    // TODO: implement initState
-    client=Client();
-    ethClient=Web3Client(infura_url, client!);
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -114,14 +99,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               GestureDetector(
                                 //TODO:IMPLEMENT LOGIN
                                 onTap: () async {
-                                 final userCredential= await FirebaseAuth.instance
+                                  await FirebaseAuth.instance
                                       .signInWithEmailAndPassword(
                                           email: emailTextController.text,
                                           password:
                                               passwordTextController.text);
-                                 if(!userCredential.isNull){
-                                   print(getUserData(emailTextController.text, ethClient!));
-                                 }
                                 },
                                 child: Container(
                                   alignment: Alignment.center,

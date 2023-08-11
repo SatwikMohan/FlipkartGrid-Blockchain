@@ -1,8 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flipgrid/firebase_options.dart';
-import 'package:flipgrid/home_page.dart';
-import 'package:flipgrid/signup.dart';
-import 'package:flipgrid/user.dart';
+import 'package:flipgrid/login_signup/signup.dart';
+import 'package:flipgrid/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -44,7 +43,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: RegisterScreen(),
+      home: const RegisterScreen(),
       // home: const FollowToEarn(title: 'Flutter Demo Home Page'),
     );
   }
