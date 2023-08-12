@@ -2,6 +2,112 @@
   {
     "inputs": [
       {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "email",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "brandAddress",
+        "type": "address"
+      }
+    ],
+    "name": "addBrand",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "email",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "password",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "customerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "addCustomer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "spender",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "approve",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "buyUsingFungibleToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "spender",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "requestedDecrease",
+        "type": "uint256"
+      }
+    ],
+    "name": "decreaseAllowance",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "spender",
         "type": "address"
@@ -132,6 +238,136 @@
     "type": "event"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "spender",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "addedValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "increaseAllowance",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "customerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "increaseLoyaltyPoints",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "customerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "makeCustomerLoyal",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "brandAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "customerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "makeMyLoyalCustomer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "customerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "mintDailyCheckInLoyaltyPoints",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "customerAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "points",
+        "type": "uint256"
+      }
+    ],
+    "name": "mintLoyaltyPoints",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "startSystem",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "transfer",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -159,27 +395,46 @@
   {
     "inputs": [
       {
-        "internalType": "string",
-        "name": "name",
-        "type": "string"
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
       },
       {
-        "internalType": "string",
-        "name": "email",
-        "type": "string"
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
       },
       {
-        "internalType": "string",
-        "name": "password",
-        "type": "string"
-      },
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "transferFrom",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
         "internalType": "address",
         "name": "customerAddress",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "points",
+        "type": "uint256"
       }
     ],
-    "name": "addCustomer",
+    "name": "transferToMyLoyalCustomer",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -212,30 +467,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "spender",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "value",
-        "type": "uint256"
-      }
-    ],
-    "name": "approve",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "account",
         "type": "address"
       }
@@ -245,6 +476,40 @@
       {
         "internalType": "uint256",
         "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "name": "brands",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "email",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "brandAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "currLoyalPoints",
         "type": "uint256"
       }
     ],
@@ -311,30 +576,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "spender",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "requestedDecrease",
-        "type": "uint256"
-      }
-    ],
-    "name": "decreaseAllowance",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -410,81 +651,54 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "spender",
+        "name": "",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "addedValue",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "name": "increaseAllowance",
+    "name": "loyalCustomers",
     "outputs": [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
       {
-        "internalType": "address",
-        "name": "customerAddress",
-        "type": "address"
-      }
-    ],
-    "name": "increaseLoyaltyPoints",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+        "internalType": "string",
+        "name": "email",
+        "type": "string"
+      },
       {
-        "internalType": "address",
-        "name": "customerAddress",
-        "type": "address"
-      }
-    ],
-    "name": "makeCustomerLoyal",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "customerAddress",
-        "type": "address"
-      }
-    ],
-    "name": "mintDailyCheckInLoyaltyPoints",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+        "internalType": "string",
+        "name": "password",
+        "type": "string"
+      },
       {
         "internalType": "address",
         "name": "customerAddress",
         "type": "address"
       },
       {
+        "internalType": "bool",
+        "name": "isLoyal",
+        "type": "bool"
+      },
+      {
         "internalType": "uint256",
-        "name": "points",
+        "name": "currLoyalPoints",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalTokens",
         "type": "uint256"
       }
     ],
-    "name": "mintLoyaltyPoints",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -531,13 +745,6 @@
   },
   {
     "inputs": [],
-    "name": "startSystem",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "symbol",
     "outputs": [
       {
@@ -560,84 +767,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "value",
-        "type": "uint256"
-      }
-    ],
-    "name": "transfer",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "value",
-        "type": "uint256"
-      }
-    ],
-    "name": "transferFrom",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "customerAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "points",
-        "type": "uint256"
-      }
-    ],
-    "name": "transferToMyLoyalCustomer",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "useFungibleToken",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]
