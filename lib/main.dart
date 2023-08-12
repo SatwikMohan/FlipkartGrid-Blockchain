@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flipgrid/firebase_options.dart';
-import 'package:flipgrid/login_signup/login.dart';
+import 'package:flipgrid/user_profile.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,7 +19,8 @@ final userProvider = Provider((ref) => const User(
     name: "Test User",
     password: "Test Password",
     address: "Test Adress",
-    loyalityPoints: 0));
+    loyalityPoints: 20,
+    loginStreak: 2));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginScreen(),
+      home: const UserProfilePage(),
       // home: ProductCard(
       //   product: Product(
       //     name: 'Example Product',
@@ -66,4 +68,15 @@ class MyApp extends StatelessWidget {
       // home: const FollowToEarn(title: 'Flutter Demo Home Page'),
     );
   }
+}
+
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.trackpad,
+        // etc.
+      };
 }
