@@ -1,5 +1,6 @@
 import 'dart:js_interop';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flipgrid/login_signup/signup.dart';
 import 'package:flipgrid/services/functions.dart';
@@ -7,6 +8,8 @@ import 'package:flipgrid/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:web3dart/web3dart.dart';
 
 import '../text_field.dart';
@@ -29,14 +32,36 @@ class _LoginScreenState extends State<LoginScreen> {
   bool loadingState = false;
   Client? client;
   Web3Client? ethClient;
-  ServiceClass serviceClass=ServiceClass();
+  ServiceClass serviceClass = ServiceClass();
+
+  void showDailyCheckInDialog() async {
+    await QuickAlert.show(
+      context: context,
+      type: QuickAlertType.success,
+      title: "Daily Check Reward",
+      widget: const Column(
+        children: [
+          Text("5 days streak!"),
+          Text("You are awarded 2 SUPERCOINS"),
+          Text("Come back again for more!"),
+        ],
+      ),
+      confirmBtnText: "Claim Reward!",
+      onConfirmBtnTap: () {
+        Navigator.pop(context);
+      },
+      barrierDismissible: false,
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
-    client=Client();
-    ethClient=Web3Client(infura_url, client!);
+    client = Client();
+    ethClient = Web3Client(infura_url, client!);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -113,15 +138,48 @@ class _LoginScreenState extends State<LoginScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               GestureDetector(
-                                //TODO:IMPLEMENT LOGIN
                                 onTap: () async {
-                                  final credential=await FirebaseAuth.instance
+                                  final credential = await FirebaseAuth.instance
                                       .signInWithEmailAndPassword(
                                           email: emailTextController.text,
                                           password:
                                               passwordTextController.text);
-                                  if(!credential.isNull){
-                                    serviceClass.getUserData(emailTextController.text, ethClient!);
+                                  List<dynamic> userData;
+                                  if (!credential.isNull) {
+                                    userData = await serviceClass.getUserData(
+                                        emailTextController.text, ethClient!);
+                                    print(userData);
+                                    final lastDateTimeresponse =
+                                        await FirebaseFirestore.instance
+                                            .collection("lastLogin")
+                                            .doc(userData[0][1])
+                                            .get();
+                                    final lastDateTimeString =
+                                        lastDateTimeresponse
+                                            .data()?["lastLogin"];
+                                    if (lastDateTimeString.length != 0) {
+                                      final lastdatetime =
+                                          DateTime.parse(lastDateTimeString);
+                                      final currentDateTime = DateTime.now();
+                                      final dayDifference = currentDateTime
+                                          .difference(lastdatetime)
+                                          .inDays;
+                                      print(dayDifference);
+                                      if (dayDifference == 1) {
+                                        showDailyCheckInDialog();
+                                        final response = await serviceClass
+                                            .mintDailyCheckInLoyaltyPoints(
+                                                userData[0][3].toString(),
+                                                ethClient!);
+                                        print(response);
+                                      }
+                                    }
+                                    await FirebaseFirestore.instance
+                                        .collection("lastLogin")
+                                        .doc(userData[0][1])
+                                        .set({
+                                      "lastLogin": DateTime.now().toString()
+                                    });
                                   }
                                 },
                                 child: Container(

@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flipgrid/explore.dart';
 import 'package:flipgrid/firebase_options.dart';
+import 'package:flipgrid/login_signup/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Explore(),
+      home: const LoginScreen(),
       // home: ProductCard(
       //   product: Product(
       //     name: 'Example Product',
