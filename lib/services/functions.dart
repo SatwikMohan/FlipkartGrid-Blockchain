@@ -22,8 +22,8 @@ class ServiceClass{
     return result;
   }
 
-  Future<String> addCustomer(String name,String email,String password,String customerAddress,Web3Client ethClient){
-    var response=_callFunction('addCustomer', [name,email,password,EthereumAddress.fromHex(customerAddress)], ethClient, owner_private_key);
+  Future<String> addCustomer(String name,String email,String password,String customerAddress,Web3Client ethClient) async{
+    var response=await _callFunction('addCustomer', [name,email,password,EthereumAddress.fromHex(customerAddress)], ethClient, owner_private_key);
     print('Function addCustomer Called Successfully');
     return response;
   }
@@ -42,21 +42,26 @@ class ServiceClass{
     return response;
   }
 
-  Future<String> mintDailyCheckInLoyaltyPoints(String customerAddress,Web3Client ethClient){
-    var response=_callFunction('mintDailyCheckInLoyaltyPoints', [EthereumAddress.fromHex(customerAddress)], ethClient, owner_private_key);
+  Future<String> mintDailyCheckInLoyaltyPoints(String customerAddress,Web3Client ethClient) async{
+    var response=await _callFunction('mintDailyCheckInLoyaltyPoints', [EthereumAddress.fromHex(customerAddress)], ethClient, owner_private_key);
     print('Function mintDailyCheckInLoyaltyPoints Called Successfully');
     return response;
   }
 
-  Future<String> mintLoyaltyPoints(String customerAddress,int points,Web3Client ethClient){
-    var response=_callFunction('mintLoyaltyPoints', [EthereumAddress.fromHex(customerAddress),points], ethClient, owner_private_key);
+  Future<String> mintLoyaltyPoints(String customerAddress,int points,Web3Client ethClient) async{
+    var response=await _callFunction('mintLoyaltyPoints', [EthereumAddress.fromHex(customerAddress),points], ethClient, owner_private_key);
     print('Function mintLoyaltyPoints Called Successfully');
     return response;
   }
 
-  Future<String> makeCustomerLoyal(String customerAddress,Web3Client ethClient){
-    var response=_callFunction('makeCustomerLoyal', [EthereumAddress.fromHex(customerAddress)], ethClient, owner_private_key);
+  Future<String> makeCustomerLoyal(String customerAddress,Web3Client ethClient) async{
+    var response=await _callFunction('makeCustomerLoyal', [EthereumAddress.fromHex(customerAddress)], ethClient, owner_private_key);
     print('Function makeCustomerLoyal Called Successfully');
+    return response;
+  }
+  Future<String> transferToMyLoyalCustomer(String customerAddress,int points,Web3Client ethClient) async{
+    var response=await _callFunction('transferToMyLoyalCustomer', [EthereumAddress.fromHex(customerAddress),points], ethClient, owner_private_key);
+    print('Function transferToMyLoyalCustomer Called Successfully');
     return response;
   }
 }
