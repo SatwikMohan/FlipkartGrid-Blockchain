@@ -1,7 +1,7 @@
 import 'package:flipgrid/cart.dart';
-import 'package:flipgrid/product_list_view.dart';
 import 'package:flutter/material.dart';
 
+import 'models/test_models.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   final Product product;

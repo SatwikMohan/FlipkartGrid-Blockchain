@@ -19,7 +19,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final employeeModel = ref.watch(userProvider);
+    final employeeModel = ref.watch(currentUserStateProvider).getCurrentUser;
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       floatingActionButton: IconButton(
@@ -71,14 +71,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                       padding: EdgeInsets.only(top: height * 0.0125),
                     ),
                     Text(
-                      employeeModel.address,
+                      employeeModel.customerAddress,
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.normal),
                     ),
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                       const Text("Loyality Points : "),
                       Text(
-                        employeeModel.loyalityPoints.toString(),
+                        employeeModel.tokens.toString(),
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

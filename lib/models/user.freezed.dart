@@ -14,40 +14,43 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-User _$UserFromJson(Map<String, dynamic> json) {
-  return _User.fromJson(json);
+Customer _$CustomerFromJson(Map<String, dynamic> json) {
+  return _Customer.fromJson(json);
 }
 
 /// @nodoc
-mixin _$User {
+mixin _$Customer {
   String get name => throw _privateConstructorUsedError;
+  String get email => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
-  String get address => throw _privateConstructorUsedError;
-  int get loyalityPoints => throw _privateConstructorUsedError;
-  int get loginStreak => throw _privateConstructorUsedError;
+  String get customerAddress => throw _privateConstructorUsedError;
+  int? get tokens => throw _privateConstructorUsedError;
+  int? get loginStreak => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $UserCopyWith<User> get copyWith => throw _privateConstructorUsedError;
+  $CustomerCopyWith<Customer> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UserCopyWith<$Res> {
-  factory $UserCopyWith(User value, $Res Function(User) then) =
-      _$UserCopyWithImpl<$Res, User>;
+abstract class $CustomerCopyWith<$Res> {
+  factory $CustomerCopyWith(Customer value, $Res Function(Customer) then) =
+      _$CustomerCopyWithImpl<$Res, Customer>;
   @useResult
   $Res call(
       {String name,
+      String email,
       String password,
-      String address,
-      int loyalityPoints,
-      int loginStreak});
+      String customerAddress,
+      int? tokens,
+      int? loginStreak});
 }
 
 /// @nodoc
-class _$UserCopyWithImpl<$Res, $Val extends User>
-    implements $UserCopyWith<$Res> {
-  _$UserCopyWithImpl(this._value, this._then);
+class _$CustomerCopyWithImpl<$Res, $Val extends Customer>
+    implements $CustomerCopyWith<$Res> {
+  _$CustomerCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -58,131 +61,148 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   @override
   $Res call({
     Object? name = null,
+    Object? email = null,
     Object? password = null,
-    Object? address = null,
-    Object? loyalityPoints = null,
-    Object? loginStreak = null,
+    Object? customerAddress = null,
+    Object? tokens = freezed,
+    Object? loginStreak = freezed,
   }) {
     return _then(_value.copyWith(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
       password: null == password
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String,
-      address: null == address
-          ? _value.address
-          : address // ignore: cast_nullable_to_non_nullable
+      customerAddress: null == customerAddress
+          ? _value.customerAddress
+          : customerAddress // ignore: cast_nullable_to_non_nullable
               as String,
-      loyalityPoints: null == loyalityPoints
-          ? _value.loyalityPoints
-          : loyalityPoints // ignore: cast_nullable_to_non_nullable
-              as int,
-      loginStreak: null == loginStreak
+      tokens: freezed == tokens
+          ? _value.tokens
+          : tokens // ignore: cast_nullable_to_non_nullable
+              as int?,
+      loginStreak: freezed == loginStreak
           ? _value.loginStreak
           : loginStreak // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
-  factory _$$_UserCopyWith(_$_User value, $Res Function(_$_User) then) =
-      __$$_UserCopyWithImpl<$Res>;
+abstract class _$$_CustomerCopyWith<$Res> implements $CustomerCopyWith<$Res> {
+  factory _$$_CustomerCopyWith(
+          _$_Customer value, $Res Function(_$_Customer) then) =
+      __$$_CustomerCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {String name,
+      String email,
       String password,
-      String address,
-      int loyalityPoints,
-      int loginStreak});
+      String customerAddress,
+      int? tokens,
+      int? loginStreak});
 }
 
 /// @nodoc
-class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
-    implements _$$_UserCopyWith<$Res> {
-  __$$_UserCopyWithImpl(_$_User _value, $Res Function(_$_User) _then)
+class __$$_CustomerCopyWithImpl<$Res>
+    extends _$CustomerCopyWithImpl<$Res, _$_Customer>
+    implements _$$_CustomerCopyWith<$Res> {
+  __$$_CustomerCopyWithImpl(
+      _$_Customer _value, $Res Function(_$_Customer) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? name = null,
+    Object? email = null,
     Object? password = null,
-    Object? address = null,
-    Object? loyalityPoints = null,
-    Object? loginStreak = null,
+    Object? customerAddress = null,
+    Object? tokens = freezed,
+    Object? loginStreak = freezed,
   }) {
-    return _then(_$_User(
+    return _then(_$_Customer(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
               as String,
       password: null == password
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String,
-      address: null == address
-          ? _value.address
-          : address // ignore: cast_nullable_to_non_nullable
+      customerAddress: null == customerAddress
+          ? _value.customerAddress
+          : customerAddress // ignore: cast_nullable_to_non_nullable
               as String,
-      loyalityPoints: null == loyalityPoints
-          ? _value.loyalityPoints
-          : loyalityPoints // ignore: cast_nullable_to_non_nullable
-              as int,
-      loginStreak: null == loginStreak
+      tokens: freezed == tokens
+          ? _value.tokens
+          : tokens // ignore: cast_nullable_to_non_nullable
+              as int?,
+      loginStreak: freezed == loginStreak
           ? _value.loginStreak
           : loginStreak // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$_User implements _User {
-  const _$_User(
+class _$_Customer implements _Customer {
+  const _$_Customer(
       {required this.name,
+      required this.email,
       required this.password,
-      required this.address,
-      this.loyalityPoints = 0,
-      this.loginStreak = 0});
+      required this.customerAddress,
+      required this.tokens,
+      required this.loginStreak});
 
-  factory _$_User.fromJson(Map<String, dynamic> json) => _$$_UserFromJson(json);
+  factory _$_Customer.fromJson(Map<String, dynamic> json) =>
+      _$$_CustomerFromJson(json);
 
   @override
   final String name;
   @override
+  final String email;
+  @override
   final String password;
   @override
-  final String address;
+  final String customerAddress;
   @override
-  @JsonKey()
-  final int loyalityPoints;
+  final int? tokens;
   @override
-  @JsonKey()
-  final int loginStreak;
+  final int? loginStreak;
 
   @override
   String toString() {
-    return 'User(name: $name, password: $password, address: $address, loyalityPoints: $loyalityPoints, loginStreak: $loginStreak)';
+    return 'Customer(name: $name, email: $email, password: $password, customerAddress: $customerAddress, tokens: $tokens, loginStreak: $loginStreak)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_User &&
+            other is _$_Customer &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.email, email) || other.email == email) &&
             (identical(other.password, password) ||
                 other.password == password) &&
-            (identical(other.address, address) || other.address == address) &&
-            (identical(other.loyalityPoints, loyalityPoints) ||
-                other.loyalityPoints == loyalityPoints) &&
+            (identical(other.customerAddress, customerAddress) ||
+                other.customerAddress == customerAddress) &&
+            (identical(other.tokens, tokens) || other.tokens == tokens) &&
             (identical(other.loginStreak, loginStreak) ||
                 other.loginStreak == loginStreak));
   }
@@ -190,43 +210,47 @@ class _$_User implements _User {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, name, password, address, loyalityPoints, loginStreak);
+      runtimeType, name, email, password, customerAddress, tokens, loginStreak);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserCopyWith<_$_User> get copyWith =>
-      __$$_UserCopyWithImpl<_$_User>(this, _$identity);
+  _$$_CustomerCopyWith<_$_Customer> get copyWith =>
+      __$$_CustomerCopyWithImpl<_$_Customer>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_UserToJson(
+    return _$$_CustomerToJson(
       this,
     );
   }
 }
 
-abstract class _User implements User {
-  const factory _User(
+abstract class _Customer implements Customer {
+  const factory _Customer(
       {required final String name,
+      required final String email,
       required final String password,
-      required final String address,
-      final int loyalityPoints,
-      final int loginStreak}) = _$_User;
+      required final String customerAddress,
+      required final int? tokens,
+      required final int? loginStreak}) = _$_Customer;
 
-  factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
+  factory _Customer.fromJson(Map<String, dynamic> json) = _$_Customer.fromJson;
 
   @override
   String get name;
   @override
+  String get email;
+  @override
   String get password;
   @override
-  String get address;
+  String get customerAddress;
   @override
-  int get loyalityPoints;
+  int? get tokens;
   @override
-  int get loginStreak;
+  int? get loginStreak;
   @override
   @JsonKey(ignore: true)
-  _$$_UserCopyWith<_$_User> get copyWith => throw _privateConstructorUsedError;
+  _$$_CustomerCopyWith<_$_Customer> get copyWith =>
+      throw _privateConstructorUsedError;
 }

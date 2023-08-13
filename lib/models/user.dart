@@ -4,14 +4,16 @@ part 'user.freezed.dart';
 part 'user.g.dart';
 
 @Freezed()
-class User with _$User {
-  const factory User({
+class Customer with _$Customer {
+  const factory Customer({
     required String name,
+    required String email,
     required String password,
-    required String address,
-    @Default(0) int loyalityPoints,
-    @Default(0) int loginStreak,
-  }) = _User;
+    required String customerAddress,
+    required int? tokens,
+    required int? loginStreak,
+  }) = _Customer;
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory Customer.fromJson(Map<String, dynamic> json) =>
+      _$CustomerFromJson(json);
 }

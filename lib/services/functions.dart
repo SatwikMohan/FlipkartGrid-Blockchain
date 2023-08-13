@@ -28,7 +28,7 @@ class ServiceClass {
 
   Future<String> addCustomer(String name, String email, String password,
       String customerAddress, Web3Client ethClient) async {
-    print(name+email+password+customerAddress);
+    print(name + email + password + customerAddress);
     var response = await _callFunction(
         'addCustomer',
         [name, email, password, EthereumAddress.fromHex(customerAddress)],

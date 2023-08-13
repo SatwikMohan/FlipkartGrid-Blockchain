@@ -1,14 +1,19 @@
 import 'dart:js_interop';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flipgrid/main.dart';
 import 'package:flipgrid/services/functions.dart';
 import 'package:flipgrid/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
 import 'package:web3dart/web3dart.dart';
 
 import '../../text_field.dart';
+import '../models/user.dart';
+import '../user_profile.dart';
 import 'login.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -28,7 +33,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool loadingState = false;
   Client? client;
   Web3Client? ethClient;
-  ServiceClass serviceClass=ServiceClass();
+  ServiceClass serviceClass = ServiceClass();
   @override
   void initState() {
     // TODO: implement initState
@@ -124,62 +129,86 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: Colors.lightBlue,
                             size: 32,
                           )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                onTap: () async {
-                                  final userCredential = await FirebaseAuth
-                                      .instance
-                                      .createUserWithEmailAndPassword(
+                        : Consumer(
+                            builder: (BuildContext context, WidgetRef ref,
+                                Widget? child) {
+                              final user = ref.watch(currentUserStateProvider);
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      final userCredential = await FirebaseAuth
+                                          .instance
+                                          .createUserWithEmailAndPassword(
+                                              email: emailTextController.text,
+                                              password:
+                                                  passwordTextController.text);
+                                      await userCredential.user
+                                          ?.updatePhotoURL("FakeETHid");
+                                      final newCustomer = Customer(
+                                          name: userNameTextController.text,
                                           email: emailTextController.text,
-                                          password:
-                                              passwordTextController.text);
-                                  await userCredential.user
-                                      ?.updatePhotoURL("FakeETHid");
-                                  if (!userCredential.isNull) {
-                                    serviceClass.addCustomer(
-                                        userNameTextController.text,
-                                        emailTextController.text,
-                                        passwordTextController.text,
-                                        ethidcontroller.text,
-                                        ethClient!);
-                                  }
-                                  // registerScreenVM.emailRegister();
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: width * 0.55,
-                                  padding: EdgeInsets.symmetric(
-                                    // horizontal: width * 0.2,
-                                    vertical: height * 0.5 * 0.04,
-                                  ),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(16),
+                                          password: passwordTextController.text,
+                                          customerAddress: ethidcontroller.text,
+                                          tokens: 0,
+                                          loginStreak: 0);
+                                      if (!userCredential.isNull) {
+                                        serviceClass.addCustomer(
+                                            userNameTextController.text,
+                                            emailTextController.text,
+                                            passwordTextController.text,
+                                            ethidcontroller.text,
+                                            ethClient!);
+                                        user.setCurrentUser = newCustomer;
+                                        FirebaseFirestore.instance
+                                            .collection("Customers")
+                                            .doc(emailTextController.text)
+                                            .set(newCustomer.toJson())
+                                            .then((value) =>
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) {
+                                                  return const UserProfilePage();
+                                                })));
+                                      }
+                                      // registerScreenVM.emailRegister();
+                                    },
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      width: width * 0.55,
+                                      padding: EdgeInsets.symmetric(
+                                        // horizontal: width * 0.2,
+                                        vertical: height * 0.5 * 0.04,
+                                      ),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(16),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        'Sign Up',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  child: const Text(
-                                    'Sign Up',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              // Padding(
-                              //     padding:
-                              //         EdgeInsets.only(left: width * 0.06)),
-                              // GestureDetector(
-                              //     onTap: () {
-                              //       registerScreenVM.googleRegister();
-                              //     },
-                              //     child: const ButtonBox(
-                              //         imagePath: 'lib/images/google.png')),
-                            ],
+                                  // Padding(
+                                  //     padding:
+                                  //         EdgeInsets.only(left: width * 0.06)),
+                                  // GestureDetector(
+                                  //     onTap: () {
+                                  //       registerScreenVM.googleRegister();
+                                  //     },
+                                  //     child: const ButtonBox(
+                                  //         imagePath: 'lib/images/google.png')),
+                                ],
+                              );
+                            },
                           ),
                     Expanded(
                       child: Row(
