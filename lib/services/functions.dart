@@ -97,4 +97,11 @@ class ServiceClass {
     print('Function transferToMyLoyalCustomer Called Successfully');
     return response;
   }
+
+  Future<String> buyUsingFungibleToken(String brandAddress,String customerAddress,int cost,Web3Client ethClient) async{
+    var response=await _callFunction('buyUsingFungibleToken', [EthereumAddress.fromHex(customerAddress),EthereumAddress.fromHex(brandAddress),cost], ethClient, owner_private_key);
+    print('Function buyUsingFungibleToken Called Successfully');
+    return response;
+  }
+
 }
