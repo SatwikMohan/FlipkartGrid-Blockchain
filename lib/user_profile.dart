@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flipgrid/login_signup/login.dart';
 import 'package:flipgrid/main.dart';
 import 'package:flipgrid/models/test_models.dart';
 import 'package:flipgrid/product_list_view.dart';
@@ -12,7 +14,7 @@ import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:web3dart/web3dart.dart';
 
-import 'follow_to_earn.dart';
+import 'test_features/follow_to_earn.dart';
 
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key, required});
@@ -67,6 +69,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+      floatingActionButton: IconButton(
+          onPressed: () async {
+            FirebaseAuth.instance.signOut();
+            Navigator.of(context)
+                .pushReplacement(MaterialPageRoute(builder: (context) {
+              return const LoginScreen();
+            }));
+          },
+          icon: const Icon(Icons.logout)),
       appBar: AppBar(
         title: const Text('User Profile'),
       ),
