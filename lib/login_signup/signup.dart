@@ -152,7 +152,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           password: passwordTextController.text,
                                           customerAddress: ethidcontroller.text,
                                           tokens: 0,
-                                          loginStreak: 0);
+                                          loginStreak: 0,
+                                          lastLogin: DateTime.now().toString());
                                       if (!userCredential.isNull) {
                                         serviceClass.addCustomer(
                                             userNameTextController.text,
@@ -166,9 +167,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             .doc(emailTextController.text)
                                             .set(newCustomer.toJson())
                                             .then((value) =>
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) {
+                                                Navigator.of(context)
+                                                    .pushReplacement(
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
                                                   return const UserProfilePage();
                                                 })));
                                       }

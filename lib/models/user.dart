@@ -10,8 +10,9 @@ class Customer with _$Customer {
     required String email,
     required String password,
     required String customerAddress,
-    required int? tokens,
-    required int? loginStreak,
+    required String lastLogin,
+    required int tokens,
+    required int loginStreak,
   }) = _Customer;
 
   factory Customer.fromJson(Map<String, dynamic> json) =>

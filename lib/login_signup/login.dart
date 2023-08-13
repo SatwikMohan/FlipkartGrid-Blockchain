@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
       widget: const Column(
         children: [
           Text("5 days streak!"),
-          Text("You are awarded 2 SUPERCOINS"),
+          Text("You are awarded 1 SUPERCOINS"),
           Text("Come back again for more!"),
         ],
       ),
@@ -160,6 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 .collection("Customers")
                                                 .doc(emailTextController.text)
                                                 .get();
+
                                         final dbuserData =
                                             firebaseUserResponse.data();
                                         if (dbuserData?.isNotEmpty ?? false) {
@@ -173,23 +174,24 @@ class _LoginScreenState extends State<LoginScreen> {
                                           // );
                                           user.setCurrentUser =
                                               Customer.fromJson(dbuserData!);
-                                          print(user.getCurrentUser.toJson());
+                                          print(
+                                              "firebase data : ${user.getCurrentUser.toJson()}");
                                         }
                                         ethUserData =
                                             await serviceClass.getUserData(
                                                 emailTextController.text,
                                                 ethClient!);
+                                        user.setCurrentUser =
+                                            user.getCurrentUser.copyWith(
+                                                tokens: int.parse(ethUserData[0]
+                                                        [5]
+                                                    .toString()));
 
                                         print(ethUserData[0].toString());
-                                        final lastDateTimeresponse =
-                                            await FirebaseFirestore.instance
-                                                .collection("lastLogin")
-                                                .doc(ethUserData[0][1])
-                                                .get();
-                                        final lastDateTimeString =
-                                            lastDateTimeresponse
-                                                .data()?["lastLogin"];
-                                        if (lastDateTimeString.length != 0) {
+
+                                        final String lastDateTimeString =
+                                            user.getCurrentUser.lastLogin;
+                                        if (lastDateTimeString.isNotEmpty) {
                                           final lastdatetime = DateTime.parse(
                                               lastDateTimeString);
                                           final currentDateTime =
@@ -200,22 +202,32 @@ class _LoginScreenState extends State<LoginScreen> {
                                           print(dayDifference);
                                           if (dayDifference == 1) {
                                             showDailyCheckInDialog();
+                                            user.setCurrentUser =
+                                                user.getCurrentUser.copyWith(
+                                                    tokens: user.getCurrentUser
+                                                            .tokens +
+                                                        1);
                                             final response = await serviceClass
                                                 .mintDailyCheckInLoyaltyPoints(
                                                     ethUserData[0][3]
                                                         .toString(),
                                                     ethClient!);
+                                            user.setCurrentUser =
+                                                user.getCurrentUser.copyWith(
+                                                    lastLogin: DateTime.now()
+                                                        .toString());
                                             print(response);
                                           }
                                         }
                                         await FirebaseFirestore.instance
-                                            .collection("lastLogin")
-                                            .doc(ethUserData[0][1])
-                                            .set({
-                                          "lastLogin": DateTime.now().toString()
-                                        }).then((value) => Navigator.of(context)
-                                                    .push(MaterialPageRoute(
-                                                        builder: (context) {
+                                            .collection("Customers")
+                                            .doc(emailTextController.text)
+                                            .set(user.getCurrentUser.toJson())
+                                            .then((value) =>
+                                                Navigator.of(context)
+                                                    .pushReplacement(
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
                                                   return const UserProfilePage();
                                                 })));
                                       }

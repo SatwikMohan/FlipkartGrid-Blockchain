@@ -24,8 +24,9 @@ mixin _$Customer {
   String get email => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
   String get customerAddress => throw _privateConstructorUsedError;
-  int? get tokens => throw _privateConstructorUsedError;
-  int? get loginStreak => throw _privateConstructorUsedError;
+  String get lastLogin => throw _privateConstructorUsedError;
+  int get tokens => throw _privateConstructorUsedError;
+  int get loginStreak => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,8 +44,9 @@ abstract class $CustomerCopyWith<$Res> {
       String email,
       String password,
       String customerAddress,
-      int? tokens,
-      int? loginStreak});
+      String lastLogin,
+      int tokens,
+      int loginStreak});
 }
 
 /// @nodoc
@@ -64,8 +66,9 @@ class _$CustomerCopyWithImpl<$Res, $Val extends Customer>
     Object? email = null,
     Object? password = null,
     Object? customerAddress = null,
-    Object? tokens = freezed,
-    Object? loginStreak = freezed,
+    Object? lastLogin = null,
+    Object? tokens = null,
+    Object? loginStreak = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -84,14 +87,18 @@ class _$CustomerCopyWithImpl<$Res, $Val extends Customer>
           ? _value.customerAddress
           : customerAddress // ignore: cast_nullable_to_non_nullable
               as String,
-      tokens: freezed == tokens
+      lastLogin: null == lastLogin
+          ? _value.lastLogin
+          : lastLogin // ignore: cast_nullable_to_non_nullable
+              as String,
+      tokens: null == tokens
           ? _value.tokens
           : tokens // ignore: cast_nullable_to_non_nullable
-              as int?,
-      loginStreak: freezed == loginStreak
+              as int,
+      loginStreak: null == loginStreak
           ? _value.loginStreak
           : loginStreak // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
     ) as $Val);
   }
 }
@@ -108,8 +115,9 @@ abstract class _$$_CustomerCopyWith<$Res> implements $CustomerCopyWith<$Res> {
       String email,
       String password,
       String customerAddress,
-      int? tokens,
-      int? loginStreak});
+      String lastLogin,
+      int tokens,
+      int loginStreak});
 }
 
 /// @nodoc
@@ -127,8 +135,9 @@ class __$$_CustomerCopyWithImpl<$Res>
     Object? email = null,
     Object? password = null,
     Object? customerAddress = null,
-    Object? tokens = freezed,
-    Object? loginStreak = freezed,
+    Object? lastLogin = null,
+    Object? tokens = null,
+    Object? loginStreak = null,
   }) {
     return _then(_$_Customer(
       name: null == name
@@ -147,14 +156,18 @@ class __$$_CustomerCopyWithImpl<$Res>
           ? _value.customerAddress
           : customerAddress // ignore: cast_nullable_to_non_nullable
               as String,
-      tokens: freezed == tokens
+      lastLogin: null == lastLogin
+          ? _value.lastLogin
+          : lastLogin // ignore: cast_nullable_to_non_nullable
+              as String,
+      tokens: null == tokens
           ? _value.tokens
           : tokens // ignore: cast_nullable_to_non_nullable
-              as int?,
-      loginStreak: freezed == loginStreak
+              as int,
+      loginStreak: null == loginStreak
           ? _value.loginStreak
           : loginStreak // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
     ));
   }
 }
@@ -167,6 +180,7 @@ class _$_Customer implements _Customer {
       required this.email,
       required this.password,
       required this.customerAddress,
+      required this.lastLogin,
       required this.tokens,
       required this.loginStreak});
 
@@ -182,13 +196,15 @@ class _$_Customer implements _Customer {
   @override
   final String customerAddress;
   @override
-  final int? tokens;
+  final String lastLogin;
   @override
-  final int? loginStreak;
+  final int tokens;
+  @override
+  final int loginStreak;
 
   @override
   String toString() {
-    return 'Customer(name: $name, email: $email, password: $password, customerAddress: $customerAddress, tokens: $tokens, loginStreak: $loginStreak)';
+    return 'Customer(name: $name, email: $email, password: $password, customerAddress: $customerAddress, lastLogin: $lastLogin, tokens: $tokens, loginStreak: $loginStreak)';
   }
 
   @override
@@ -202,6 +218,8 @@ class _$_Customer implements _Customer {
                 other.password == password) &&
             (identical(other.customerAddress, customerAddress) ||
                 other.customerAddress == customerAddress) &&
+            (identical(other.lastLogin, lastLogin) ||
+                other.lastLogin == lastLogin) &&
             (identical(other.tokens, tokens) || other.tokens == tokens) &&
             (identical(other.loginStreak, loginStreak) ||
                 other.loginStreak == loginStreak));
@@ -209,8 +227,8 @@ class _$_Customer implements _Customer {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, name, email, password, customerAddress, tokens, loginStreak);
+  int get hashCode => Object.hash(runtimeType, name, email, password,
+      customerAddress, lastLogin, tokens, loginStreak);
 
   @JsonKey(ignore: true)
   @override
@@ -232,8 +250,9 @@ abstract class _Customer implements Customer {
       required final String email,
       required final String password,
       required final String customerAddress,
-      required final int? tokens,
-      required final int? loginStreak}) = _$_Customer;
+      required final String lastLogin,
+      required final int tokens,
+      required final int loginStreak}) = _$_Customer;
 
   factory _Customer.fromJson(Map<String, dynamic> json) = _$_Customer.fromJson;
 
@@ -246,9 +265,11 @@ abstract class _Customer implements Customer {
   @override
   String get customerAddress;
   @override
-  int? get tokens;
+  String get lastLogin;
   @override
-  int? get loginStreak;
+  int get tokens;
+  @override
+  int get loginStreak;
   @override
   @JsonKey(ignore: true)
   _$$_CustomerCopyWith<_$_Customer> get copyWith =>

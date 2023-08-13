@@ -1,10 +1,12 @@
 import 'package:flipgrid/cart.dart';
+import 'package:flipgrid/models/brand.dart';
 import 'package:flutter/material.dart';
-
-import 'models/test_models.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
-  final Product product;
+  final Brand product;
+
+  // final ProductTest product;
 
   const ProductDetailsScreen({super.key, required this.product});
 
@@ -18,7 +20,7 @@ class ProductDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Image.network(product.image),
+            Image.network(product.PicUrl),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -31,38 +33,44 @@ class ProductDetailsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    product.company,
+                    product.name,
                     style: const TextStyle(color: Colors.grey),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '\$${product.price}',
+                    '${product.CostETH} tokens',
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    product.description,
-                    style: const TextStyle(fontSize: 16),
+                  const Text(
+                    "product.description",
+                    style: TextStyle(fontSize: 16),
                   ),
                   const SizedBox(height: 8),
-                  Row(
+                  const Row(
                     children: [
-                      const Icon(Icons.star, color: Colors.yellow),
-                      Text('${product.rating}'),
+                      Icon(Icons.star, color: Colors.yellow),
+                      Text("product.rating"),
                     ],
                   ),
                   const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return const CartScreen();
-                      }));
-                      // Add product to cart logic
-                      // You can implement your own logic here
+                  Consumer(
+                    builder:
+                        (BuildContext context, WidgetRef ref, Widget? child) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          ref.read(cartProductsProvider).add(product);
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return const CartScreen();
+                          }));
+                          // Add product to cart logic
+                          // You can implement your own logic here
+                        },
+                        child: const Text('Add to Cart'),
+                      );
                     },
-                    child: const Text('Add to Cart'),
                   ),
                 ],
               ),

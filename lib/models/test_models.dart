@@ -5,7 +5,7 @@ class Usertest {
   final String ethereumWallet;
   final int loyaltyPoints;
   final int loginStreakCount;
-  final List<Transaction> transactionHistory;
+  final List<TransactionTest> transactionHistory;
 
   Usertest({
     required this.name,
@@ -18,11 +18,11 @@ class Usertest {
   });
 }
 
-class Transaction {
+class TransactionTest {
   final String description;
   final double amount;
 
-  Transaction({required this.description, required this.amount});
+  TransactionTest({required this.description, required this.amount});
 }
 
 final Usertest userTest = Usertest(
@@ -33,13 +33,13 @@ final Usertest userTest = Usertest(
   loyaltyPoints: 500,
   loginStreakCount: 10,
   transactionHistory: [
-    Transaction(description: 'Product A', amount: -50.0),
-    Transaction(description: 'Product B', amount: -75.0),
+    TransactionTest(description: 'Product A', amount: -50.0),
+    TransactionTest(description: 'Product B', amount: -75.0),
     // Add more transactions here
   ],
 );
 
-class Product {
+class ProductTest {
   final String name;
   final String company;
   final int price;
@@ -47,7 +47,7 @@ class Product {
   final double rating;
   final String image;
 
-  Product({
+  ProductTest({
     required this.name,
     required this.company,
     required this.price,
@@ -57,20 +57,20 @@ class Product {
   });
 }
 
-final List<Product> products = [
-  Product(
+final List<ProductTest> productsTest = [
+  ProductTest(
     name: 'Product 1',
     company: 'Company A',
-    price: 2,
+    price: 1,
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     rating: 4.5,
     image:
         'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg',
   ),
-  Product(
+  ProductTest(
     name: 'Product 2',
     company: 'Company B',
-    price: 3,
+    price: 2,
     description:
         'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     rating: 4.0,

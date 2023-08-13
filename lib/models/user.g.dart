@@ -11,8 +11,9 @@ _$_Customer _$$_CustomerFromJson(Map<String, dynamic> json) => _$_Customer(
       email: json['email'] as String,
       password: json['password'] as String,
       customerAddress: json['customerAddress'] as String,
-      tokens: json['tokens'] as int?,
-      loginStreak: json['loginStreak'] as int?,
+      lastLogin: json['lastLogin'] as String,
+      tokens: json['tokens'] as int,
+      loginStreak: json['loginStreak'] as int,
     );
 
 Map<String, dynamic> _$$_CustomerToJson(_$_Customer instance) =>
@@ -21,6 +22,7 @@ Map<String, dynamic> _$$_CustomerToJson(_$_Customer instance) =>
       'email': instance.email,
       'password': instance.password,
       'customerAddress': instance.customerAddress,
+      'lastLogin': instance.lastLogin,
       'tokens': instance.tokens,
       'loginStreak': instance.loginStreak,
     };

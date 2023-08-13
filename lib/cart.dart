@@ -1,8 +1,14 @@
 import 'package:flipgrid/main.dart';
-import 'package:flipgrid/models/test_models.dart';
+import 'package:flipgrid/models/brand.dart';
 import 'package:flipgrid/product_list_view.dart';
+import 'package:flipgrid/services/functions.dart';
+import 'package:flipgrid/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart';
+import 'package:web3dart/web3dart.dart';
+
+final cartProductsProvider = Provider<List<Brand>>((ref) => []);
 
 class CartScreen extends ConsumerStatefulWidget {
   const CartScreen({super.key});
@@ -14,13 +20,18 @@ class CartScreen extends ConsumerStatefulWidget {
 class _CartScreenState extends ConsumerState<CartScreen> {
   double totalAmount = 0;
   double userBalance = 0;
-
+  Client? client;
+  Web3Client? ethClient;
+  List<Brand> cartProducts = [];
   @override
   void initState() {
-    totalAmount = products.fold(
-        0, (previousValue, element) => previousValue + element.price);
-    userBalance = (ref.read(currentUserStateProvider).getCurrentUser.tokens ??
-        0) as double;
+    client = Client();
+    ethClient = Web3Client(infura_url, client!);
+    cartProducts = ref.read(cartProductsProvider);
+    totalAmount = cartProducts.fold(0,
+        (previousValue, element) => previousValue + int.parse(element.CostETH));
+    userBalance =
+        (ref.read(currentUserStateProvider).getCurrentUser.tokens) as double;
     super.initState();
   }
 
@@ -36,7 +47,22 @@ class _CartScreenState extends ConsumerState<CartScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const ProductListView(),
+              ListView.builder(
+                shrinkWrap: true,
+                // itemCount: productsTest.length,
+                itemCount: cartProducts.length,
+                itemBuilder: (context, index) {
+                  return ProductCard(
+                    product: cartProducts[index],
+                    onTapDelete: () {
+                      setState(() {
+                        cartProducts.remove(cartProducts[index]);
+                      });
+                    },
+                  );
+                  // return ProductCard(product: productsTest[index]);
+                },
+              ),
               Text(
                 'Total Amount: ${totalAmount.toStringAsFixed(2)} tokens',
                 style:
@@ -51,11 +77,19 @@ class _CartScreenState extends ConsumerState<CartScreen> {
               ElevatedButton(
                 onPressed: totalAmount <= userBalance
                     ? () {
-                        // Buy Now logic
-                        // You can implement your own logic here
+                        ServiceClass().buyUsingFungibleToken(
+                            "0xE504F1aDE6B4d28ccFf9a29EE90cd5C82e16e55b",
+                            ref
+                                .read(currentUserStateProvider)
+                                .getCurrentUser
+                                .customerAddress,
+                            totalAmount as int,
+                            ethClient!);
                       }
                     : null,
-                child: const Text('Buy Now'),
+                child: totalAmount <= userBalance
+                    ? const Text('Buy Now')
+                    : const Text("Insufficient Balance"),
               ),
             ],
           ),
