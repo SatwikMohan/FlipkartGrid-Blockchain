@@ -92,6 +92,9 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                             .getUserData(user.getCurrentUser.email, ethClient!);
                         user.setCurrentUser = user.getCurrentUser.copyWith(
                             tokens: int.parse(ethUserData[0][5].toString()));
+                        setState(() {
+                          cartProducts = [];
+                        });
                         await FirebaseFirestore.instance
                             .collection("Customers")
                             .doc(user.getCurrentUser.email)
