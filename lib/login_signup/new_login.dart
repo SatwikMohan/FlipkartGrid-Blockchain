@@ -152,9 +152,9 @@ class _NewLoginState extends State<NewLogin> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 131, vertical: 20)),
                                       onPressed: () async {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
+                                        // setState(() {
+                                        //   isLoading = true;
+                                        // });
                                         final credential = await FirebaseAuth
                                             .instance
                                             .signInWithEmailAndPassword(
@@ -241,9 +241,9 @@ class _NewLoginState extends State<NewLogin> {
                                               return const UserProfilePage();
                                             }));
                                           });
-                                          setState(() {
-                                            isLoading = false;
-                                          });
+                                          // setState(() {
+                                          //   isLoading = false;
+                                          // });
                                         }
                                       },
                                       child: const Text(

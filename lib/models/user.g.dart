@@ -14,6 +14,9 @@ _$_Customer _$$_CustomerFromJson(Map<String, dynamic> json) => _$_Customer(
       lastLogin: json['lastLogin'] as String,
       tokens: json['tokens'] as int,
       loginStreak: json['loginStreak'] as int,
+      instaFollowed: json['instaFollowed'] as bool,
+      fbFollowed: json['fbFollowed'] as bool,
+      twitterFollowed: json['twitterFollowed'] as bool,
     );
 
 Map<String, dynamic> _$$_CustomerToJson(_$_Customer instance) =>
@@ -25,4 +28,7 @@ Map<String, dynamic> _$$_CustomerToJson(_$_Customer instance) =>
       'lastLogin': instance.lastLogin,
       'tokens': instance.tokens,
       'loginStreak': instance.loginStreak,
+      'instaFollowed': instance.instaFollowed,
+      'fbFollowed': instance.fbFollowed,
+      'twitterFollowed': instance.twitterFollowed,
     };

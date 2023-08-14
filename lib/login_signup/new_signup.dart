@@ -188,16 +188,17 @@ class _NewSignUpState extends State<NewSignUp> {
                                         await userCredential.user
                                             ?.updatePhotoURL("FakeETHid");
                                         final newCustomer = Customer(
-                                            name: userNameTextController.text,
-                                            email: emailTextController.text,
-                                            password:
-                                                passwordTextController.text,
-                                            customerAddress:
-                                                ethidcontroller.text,
-                                            tokens: 0,
-                                            loginStreak: 0,
-                                            lastLogin:
-                                                DateTime.now().toString());
+                                          name: userNameTextController.text,
+                                          email: emailTextController.text,
+                                          password: passwordTextController.text,
+                                          customerAddress: ethidcontroller.text,
+                                          tokens: 0,
+                                          loginStreak: 0,
+                                          lastLogin: DateTime.now().toString(),
+                                          fbFollowed: false,
+                                          instaFollowed: false,
+                                          twitterFollowed: false,
+                                        );
                                         if (!userCredential.isNull) {
                                           serviceClass.addCustomer(
                                               userNameTextController.text,

@@ -13,6 +13,9 @@ class Customer with _$Customer {
     required String lastLogin,
     required int tokens,
     required int loginStreak,
+    required bool instaFollowed,
+    required bool fbFollowed,
+    required bool twitterFollowed,
   }) = _Customer;
 
   factory Customer.fromJson(Map<String, dynamic> json) =>

@@ -27,6 +27,9 @@ mixin _$Customer {
   String get lastLogin => throw _privateConstructorUsedError;
   int get tokens => throw _privateConstructorUsedError;
   int get loginStreak => throw _privateConstructorUsedError;
+  bool get instaFollowed => throw _privateConstructorUsedError;
+  bool get fbFollowed => throw _privateConstructorUsedError;
+  bool get twitterFollowed => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -46,7 +49,10 @@ abstract class $CustomerCopyWith<$Res> {
       String customerAddress,
       String lastLogin,
       int tokens,
-      int loginStreak});
+      int loginStreak,
+      bool instaFollowed,
+      bool fbFollowed,
+      bool twitterFollowed});
 }
 
 /// @nodoc
@@ -69,6 +75,9 @@ class _$CustomerCopyWithImpl<$Res, $Val extends Customer>
     Object? lastLogin = null,
     Object? tokens = null,
     Object? loginStreak = null,
+    Object? instaFollowed = null,
+    Object? fbFollowed = null,
+    Object? twitterFollowed = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -99,6 +108,18 @@ class _$CustomerCopyWithImpl<$Res, $Val extends Customer>
           ? _value.loginStreak
           : loginStreak // ignore: cast_nullable_to_non_nullable
               as int,
+      instaFollowed: null == instaFollowed
+          ? _value.instaFollowed
+          : instaFollowed // ignore: cast_nullable_to_non_nullable
+              as bool,
+      fbFollowed: null == fbFollowed
+          ? _value.fbFollowed
+          : fbFollowed // ignore: cast_nullable_to_non_nullable
+              as bool,
+      twitterFollowed: null == twitterFollowed
+          ? _value.twitterFollowed
+          : twitterFollowed // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -117,7 +138,10 @@ abstract class _$$_CustomerCopyWith<$Res> implements $CustomerCopyWith<$Res> {
       String customerAddress,
       String lastLogin,
       int tokens,
-      int loginStreak});
+      int loginStreak,
+      bool instaFollowed,
+      bool fbFollowed,
+      bool twitterFollowed});
 }
 
 /// @nodoc
@@ -138,6 +162,9 @@ class __$$_CustomerCopyWithImpl<$Res>
     Object? lastLogin = null,
     Object? tokens = null,
     Object? loginStreak = null,
+    Object? instaFollowed = null,
+    Object? fbFollowed = null,
+    Object? twitterFollowed = null,
   }) {
     return _then(_$_Customer(
       name: null == name
@@ -168,6 +195,18 @@ class __$$_CustomerCopyWithImpl<$Res>
           ? _value.loginStreak
           : loginStreak // ignore: cast_nullable_to_non_nullable
               as int,
+      instaFollowed: null == instaFollowed
+          ? _value.instaFollowed
+          : instaFollowed // ignore: cast_nullable_to_non_nullable
+              as bool,
+      fbFollowed: null == fbFollowed
+          ? _value.fbFollowed
+          : fbFollowed // ignore: cast_nullable_to_non_nullable
+              as bool,
+      twitterFollowed: null == twitterFollowed
+          ? _value.twitterFollowed
+          : twitterFollowed // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -182,7 +221,10 @@ class _$_Customer implements _Customer {
       required this.customerAddress,
       required this.lastLogin,
       required this.tokens,
-      required this.loginStreak});
+      required this.loginStreak,
+      required this.instaFollowed,
+      required this.fbFollowed,
+      required this.twitterFollowed});
 
   factory _$_Customer.fromJson(Map<String, dynamic> json) =>
       _$$_CustomerFromJson(json);
@@ -201,10 +243,16 @@ class _$_Customer implements _Customer {
   final int tokens;
   @override
   final int loginStreak;
+  @override
+  final bool instaFollowed;
+  @override
+  final bool fbFollowed;
+  @override
+  final bool twitterFollowed;
 
   @override
   String toString() {
-    return 'Customer(name: $name, email: $email, password: $password, customerAddress: $customerAddress, lastLogin: $lastLogin, tokens: $tokens, loginStreak: $loginStreak)';
+    return 'Customer(name: $name, email: $email, password: $password, customerAddress: $customerAddress, lastLogin: $lastLogin, tokens: $tokens, loginStreak: $loginStreak, instaFollowed: $instaFollowed, fbFollowed: $fbFollowed, twitterFollowed: $twitterFollowed)';
   }
 
   @override
@@ -222,13 +270,29 @@ class _$_Customer implements _Customer {
                 other.lastLogin == lastLogin) &&
             (identical(other.tokens, tokens) || other.tokens == tokens) &&
             (identical(other.loginStreak, loginStreak) ||
-                other.loginStreak == loginStreak));
+                other.loginStreak == loginStreak) &&
+            (identical(other.instaFollowed, instaFollowed) ||
+                other.instaFollowed == instaFollowed) &&
+            (identical(other.fbFollowed, fbFollowed) ||
+                other.fbFollowed == fbFollowed) &&
+            (identical(other.twitterFollowed, twitterFollowed) ||
+                other.twitterFollowed == twitterFollowed));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, name, email, password,
-      customerAddress, lastLogin, tokens, loginStreak);
+  int get hashCode => Object.hash(
+      runtimeType,
+      name,
+      email,
+      password,
+      customerAddress,
+      lastLogin,
+      tokens,
+      loginStreak,
+      instaFollowed,
+      fbFollowed,
+      twitterFollowed);
 
   @JsonKey(ignore: true)
   @override
@@ -252,7 +316,10 @@ abstract class _Customer implements Customer {
       required final String customerAddress,
       required final String lastLogin,
       required final int tokens,
-      required final int loginStreak}) = _$_Customer;
+      required final int loginStreak,
+      required final bool instaFollowed,
+      required final bool fbFollowed,
+      required final bool twitterFollowed}) = _$_Customer;
 
   factory _Customer.fromJson(Map<String, dynamic> json) = _$_Customer.fromJson;
 
@@ -270,6 +337,12 @@ abstract class _Customer implements Customer {
   int get tokens;
   @override
   int get loginStreak;
+  @override
+  bool get instaFollowed;
+  @override
+  bool get fbFollowed;
+  @override
+  bool get twitterFollowed;
   @override
   @JsonKey(ignore: true)
   _$$_CustomerCopyWith<_$_Customer> get copyWith =>
