@@ -1,6 +1,6 @@
 ////SPDX-License-Identifier: MIT
 //pragma solidity 0.8.20;
-//import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol";
+//import "erc20.sol";
 //import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
 //contract FungibleToken is ERC20("Fungible Token", "FT"){
 //
@@ -37,10 +37,10 @@
 //        _;
 //    }
 //
-//    mapping(address=>Customer) public customers;
-//    mapping(string=>Brand) public brands;
-//    mapping(address=>Customer[]) public loyalCustomers;// key=brandAdress, value= Customer
-//    mapping(string=>CustomerSignature) public signedCustomers;
+//    mapping(address=>Customer) private customers;
+//    mapping(string=>Brand) private brands;
+//    mapping(address=>Customer[]) private loyalCustomers;// key=brandAdress, value= Customer
+//    mapping(string=>CustomerSignature) private signedCustomers;
 //    address[] signedBrands;
 //
 //    function addBrand(string memory name,string memory email,address brandAddress) flipkartOnly public{
@@ -58,6 +58,7 @@
 //    }
 //
 //    function addCustomer(string memory name,string memory email,string memory password,address customerAddress) public{
+//        resetBalance(customerAddress);
 //        customers[customerAddress]=Customer(name,email,password,customerAddress,false,0,0);
 //        signedCustomers[email]=CustomerSignature(name,password,customerAddress);
 //    }
@@ -107,8 +108,9 @@
 //        _;
 //    }
 //
-//    function buyUsingFungibleToken(address brandAddress,uint cost) SignedBrandOnly(brandAddress) public{
-//        transferFrom(msg.sender, brandAddress, cost*10**18);
+//    function buyUsingFungibleToken(address customerAddress,address brandAddress,uint cost) SignedBrandOnly(brandAddress) public{
+//        transferFrom(customerAddress, brandAddress, cost*10**18);
+//        customers[customerAddress].currLoyalPoints-=cost;
 //    }
 //
 //}
