@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flipgrid/firebase_options.dart';
-import 'package:flipgrid/login_signup/new_login.dart';
+import 'package:flipgrid/login_signup/new_signup.dart';
 import 'package:flipgrid/models/user.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -40,10 +40,10 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const NewLogin(),
+      home: const NewSignUp(),
     );
   }
 }

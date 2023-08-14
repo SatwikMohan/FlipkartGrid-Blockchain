@@ -3,8 +3,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flipgrid/login_signup/new_signup.dart';
-import 'package:flipgrid/main.dart';
+import 'package:flipgrid/login_signup/new_login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,22 +12,25 @@ import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:web3dart/web3dart.dart';
 
+import '../main.dart';
 import '../models/user.dart';
 import '../services/functions.dart';
 import '../user_profile.dart';
 import '../utils/constants.dart';
 import 'auth_input_text.dart';
 
-class NewLogin extends StatefulWidget {
-  const NewLogin({super.key});
+class NewSignUp extends StatefulWidget {
+  const NewSignUp({super.key});
 
   @override
-  State<NewLogin> createState() => _NewLoginState();
+  State<NewSignUp> createState() => _NewSignUpState();
 }
 
-class _NewLoginState extends State<NewLogin> {
+class _NewSignUpState extends State<NewSignUp> {
+  final TextEditingController userNameTextController = TextEditingController();
   final TextEditingController emailTextController = TextEditingController();
   final TextEditingController passwordTextController = TextEditingController();
+  final TextEditingController ethidcontroller = TextEditingController();
   bool isLoading = false;
 
   bool loadingState = false;
@@ -96,7 +98,7 @@ class _NewLoginState extends State<NewLogin> {
                       child: Column(
                         children: [
                           Text(
-                            "Login To Continue",
+                            "Let's Get Started",
                             style: GoogleFonts.pacifico(
                               textStyle: const TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -108,7 +110,7 @@ class _NewLoginState extends State<NewLogin> {
                             height: 30,
                           ),
                           Container(
-                            height: 280,
+                            height: 380,
                             width: MediaQuery.of(context).size.width / 1.1 < 500
                                 ? MediaQuery.of(context).size.width / 1.1
                                 : 500,
@@ -120,7 +122,17 @@ class _NewLoginState extends State<NewLogin> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 20, right: 20, bottom: 20, top: 20),
+                                      left: 20, right: 20, top: 15),
+                                  child: AuthInputText(
+                                    textEditingController:
+                                        userNameTextController,
+                                    labelText: "User Name",
+                                    hintText: "",
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20, top: 15),
                                   child: AuthInputText(
                                     textEditingController: emailTextController,
                                     hintText: "enter email here",
@@ -129,11 +141,20 @@ class _NewLoginState extends State<NewLogin> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 20, right: 20),
+                                      left: 20, right: 20, top: 15),
                                   child: AuthInputText(
                                     textEditingController:
                                         passwordTextController,
                                     labelText: "Password",
+                                    hintText: "********",
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20, top: 15),
+                                  child: AuthInputText(
+                                    textEditingController: ethidcontroller,
+                                    labelText: "Eth Id",
                                     hintText: "********",
                                   ),
                                 ),
@@ -154,92 +175,48 @@ class _NewLoginState extends State<NewLogin> {
                                               horizontal: 131, vertical: 20)),
                                       onPressed: () async {
                                         isLoading = true;
-                                        final credential = await FirebaseAuth
-                                            .instance
-                                            .signInWithEmailAndPassword(
-                                                email: emailTextController.text,
-                                                password: passwordTextController
-                                                    .text);
-                                        List<dynamic> ethUserData;
-                                        if (!credential.isNull) {
-                                          final firebaseUserResponse =
-                                              await FirebaseFirestore.instance
-                                                  .collection("Customers")
-                                                  .doc(emailTextController.text)
-                                                  .get();
-
-                                          final dbuserData =
-                                              firebaseUserResponse.data();
-                                          if (dbuserData?.isNotEmpty ?? false) {
-                                            // user.setCurrentUser = Customer(
-                                            //   name: userData[0][0],
-                                            //   email: userData[0][0],
-                                            //   password: userData[0][0],
-                                            //   customerAddress: userData[0][0],
-                                            //   loginStreak: null,
-                                            //   tokens: null,
-                                            // );
-                                            user.setCurrentUser =
-                                                Customer.fromJson(dbuserData!);
-                                            print(
-                                                "firebase data : ${user.getCurrentUser.toJson()}");
-                                          }
-                                          ethUserData =
-                                              await serviceClass.getUserData(
-                                                  emailTextController.text,
-                                                  ethClient!);
-                                          user.setCurrentUser =
-                                              user.getCurrentUser.copyWith(
-                                                  tokens: int.parse(
-                                                      ethUserData[0][5]
-                                                          .toString()));
-
-                                          print(ethUserData[0].toString());
-
-                                          final String lastDateTimeString =
-                                              user.getCurrentUser.lastLogin;
-                                          if (lastDateTimeString.isNotEmpty) {
-                                            final lastdatetime = DateTime.parse(
-                                                lastDateTimeString);
-                                            final currentDateTime =
-                                                DateTime.now();
-                                            final dayDifference =
-                                                currentDateTime
-                                                    .difference(lastdatetime)
-                                                    .inDays;
-                                            print(dayDifference);
-                                            if (dayDifference == 1) {
-                                              showDailyCheckInDialog();
-                                              user.setCurrentUser =
-                                                  user.getCurrentUser.copyWith(
-                                                      tokens: user
-                                                              .getCurrentUser
-                                                              .tokens +
-                                                          1);
-                                              final response = await serviceClass
-                                                  .mintDailyCheckInLoyaltyPoints(
-                                                      ethUserData[0][3]
-                                                          .toString(),
-                                                      ethClient!);
-                                              user.setCurrentUser =
-                                                  user.getCurrentUser.copyWith(
-                                                      lastLogin: DateTime.now()
-                                                          .toString());
-                                              print(response);
-                                            }
-                                          }
-                                          await FirebaseFirestore.instance
+                                        final userCredential =
+                                            await FirebaseAuth.instance
+                                                .createUserWithEmailAndPassword(
+                                                    email: emailTextController
+                                                        .text,
+                                                    password:
+                                                        passwordTextController
+                                                            .text);
+                                        await userCredential.user
+                                            ?.updatePhotoURL("FakeETHid");
+                                        final newCustomer = Customer(
+                                            name: userNameTextController.text,
+                                            email: emailTextController.text,
+                                            password:
+                                                passwordTextController.text,
+                                            customerAddress:
+                                                ethidcontroller.text,
+                                            tokens: 0,
+                                            loginStreak: 0,
+                                            lastLogin:
+                                                DateTime.now().toString());
+                                        if (!userCredential.isNull) {
+                                          serviceClass.addCustomer(
+                                              userNameTextController.text,
+                                              emailTextController.text,
+                                              passwordTextController.text,
+                                              ethidcontroller.text,
+                                              ethClient!);
+                                          user.setCurrentUser = newCustomer;
+                                          FirebaseFirestore.instance
                                               .collection("Customers")
                                               .doc(emailTextController.text)
-                                              .set(user.getCurrentUser.toJson())
-                                              .then((value) {
-                                            Navigator.of(context)
-                                                .pushReplacement(
-                                                    MaterialPageRoute(
-                                                        builder: (context) {
-                                              return const UserProfilePage();
-                                            }));
-                                          });
+                                              .set(newCustomer.toJson())
+                                              .then((value) =>
+                                                  Navigator.of(context)
+                                                      .pushReplacement(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) {
+                                                    return const UserProfilePage();
+                                                  })));
+
                                           isLoading = false;
                                         }
                                       },
@@ -268,7 +245,7 @@ class _NewLoginState extends State<NewLogin> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "New Here? ",
+                                    "Already A Member? ",
                                     style: GoogleFonts.actor(
                                       textStyle: TextStyle(
                                           color: Colors.black.withOpacity(0.8),
@@ -281,11 +258,11 @@ class _NewLoginState extends State<NewLogin> {
                                         Navigator.of(context).pushReplacement(
                                             MaterialPageRoute(builder:
                                                 (BuildContext context) {
-                                          return const NewSignUp();
+                                          return const NewLogin();
                                         }));
                                       },
                                       child: const Text(
-                                        "Get Started!",
+                                        "LoginHere!",
                                         style: TextStyle(color: Colors.blue),
                                       ))
                                 ]),
