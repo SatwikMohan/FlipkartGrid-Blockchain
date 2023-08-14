@@ -1,4 +1,3 @@
-import 'dart:js_interop';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -153,7 +152,9 @@ class _NewLoginState extends State<NewLogin> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 131, vertical: 20)),
                                       onPressed: () async {
-                                        isLoading = true;
+                                        setState(() {
+                                          isLoading = true;
+                                        });
                                         final credential = await FirebaseAuth
                                             .instance
                                             .signInWithEmailAndPassword(
@@ -161,7 +162,7 @@ class _NewLoginState extends State<NewLogin> {
                                                 password: passwordTextController
                                                     .text);
                                         List<dynamic> ethUserData;
-                                        if (!credential.isNull) {
+                                        if (credential.user != null) {
                                           final firebaseUserResponse =
                                               await FirebaseFirestore.instance
                                                   .collection("Customers")
@@ -240,7 +241,9 @@ class _NewLoginState extends State<NewLogin> {
                                               return const UserProfilePage();
                                             }));
                                           });
-                                          isLoading = false;
+                                          setState(() {
+                                            isLoading = false;
+                                          });
                                         }
                                       },
                                       child: const Text(

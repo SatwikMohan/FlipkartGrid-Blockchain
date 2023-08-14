@@ -55,6 +55,7 @@ dependencies:
   json_annotation: ^4.8.1
   web3dart: ^2.7.1
   cloud_firestore: ^4.8.4
+  shared_preferences: ^2.2.0
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flipgrid/firebase_options.dart';
-import 'package:flipgrid/login_signup/new_signup.dart';
+import 'package:flipgrid/login_signup/login.dart';
 import 'package:flipgrid/models/user.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,15 @@ final currentUserStateProvider =
     ChangeNotifierProvider((ref) => CurrentUserState());
 
 class CurrentUserState extends ChangeNotifier {
-  late Customer _user;
+  // late Customer _user;
+  Customer _user = Customer(
+      name: "testUser",
+      email: "testemail@gmail.com",
+      password: "testpass",
+      customerAddress: "testCustomerAddress",
+      lastLogin: DateTime.now().toString(),
+      tokens: 3,
+      loginStreak: 5);
   set setCurrentUser(Customer user) {
     _user = user;
     notifyListeners();
@@ -43,7 +51,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const NewSignUp(),
+      home: const LoginScreen(),
     );
   }
 }

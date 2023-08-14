@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flipgrid/main.dart';
 import 'package:flipgrid/models/brand.dart';
 import 'package:flipgrid/product_list_view.dart';
@@ -76,15 +77,25 @@ class _CartScreenState extends ConsumerState<CartScreen> {
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: totalAmount <= userBalance
-                    ? () {
+                    ? () async {
                         ServiceClass().buyUsingFungibleToken(
                             "0xE504F1aDE6B4d28ccFf9a29EE90cd5C82e16e55b",
                             ref
                                 .read(currentUserStateProvider)
                                 .getCurrentUser
                                 .customerAddress,
-                            totalAmount as int,
+                            BigInt.parse((totalAmount as int).toString()),
                             ethClient!);
+                        List<dynamic> ethUserData;
+                        final user = ref.read(currentUserStateProvider);
+                        ethUserData = await ServiceClass()
+                            .getUserData(user.getCurrentUser.email, ethClient!);
+                        user.setCurrentUser = user.getCurrentUser.copyWith(
+                            tokens: int.parse(ethUserData[0][5].toString()));
+                        await FirebaseFirestore.instance
+                            .collection("Customers")
+                            .doc(user.getCurrentUser.email)
+                            .set(user.getCurrentUser.toJson());
                       }
                     : null,
                 child: totalAmount <= userBalance

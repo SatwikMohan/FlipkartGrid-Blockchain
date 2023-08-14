@@ -174,7 +174,9 @@ class _NewSignUpState extends State<NewSignUp> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 131, vertical: 20)),
                                       onPressed: () async {
-                                        isLoading = true;
+                                        setState(() {
+                                          isLoading = true;
+                                        });
                                         final userCredential =
                                             await FirebaseAuth.instance
                                                 .createUserWithEmailAndPassword(
@@ -217,11 +219,13 @@ class _NewSignUpState extends State<NewSignUp> {
                                                     return const UserProfilePage();
                                                   })));
 
-                                          isLoading = false;
+                                          setState(() {
+                                            isLoading = false;
+                                          });
                                         }
                                       },
                                       child: const Text(
-                                        'Log In',
+                                        'Sign Up',
                                         style: TextStyle(fontSize: 17),
                                       ));
                                 })

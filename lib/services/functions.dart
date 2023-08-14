@@ -98,10 +98,18 @@ class ServiceClass {
     return response;
   }
 
-  Future<String> buyUsingFungibleToken(String brandAddress,String customerAddress,int cost,Web3Client ethClient) async{
-    var response=await _callFunction('buyUsingFungibleToken', [EthereumAddress.fromHex(customerAddress),EthereumAddress.fromHex(brandAddress),cost], ethClient, owner_private_key);
+  Future<String> buyUsingFungibleToken(String brandAddress,
+      String customerAddress, BigInt cost, Web3Client ethClient) async {
+    var response = await _callFunction(
+        'buyUsingFungibleToken',
+        [
+          EthereumAddress.fromHex(customerAddress),
+          EthereumAddress.fromHex(brandAddress),
+          cost
+        ],
+        ethClient,
+        owner_private_key);
     print('Function buyUsingFungibleToken Called Successfully');
     return response;
   }
-
 }
