@@ -54,6 +54,13 @@ class ServiceClass {
     return response;
   }
 
+  Future<List<dynamic>> isCustomerMyLoyalCustomer(String brandAddress,String customerAddress,Web3Client ethClient) async{
+    var response=await _ask('isCustomerMyLoyalCustomer',[EthereumAddress.fromHex(brandAddress),EthereumAddress.fromHex(customerAddress)],ethClient);
+    print('Function isCustomerMyLoyalCustomer Called Successfully');
+    print("=>${response[0]}");
+    return response;
+  }
+
   Future<String> mintDailyCheckInLoyaltyPoints(
       String customerAddress, Web3Client ethClient) async {
     var response = await _callFunction(
@@ -112,4 +119,13 @@ class ServiceClass {
     print('Function buyUsingFungibleToken Called Successfully');
     return response;
   }
+
+  Future<String> updateMoneySpendOnBrand(String brandAddress,String customerAddress,BigInt money,Web3Client ethClient) async{
+    var response=await _callFunction('updateMoneySpendOnBrand',[EthereumAddress.fromHex(brandAddress),
+      EthereumAddress.fromHex(customerAddress),
+      money],ethClient,owner_private_key);
+    print('Function updateMoneySpendOnBrand Called Successfully');
+    return response;
+  }
+
 }

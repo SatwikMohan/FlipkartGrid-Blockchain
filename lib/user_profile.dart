@@ -6,6 +6,7 @@ import 'package:flipgrid/main.dart';
 import 'package:flipgrid/models/test_models.dart';
 import 'package:flipgrid/product_list_view.dart';
 import 'package:flipgrid/services/functions.dart';
+import 'package:flipgrid/share_screen.dart';
 import 'package:flipgrid/text_field.dart';
 import 'package:flipgrid/transactions_screen.dart';
 import 'package:flipgrid/utils/constants.dart';
@@ -172,6 +173,23 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           },
                           child: const Text(
                             'Transaction History:',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return ShareScreen();
+                                },
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Share with friends',
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
