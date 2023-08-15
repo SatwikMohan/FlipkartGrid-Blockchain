@@ -64,6 +64,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                             .remove(ref.read(cartProductsProvider)[index]);
                       });
                     },
+                    customerAddress: ref.read(currentUserStateProvider).getCurrentUser.customerAddress,
                   );
                   // return ProductCard(product: productsTest[index]);
                 },
@@ -82,7 +83,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
               ElevatedButton(
                 onPressed: totalAmount <= userBalance
                     ? () async {
-                        ServiceClass().buyUsingFungibleToken(
+                        ServiceClass().updateMoneySpendOnBrand(
                             "0xE504F1aDE6B4d28ccFf9a29EE90cd5C82e16e55b",
                             ref
                                 .read(currentUserStateProvider)

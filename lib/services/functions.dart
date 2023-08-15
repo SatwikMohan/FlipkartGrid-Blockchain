@@ -54,6 +54,13 @@ class ServiceClass {
     return response;
   }
 
+  Future<List<dynamic>> getBrandAddress(String email,Web3Client ethClient) async{
+    var response=await _ask('getBrandAddress',[email],ethClient);
+    print('Function getBrandAddress Called Successfully');
+    print("=>${response[0]}");
+    return response;
+  }
+
   Future<List<dynamic>> isCustomerMyLoyalCustomer(String brandAddress,String customerAddress,Web3Client ethClient) async{
     var response=await _ask('isCustomerMyLoyalCustomer',[EthereumAddress.fromHex(brandAddress),EthereumAddress.fromHex(customerAddress)],ethClient);
     print('Function isCustomerMyLoyalCustomer Called Successfully');

@@ -6,13 +6,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'models/brand.dart';
 
 class ProductListView extends StatefulWidget {
-  const ProductListView({super.key});
+  late String customerAddress;
+  ProductListView(String customerAddress){
+    this.customerAddress=customerAddress;
+  }
 
   @override
-  State<ProductListView> createState() => _ProductListViewState();
+  State<ProductListView> createState() => _ProductListViewState(customerAddress);
 }
 
 class _ProductListViewState extends State<ProductListView> {
+  late String customerAddress;
+  _ProductListViewState(String customerAddress){
+    this.customerAddress=customerAddress;
+  }
   List<Brand> products = [];
   void getProducts() async {
     final response =
@@ -44,7 +51,7 @@ class _ProductListViewState extends State<ProductListView> {
 
         itemBuilder: (context, index) {
           return ProductCard(
-            product: products[index], onTapDelete: null,
+            product: products[index], onTapDelete: null,customerAddress: customerAddress,
             // onTapDelete: null,
           );
           // return ProductCard(product: productsTest[index]);
@@ -57,9 +64,12 @@ class _ProductListViewState extends State<ProductListView> {
 class ProductCard extends StatelessWidget {
   final Brand product;
   // final bool inCart;
+  late String customerAddress;
   final void Function()? onTapDelete;
   // final ProductTest product;
-  const ProductCard({super.key, required this.product, this.onTapDelete});
+  ProductCard({super.key, required this.product, this.onTapDelete,required String customerAddress}){
+    this.customerAddress=customerAddress;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +78,7 @@ class ProductCard extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return ProductDetailsScreen(product: product);
+            return ProductDetailsScreen(product: product,customerAddress:customerAddress);
           }));
         },
         child: ListTile(
@@ -98,7 +108,7 @@ class ProductCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "${product.CostETH}Token",
+                  "\$ ${product.CostETH}",
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),

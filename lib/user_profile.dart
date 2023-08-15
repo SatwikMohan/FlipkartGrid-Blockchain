@@ -153,7 +153,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             onPressed: () {
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
-                                return const ProductListView();
+                                return ProductListView(user.customerAddress);
                               }));
                             },
                             child: const Text(

@@ -92,7 +92,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return const Scaffold(body: ProductListView());
+                            return Scaffold(body: ProductListView(employeeModel.customerAddress));
                           }));
                         },
                         child: const Text("Buy with points!")),
