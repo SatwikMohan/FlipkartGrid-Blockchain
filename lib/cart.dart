@@ -9,6 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:web3dart/web3dart.dart';
 
+import 'models/transaction.dart';
+
 final cartProductsProvider = Provider<List<Brand>>((ref) => []);
 
 class CartScreen extends ConsumerStatefulWidget {
@@ -23,13 +25,13 @@ class _CartScreenState extends ConsumerState<CartScreen> {
   double userBalance = 0;
   Client? client;
   Web3Client? ethClient;
-  List<Brand> cartProducts = [];
+  // List<Brand> cartProducts = [];
   @override
   void initState() {
     client = Client();
     ethClient = Web3Client(infura_url, client!);
-    cartProducts = ref.read(cartProductsProvider);
-    totalAmount = cartProducts.fold(0,
+    // cartProducts = ref.read(cartProductsProvider);
+    totalAmount = ref.read(cartProductsProvider).fold(0,
         (previousValue, element) => previousValue + int.parse(element.CostETH));
     userBalance =
         (ref.read(currentUserStateProvider).getCurrentUser.tokens) as double;
@@ -51,13 +53,15 @@ class _CartScreenState extends ConsumerState<CartScreen> {
               ListView.builder(
                 shrinkWrap: true,
                 // itemCount: productsTest.length,
-                itemCount: cartProducts.length,
+                itemCount: ref.read(cartProductsProvider).length,
                 itemBuilder: (context, index) {
                   return ProductCard(
-                    product: cartProducts[index],
+                    product: ref.read(cartProductsProvider)[index],
                     onTapDelete: () {
                       setState(() {
-                        cartProducts.remove(cartProducts[index]);
+                        ref
+                            .read(cartProductsProvider)
+                            .remove(ref.read(cartProductsProvider)[index]);
                       });
                     },
                   );
@@ -93,12 +97,27 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                         user.setCurrentUser = user.getCurrentUser.copyWith(
                             tokens: int.parse(ethUserData[0][5].toString()));
                         setState(() {
-                          cartProducts = [];
+                          ref.read(cartProductsProvider).clear();
                         });
                         await FirebaseFirestore.instance
                             .collection("Customers")
                             .doc(user.getCurrentUser.email)
                             .set(user.getCurrentUser.toJson());
+                        final transaction = TransactionAppModel(
+                            dateTime: DateTime.now(),
+                            amountRecieved: null,
+                            tokensRecieved: null,
+                            tokensSpent: totalAmount as int,
+                            amountSpent: null,
+                            senderAdress: null,
+                            recieverAress: user.getCurrentUser.customerAddress,
+                            customerEmail: user.getCurrentUser.email,
+                            title:
+                                'Bought ${ref.read(cartProductsProvider).fold("", (previousValue, element) => "$previousValue${element.name}, ")}');
+                        await FirebaseFirestore.instance
+                            .collection("Transactions")
+                            .doc()
+                            .set(transaction.toJson());
                       }
                     : null,
                 child: totalAmount <= userBalance

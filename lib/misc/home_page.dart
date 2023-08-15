@@ -1,8 +1,8 @@
 import 'dart:ui';
 
+import 'package:flipgrid/follow_to_earn.dart';
 import 'package:flipgrid/main.dart';
 import 'package:flipgrid/product_list_view.dart';
-import 'package:flipgrid/test_features/follow_to_earn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';

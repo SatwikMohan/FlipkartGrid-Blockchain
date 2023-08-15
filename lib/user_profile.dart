@@ -16,7 +16,7 @@ import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:web3dart/web3dart.dart';
 
-import 'test_features/follow_to_earn.dart';
+import 'follow_to_earn.dart';
 
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key, required});

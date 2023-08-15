@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flipgrid/login_signup/new_signup.dart';
 import 'package:flipgrid/main.dart';
+import 'package:flipgrid/models/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -224,8 +225,27 @@ class _NewLoginState extends State<NewLogin> {
                                                       ethClient!);
                                               user.setCurrentUser =
                                                   user.getCurrentUser.copyWith(
-                                                      lastLogin: DateTime.now()
+                                                      lastLogin: currentDateTime
                                                           .toString());
+                                              final transaction =
+                                                  TransactionAppModel(
+                                                      dateTime: currentDateTime,
+                                                      amountRecieved: null,
+                                                      tokensRecieved: 1,
+                                                      tokensSpent: null,
+                                                      amountSpent: null,
+                                                      senderAdress: null,
+                                                      recieverAress: user
+                                                          .getCurrentUser
+                                                          .customerAddress,
+                                                      customerEmail: user
+                                                          .getCurrentUser.email,
+                                                      title:
+                                                          'daily login reward');
+                                              await FirebaseFirestore.instance
+                                                  .collection("Transactions")
+                                                  .doc()
+                                                  .set(transaction.toJson());
                                               print(response);
                                             }
                                           }
@@ -241,6 +261,7 @@ class _NewLoginState extends State<NewLogin> {
                                               return const UserProfilePage();
                                             }));
                                           });
+
                                           // setState(() {
                                           //   isLoading = false;
                                           // });

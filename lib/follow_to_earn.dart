@@ -6,8 +6,9 @@ import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:web3dart/web3dart.dart';
 
-import '../services/functions.dart';
-import '../utils/constants.dart';
+import 'models/transaction.dart';
+import 'services/functions.dart';
+import 'utils/constants.dart';
 
 Future<void> _launchSocialMediaAppIfInstalled({
   required String url,
@@ -107,6 +108,20 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                               .collection("Customers")
                               .doc(user.email)
                               .set(user.toJson());
+                          final transaction = TransactionAppModel(
+                              dateTime: DateTime.now(),
+                              amountRecieved: null,
+                              tokensRecieved: 1,
+                              tokensSpent: null,
+                              amountSpent: null,
+                              senderAdress: null,
+                              recieverAress: user.customerAddress,
+                              customerEmail: user.email,
+                              title: 'followed us on insta');
+                          await FirebaseFirestore.instance
+                              .collection("Transactions")
+                              .doc()
+                              .set(transaction.toJson());
                         } else if (user.fbFollowed && index == 1) {
                           ref.read(currentUserStateProvider).setCurrentUser =
                               ref
@@ -119,6 +134,20 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                               .collection("Customers")
                               .doc(user.email)
                               .set(user.toJson());
+                          final transaction = TransactionAppModel(
+                              dateTime: DateTime.now(),
+                              amountRecieved: null,
+                              tokensRecieved: 1,
+                              tokensSpent: null,
+                              amountSpent: null,
+                              senderAdress: null,
+                              recieverAress: user.customerAddress,
+                              customerEmail: user.email,
+                              title: "Followed us on fb");
+                          await FirebaseFirestore.instance
+                              .collection("Transactions")
+                              .doc()
+                              .set(transaction.toJson());
                         } else if (user.twitterFollowed && index == 2) {
                           ref.read(currentUserStateProvider).setCurrentUser =
                               ref
@@ -131,6 +160,20 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                               .collection("Customers")
                               .doc(user.email)
                               .set(user.toJson());
+                          final transaction = TransactionAppModel(
+                              dateTime: DateTime.now(),
+                              amountRecieved: null,
+                              tokensRecieved: 1,
+                              tokensSpent: null,
+                              amountSpent: null,
+                              senderAdress: null,
+                              recieverAress: user.customerAddress,
+                              customerEmail: user.email,
+                              title: 'followed us on twitter');
+                          await FirebaseFirestore.instance
+                              .collection("Transactions")
+                              .doc()
+                              .set(transaction.toJson());
                         }
                       },
                       child: Text(socialMediaPlatforms[index]),
