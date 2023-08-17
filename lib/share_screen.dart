@@ -26,7 +26,7 @@ class _ShareScreenState extends State<ShareScreen> {
   }
 
   void process() async{
-    int r=random(100000,1000000);
+    int r=random(1000000,10000000);
     String secretKey=r.toString();
     String code=await encryptionClass.EncryptedEthId(ethId, secretKey);
     setState(() {
