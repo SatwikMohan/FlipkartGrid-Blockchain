@@ -208,7 +208,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) {
-                                  return ShareScreen();
+                                  return ShareScreen(user.customerAddress);
                                 },
                               ),
                             );
