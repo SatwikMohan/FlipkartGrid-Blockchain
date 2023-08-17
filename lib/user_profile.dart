@@ -86,6 +86,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           icon: const Icon(Icons.logout)),
       appBar: AppBar(
         title: const Text('User Profile'),
+        backgroundColor: Colors.blue,
         actions: [
           Consumer(
             builder: (BuildContext context, WidgetRef ref, Widget? child) {
