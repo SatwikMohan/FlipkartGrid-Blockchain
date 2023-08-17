@@ -12,6 +12,7 @@ class Brand with _$Brand {
     required String PicUrl,
     required String CostETH,
     required int currLoyalPoints,
+    required bool? isuserloyaltobrand,
   }) = _Brand;
 
   factory Brand.fromJson(Map<String, dynamic> json) => _$BrandFromJson(json);

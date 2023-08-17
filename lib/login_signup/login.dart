@@ -185,7 +185,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                             user.getCurrentUser.copyWith(
                                                 tokens: int.parse(ethUserData[0]
                                                         [5]
-                                                    .toString()));
+                                                    .toString()),
+                                            customerAddress: ethUserData[0]
+                                            [3]
+                                            );
 
                                         print(ethUserData[0].toString());
 

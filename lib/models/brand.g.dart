@@ -13,6 +13,7 @@ _$_Brand _$$_BrandFromJson(Map<String, dynamic> json) => _$_Brand(
       PicUrl: json['PicUrl'] as String,
       CostETH: json['CostETH'] as String,
       currLoyalPoints: json['currLoyalPoints'] as int,
+      isuserloyaltobrand: json['isuserloyaltobrand'] as bool?,
     );
 
 Map<String, dynamic> _$$_BrandToJson(_$_Brand instance) => <String, dynamic>{
@@ -22,4 +23,5 @@ Map<String, dynamic> _$$_BrandToJson(_$_Brand instance) => <String, dynamic>{
       'PicUrl': instance.PicUrl,
       'CostETH': instance.CostETH,
       'currLoyalPoints': instance.currLoyalPoints,
+      'isuserloyaltobrand': instance.isuserloyaltobrand,
     };

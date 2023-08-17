@@ -1,12 +1,18 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flipgrid/login_signup/auth_input_text.dart';
 import 'package:flipgrid/main.dart';
 import 'package:flipgrid/models/brand.dart';
 import 'package:flipgrid/product_list_view.dart';
 import 'package:flipgrid/services/functions.dart';
+import 'package:flipgrid/text_field.dart';
 import 'package:flipgrid/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:web3dart/web3dart.dart';
 
 import 'models/transaction.dart';
@@ -23,8 +29,28 @@ class CartScreen extends ConsumerStatefulWidget {
 class _CartScreenState extends ConsumerState<CartScreen> {
   double totalAmount = 0;
   double userBalance = 0;
+  TextEditingController discountAmountController = TextEditingController();
   Client? client;
   Web3Client? ethClient;
+  void showDailyCheckInDialog() async {
+    await QuickAlert.show(
+      context: context,
+      type: QuickAlertType.success,
+      title: "Loyal CustomerReward",
+      widget: const Column(
+        children: [
+
+          Text("You are awarded 1 SUPERCOINS"),
+          Text("Buy again for more!"),
+        ],
+      ),
+      confirmBtnText: "Claim Reward!",
+      onConfirmBtnTap: () {
+        Navigator.pop(context);
+      },
+      barrierDismissible: false,
+    );
+  }
   // List<Brand> cartProducts = [];
   @override
   void initState() {
@@ -70,7 +96,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 },
               ),
               Text(
-                'Total Amount: ${totalAmount.toStringAsFixed(2)} tokens',
+                'Total Amount: \$ ${totalAmount.toStringAsFixed(2)}',
                 style:
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
@@ -79,18 +105,66 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 'Your Balance: ${userBalance.toStringAsFixed(2)} tokens',
                 style: const TextStyle(fontSize: 18),
               ),
+              const SizedBox(height: 16),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                // AuthInputText(textEditingController: discountAmountController,
+                //   labelText: "Enter Tokens Amount",
+                //   hintText: ""),
+                Container(
+                  width: 100,
+                  // height: 20,
+                  child: TextInputWidget(controller: discountAmountController, texthint: "Enter Tokens Amount", textInputType: TextInputType.number),
+                  // child: TextField(controller: discountAmountController,
+                  //   keyboardType: TextInputType.number,
+                  //   decoration: InputDecoration(hintText: "Enter tokens amount",),),
+                ),
+                // TextInputWidget(controller: discountAmountController, texthint: "Enter Tokens Amount", textInputType: TextInputType.number),
+                ElevatedButton(onPressed: (){
+                  if(userBalance>=int.parse(discountAmountController.text)) {
+                    setState(() {
+                      totalAmount =
+                          totalAmount - int.parse(discountAmountController.text);
+                      userBalance -= int.parse(discountAmountController.text);
+                    });
+                  } else {
+                    final snackBar = SnackBar(
+                      content: const Text("Insufficient Tokens"),
+                    );
+
+                    // Find the ScaffoldMessenger in the widget tree
+                    // and use it to show a SnackBar.
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                }, child: Text("Use Tokens")),
+              ]),
               const SizedBox(height: 32),
               ElevatedButton(
-                onPressed: totalAmount <= userBalance
-                    ? () async {
-                        ServiceClass().updateMoneySpendOnBrand(
-                            "0xE504F1aDE6B4d28ccFf9a29EE90cd5C82e16e55b",
-                            ref
-                                .read(currentUserStateProvider)
-                                .getCurrentUser
-                                .customerAddress,
-                            BigInt.parse((totalAmount as int).toString()),
-                            ethClient!);
+                onPressed:
+                    () async {
+                  ref.read(cartProductsProvider).forEach((element) async {
+                    final response = await ServiceClass().getBrandAddress(element.email!, ethClient!);
+                    element = element.copyWith(brandAddress: response[0]);
+                    ServiceClass().updateMoneySpendOnBrand(
+                        element.brandAddress,
+                        ref
+                            .read(currentUserStateProvider)
+                            .getCurrentUser
+                            .customerAddress,
+                        BigInt.parse((totalAmount as int).toString()),
+                        ethClient!);
+                    if(element.isuserloyaltobrand??false){
+                      final rewardresponse = await ServiceClass().mintDailyCheckInLoyaltyPoints(ref
+                          .read(currentUserStateProvider)
+                          .getCurrentUser
+                          .customerAddress, ethClient!);
+                      if(bool.parse(rewardresponse[0].toString())){
+                        showDailyCheckInDialog();
+                      }
+                    }
+                  });
+
                         List<dynamic> ethUserData;
                         final user = ref.read(currentUserStateProvider);
                         ethUserData = await ServiceClass()
@@ -119,11 +193,9 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                             .collection("Transactions")
                             .doc()
                             .set(transaction.toJson());
-                      }
-                    : null,
-                child: totalAmount <= userBalance
-                    ? const Text('Buy Now')
-                    : const Text("Insufficient Balance"),
+                      },
+                child:
+                     const Text('Buy Now')
               ),
             ],
           ),

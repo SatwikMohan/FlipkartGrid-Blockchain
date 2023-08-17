@@ -26,6 +26,7 @@ mixin _$Brand {
   String get PicUrl => throw _privateConstructorUsedError;
   String get CostETH => throw _privateConstructorUsedError;
   int get currLoyalPoints => throw _privateConstructorUsedError;
+  bool? get isuserloyaltobrand => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +44,8 @@ abstract class $BrandCopyWith<$Res> {
       String brandAddress,
       String PicUrl,
       String CostETH,
-      int currLoyalPoints});
+      int currLoyalPoints,
+      bool? isuserloyaltobrand});
 }
 
 /// @nodoc
@@ -65,6 +67,7 @@ class _$BrandCopyWithImpl<$Res, $Val extends Brand>
     Object? PicUrl = null,
     Object? CostETH = null,
     Object? currLoyalPoints = null,
+    Object? isuserloyaltobrand = freezed,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -91,6 +94,10 @@ class _$BrandCopyWithImpl<$Res, $Val extends Brand>
           ? _value.currLoyalPoints
           : currLoyalPoints // ignore: cast_nullable_to_non_nullable
               as int,
+      isuserloyaltobrand: freezed == isuserloyaltobrand
+          ? _value.isuserloyaltobrand
+          : isuserloyaltobrand // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -107,7 +114,8 @@ abstract class _$$_BrandCopyWith<$Res> implements $BrandCopyWith<$Res> {
       String brandAddress,
       String PicUrl,
       String CostETH,
-      int currLoyalPoints});
+      int currLoyalPoints,
+      bool? isuserloyaltobrand});
 }
 
 /// @nodoc
@@ -125,6 +133,7 @@ class __$$_BrandCopyWithImpl<$Res> extends _$BrandCopyWithImpl<$Res, _$_Brand>
     Object? PicUrl = null,
     Object? CostETH = null,
     Object? currLoyalPoints = null,
+    Object? isuserloyaltobrand = freezed,
   }) {
     return _then(_$_Brand(
       name: null == name
@@ -151,6 +160,10 @@ class __$$_BrandCopyWithImpl<$Res> extends _$BrandCopyWithImpl<$Res, _$_Brand>
           ? _value.currLoyalPoints
           : currLoyalPoints // ignore: cast_nullable_to_non_nullable
               as int,
+      isuserloyaltobrand: freezed == isuserloyaltobrand
+          ? _value.isuserloyaltobrand
+          : isuserloyaltobrand // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -164,7 +177,8 @@ class _$_Brand implements _Brand {
       required this.brandAddress,
       required this.PicUrl,
       required this.CostETH,
-      required this.currLoyalPoints});
+      required this.currLoyalPoints,
+      required this.isuserloyaltobrand});
 
   factory _$_Brand.fromJson(Map<String, dynamic> json) =>
       _$$_BrandFromJson(json);
@@ -181,10 +195,12 @@ class _$_Brand implements _Brand {
   final String CostETH;
   @override
   final int currLoyalPoints;
+  @override
+  final bool? isuserloyaltobrand;
 
   @override
   String toString() {
-    return 'Brand(name: $name, email: $email, brandAddress: $brandAddress, PicUrl: $PicUrl, CostETH: $CostETH, currLoyalPoints: $currLoyalPoints)';
+    return 'Brand(name: $name, email: $email, brandAddress: $brandAddress, PicUrl: $PicUrl, CostETH: $CostETH, currLoyalPoints: $currLoyalPoints, isuserloyaltobrand: $isuserloyaltobrand)';
   }
 
   @override
@@ -199,13 +215,15 @@ class _$_Brand implements _Brand {
             (identical(other.PicUrl, PicUrl) || other.PicUrl == PicUrl) &&
             (identical(other.CostETH, CostETH) || other.CostETH == CostETH) &&
             (identical(other.currLoyalPoints, currLoyalPoints) ||
-                other.currLoyalPoints == currLoyalPoints));
+                other.currLoyalPoints == currLoyalPoints) &&
+            (identical(other.isuserloyaltobrand, isuserloyaltobrand) ||
+                other.isuserloyaltobrand == isuserloyaltobrand));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, name, email, brandAddress, PicUrl, CostETH, currLoyalPoints);
+  int get hashCode => Object.hash(runtimeType, name, email, brandAddress,
+      PicUrl, CostETH, currLoyalPoints, isuserloyaltobrand);
 
   @JsonKey(ignore: true)
   @override
@@ -228,7 +246,8 @@ abstract class _Brand implements Brand {
       required final String brandAddress,
       required final String PicUrl,
       required final String CostETH,
-      required final int currLoyalPoints}) = _$_Brand;
+      required final int currLoyalPoints,
+      required final bool? isuserloyaltobrand}) = _$_Brand;
 
   factory _Brand.fromJson(Map<String, dynamic> json) = _$_Brand.fromJson;
 
@@ -244,6 +263,8 @@ abstract class _Brand implements Brand {
   String get CostETH;
   @override
   int get currLoyalPoints;
+  @override
+  bool? get isuserloyaltobrand;
   @override
   @JsonKey(ignore: true)
   _$$_BrandCopyWith<_$_Brand> get copyWith =>

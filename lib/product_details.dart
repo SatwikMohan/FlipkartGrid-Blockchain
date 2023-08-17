@@ -42,6 +42,7 @@ class _ProductDetailScreenState extends State<ProductDetailsScreen>{
     var response=await serviceClass.isCustomerMyLoyalCustomer(brandAddress, customerAddress, ethClient);
     setState(() {
       loyalty=bool.parse(response[0].toString());
+      product = product.copyWith(isuserloyaltobrand : loyalty);
     });
   }
   @override
