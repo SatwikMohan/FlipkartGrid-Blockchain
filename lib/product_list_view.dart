@@ -94,11 +94,10 @@ class ProductCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(product.name),
-              const Text("product.description"),
-              const Row(
+              Row(
                 children: [
                   Icon(Icons.star, color: Colors.yellow),
-                  Text("product.rating"),
+                  Text(product.rating),
                 ],
               ),
             ],

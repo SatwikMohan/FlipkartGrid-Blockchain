@@ -102,7 +102,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Your Balance: ${userBalance.toStringAsFixed(2)} tokens',
+                'Your Token Balance: ${userBalance.toStringAsFixed(2)} tokens',
                 style: const TextStyle(fontSize: 18),
               ),
               const SizedBox(height: 16),
@@ -115,29 +115,32 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 Container(
                   width: 100,
                   // height: 20,
-                  child: TextInputWidget(controller: discountAmountController, texthint: "Enter Tokens Amount", textInputType: TextInputType.number),
+                  child: TextInputWidget(controller: discountAmountController, texthint: "Enter", textInputType: TextInputType.number),
                   // child: TextField(controller: discountAmountController,
                   //   keyboardType: TextInputType.number,
                   //   decoration: InputDecoration(hintText: "Enter tokens amount",),),
                 ),
                 // TextInputWidget(controller: discountAmountController, texthint: "Enter Tokens Amount", textInputType: TextInputType.number),
-                ElevatedButton(onPressed: (){
-                  if(userBalance>=int.parse(discountAmountController.text)) {
-                    setState(() {
-                      totalAmount =
-                          totalAmount - int.parse(discountAmountController.text);
-                      userBalance -= int.parse(discountAmountController.text);
-                    });
-                  } else {
-                    final snackBar = SnackBar(
-                      content: const Text("Insufficient Tokens"),
-                    );
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: ElevatedButton(onPressed: (){
+                    if(userBalance>=int.parse(discountAmountController.text)) {
+                      setState(() {
+                        totalAmount =
+                            totalAmount - int.parse(discountAmountController.text);
+                        userBalance -= int.parse(discountAmountController.text);
+                      });
+                    } else {
+                      final snackBar = SnackBar(
+                        content: const Text("Insufficient Tokens"),
+                      );
 
-                    // Find the ScaffoldMessenger in the widget tree
-                    // and use it to show a SnackBar.
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
-                }, child: Text("Use Tokens")),
+                      // Find the ScaffoldMessenger in the widget tree
+                      // and use it to show a SnackBar.
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  }, child: Text("Use Tokens")),
+                ),
               ]),
               const SizedBox(height: 32),
               ElevatedButton(

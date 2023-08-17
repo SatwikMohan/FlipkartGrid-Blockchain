@@ -92,15 +92,15 @@ class _ProductDetailScreenState extends State<ProductDetailsScreen>{
                         fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    "product.description",
+                  Text(
+                    product.description,
                     style: TextStyle(fontSize: 16),
                   ),
                   const SizedBox(height: 8),
-                  const Row(
+                  Row(
                     children: [
                       Icon(Icons.star, color: Colors.yellow),
-                      Text("product.rating"),
+                      Text(product.rating),
                     ],
                   ),
                   const SizedBox(height: 9),

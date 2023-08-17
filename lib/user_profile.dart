@@ -86,6 +86,29 @@ class _UserProfilePageState extends State<UserProfilePage> {
           icon: const Icon(Icons.logout)),
       appBar: AppBar(
         title: const Text('User Profile'),
+        actions: [
+          Consumer(
+            builder: (BuildContext context, WidgetRef ref, Widget? child) {
+              final user = ref
+                  .watch(currentUserStateProvider)
+                  .getCurrentUser;
+              return Padding(
+                padding: EdgeInsets.all(12),
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                            return ProductListView(user.customerAddress);
+                          }));
+                    },
+                    child: const Text(
+                      "Start Shopping",
+                      style: TextStyle(fontSize: 16),
+                    )),
+              );
+            }
+          ),
+        ],
       ),
       body: Stack(children: [
         Container(
@@ -148,18 +171,19 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           },
                           child: const Text("Transfer Points"),
                         ),
+                        const SizedBox(height: 10),
                         const FollowOnSocials(),
-                        ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return ProductListView(user.customerAddress);
-                              }));
-                            },
-                            child: const Text(
-                              "Buy with points!",
-                              style: TextStyle(fontSize: 16),
-                            )),
+                        // ElevatedButton(
+                        //     onPressed: () {
+                        //       Navigator.push(context,
+                        //           MaterialPageRoute(builder: (context) {
+                        //         return ProductListView(user.customerAddress);
+                        //       }));
+                        //     },
+                        //     child: const Text(
+                        //       "Buy with points!",
+                        //       style: TextStyle(fontSize: 16),
+                        //     )),
                         const SizedBox(height: 8),
                         ElevatedButton(
                           onPressed: () {
@@ -172,7 +196,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             );
                           },
                           child: const Text(
-                            'Transaction History:',
+                            'Transaction History',
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
