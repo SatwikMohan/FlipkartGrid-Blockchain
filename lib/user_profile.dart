@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flipgrid/login_signup/new_login.dart';
 import 'package:flipgrid/main.dart';
@@ -20,19 +21,72 @@ import 'package:web3dart/web3dart.dart';
 import 'follow_to_earn.dart';
 
 class UserProfilePage extends StatefulWidget {
-  const UserProfilePage({super.key, required});
+  //const UserProfilePage({super.key, required});
+  late bool isSignUp;
+  UserProfilePage(bool isSignUp){
+    this.isSignUp=isSignUp;
+  }
 
   @override
-  State<UserProfilePage> createState() => _UserProfilePageState();
+  State<UserProfilePage> createState() => _UserProfilePageState(isSignUp);
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
   Client? client;
   Web3Client? ethClient;
+  late bool isSignUp;
+  _UserProfilePageState(bool isSignUp){
+    this.isSignUp=isSignUp;
+  }
+  void isReferralPresent(String referralCode) async {
+    final QuerySnapshot<Map<String, dynamic>> response;
+    response = await FirebaseFirestore.instance
+        .collection("ReferalCodes")
+        .where("Code", isEqualTo: referralCode)
+        .get();
+    print(response.docs.toString());
+    print(response.docs.map((e) => e.data()));
+    //return response.docs.map((e) => e.data());
+  }
+
+  void showReferalDialog() async{
+    final TextEditingController controller=TextEditingController();
+    print('1');
+    await QuickAlert.show(
+        context: context,
+        type: QuickAlertType.confirm,
+        barrierDismissible: true,
+        title: "Use Referral Code",
+        widget: Column(
+          children: [
+            TextInputWidget(
+              controller: controller,
+              texthint: 'Paste your referral code here',
+              textInputType: TextInputType.text,
+            )
+          ],
+        ),
+        confirmBtnText: "Claim Reward!",
+        onConfirmBtnTap: () {
+          isReferralPresent(controller.text);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.of(context).pop();
+          });
+        },
+        cancelBtnText: "Cancel",
+        onCancelBtnTap: (){
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.of(context).pop();
+          });
+        }
+    );
+  }
+
   @override
   void initState() {
     client = Client();
     ethClient = Web3Client(infura_url, client!);
+    //isSignUp?showReferalDialog(globalNavigatorKey.currentContext!):
     super.initState();
   }
 
@@ -73,6 +127,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       floatingActionButton: IconButton(
@@ -90,9 +145,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         actions: [
           Consumer(
             builder: (BuildContext context, WidgetRef ref, Widget? child) {
-              final user = ref
-                  .watch(currentUserStateProvider)
-                  .getCurrentUser;
+              final user = ref.watch(currentUserStateProvider).getCurrentUser;
               return Padding(
                 padding: EdgeInsets.all(12),
                 child: ElevatedButton(
@@ -134,6 +187,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
             child: Consumer(
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
                 final user = ref.watch(currentUserStateProvider).getCurrentUser;
+                if(isSignUp){
+                  showReferalDialog();
+                }
                 return SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
