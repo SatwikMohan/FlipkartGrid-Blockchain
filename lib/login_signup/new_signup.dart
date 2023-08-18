@@ -1,4 +1,3 @@
-import 'dart:js_interop';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:web3dart/web3dart.dart';
 
 import '../main.dart';
@@ -31,8 +28,9 @@ class _NewSignUpState extends State<NewSignUp> {
   final TextEditingController emailTextController = TextEditingController();
   final TextEditingController passwordTextController = TextEditingController();
   final TextEditingController ethidcontroller = TextEditingController();
+  final TextEditingController controller = TextEditingController();
   bool isLoading = false;
-
+  // final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
   bool loadingState = false;
   Client? client;
   Web3Client? ethClient;
@@ -49,31 +47,70 @@ class _NewSignUpState extends State<NewSignUp> {
     //return response.docs.map((e) => e.data());
   }
 
-  void showReferalDialog(BuildContext context) async {
-    // TextEditingController controller=TextEditingController();
-    print('1');
-    await QuickAlert.show(
-      context: context,
-      type: QuickAlertType.confirm,
-      title: "Use Referral Code",
-      widget: const Column(
-        children: [
-          Text("df"),
-          // TextInputWidget(
-          //   controller: controller,
-          //   texthint: 'Paste your referral code here',
-          //   textInputType: TextInputType.text,
-          // )
-        ],
-      ),
-      confirmBtnText: "Claim Reward!",
-      onConfirmBtnTap: () {
-        // isReferralPresent(controller.text);
-        Navigator.pop(context);
-      },
-      barrierDismissible: false,
-    );
-  }
+  // void showReferalDialog() {
+  //
+  //   final TextEditingController controller=TextEditingController();
+  //   print('1');
+  //   QuickAlert.show(
+  //     context: context,
+  //     type: QuickAlertType.success,
+  //     barrierDismissible: true,
+  //     title: "Use Referral Code",
+  //     widget: Column(
+  //       children: [
+  //         TextInputWidget(
+  //           controller: controller,
+  //           texthint: 'Paste your referral code here',
+  //           textInputType: TextInputType.text,
+  //         )
+  //       ],
+  //     ),
+  //     confirmBtnText: "Claim Reward!",
+  //     onConfirmBtnTap: () {
+  //      // isReferralPresent(controller.text);
+  //       Navigator.pop(context);
+  //     },
+  //   );
+  //   // TextEditingController textEditingController=TextEditingController();
+  //   // Alert(
+  //   //   context: context,
+  //   //   type: AlertType.info,
+  //   //   title: "Use Referral Code",
+  //   //   desc: "Welcome to Flipkart Family",
+  //   //   content: TextField(
+  //   //     controller: textEditingController,
+  //   //     decoration: InputDecoration(
+  //   //       hintText: 'Paste your Referral Code Here'
+  //   //     ),
+  //   //   ),
+  //   //   buttons: [
+  //   //     DialogButton(
+  //   //       child: Text(
+  //   //         "Confirm",
+  //   //         style: TextStyle(color: Colors.white, fontSize: 20),
+  //   //       ),
+  //   //       onPressed: () {
+  //   //         isReferralPresent(textEditingController.text);
+  //   //         Navigator.pop(context);
+  //   //       },
+  //   //       color: Color.fromRGBO(0, 179, 134, 1.0),
+  //   //     ),
+  //   //     DialogButton(
+  //   //       child: Text(
+  //   //         "Cancel",
+  //   //         style: TextStyle(color: Colors.white, fontSize: 20),
+  //   //       ),
+  //   //       onPressed: () {
+  //   //
+  //   //       },
+  //   //       gradient: LinearGradient(colors: [
+  //   //         Color.fromRGBO(116, 116, 191, 1.0),
+  //   //         Color.fromRGBO(52, 138, 199, 1.0)
+  //   //       ]),
+  //   //     )
+  //   //   ],
+  //   // ).show();
+  // }
 
   @override
   void initState() {
@@ -86,6 +123,36 @@ class _NewSignUpState extends State<NewSignUp> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
+    // void showReferalDialog() {
+    //   final TextEditingController controller=TextEditingController();
+    //   print('1');
+    //   QuickAlert.show(
+    //     context: globalNavigatorKey.currentContext??context,
+    //     type: QuickAlertType.confirm,
+    //     barrierDismissible: true,
+    //     title: "Use Referral Code",
+    //     widget: Column(
+    //       children: [
+    //         TextInputWidget(
+    //           controller: controller,
+    //           texthint: 'Paste your referral code here',
+    //           textInputType: TextInputType.text,
+    //         )
+    //       ],
+    //     ),
+    //     confirmBtnText: "Claim Reward!",
+    //     onConfirmBtnTap: () {
+    //       isReferralPresent(controller.text);
+    //       Navigator.of(context).pop();
+    //     },
+    //     cancelBtnText: "Cancel",
+    //     onCancelBtnTap: (){
+    //       Navigator.of(context).pop();
+    //     }
+    //   );
+    // }
+
     return Scaffold(
       body: Stack(children: [
         Container(
@@ -202,8 +269,7 @@ class _NewSignUpState extends State<NewSignUp> {
                                                     password:
                                                         passwordTextController
                                                             .text);
-                                        await userCredential.user
-                                            ?.updatePhotoURL("FakeETHid");
+                                        //await userCredential.user?.updatePhotoURL("FakeETHid");
                                         final newCustomer = Customer(
                                           name: userNameTextController.text,
                                           email: emailTextController.text,
@@ -217,31 +283,47 @@ class _NewSignUpState extends State<NewSignUp> {
                                           twitterFollowed: false,
                                         );
                                         print('outside');
-                                        if (!userCredential.isNull) {
+                                        print(userCredential.user.toString());
+                                        print(userCredential.toString());
+                                        if (userCredential.user != null) {
                                           print('inside');
-                                          // serviceClass.addCustomer(
+                                          // await serviceClass.addCustomer(
                                           //     userNameTextController.text,
                                           //     emailTextController.text,
                                           //     passwordTextController.text,
                                           //     ethidcontroller.text,
                                           //     ethClient!);
                                           user.setCurrentUser = newCustomer;
+                                          print(user.getCurrentUser.toString());
                                           await FirebaseFirestore.instance
                                               .collection("Customers")
                                               .doc(emailTextController.text)
-                                              .set(newCustomer.toJson());
-
+                                              .set(
+                                                  user.getCurrentUser.toJson());
+                                          //.then((value){
                                           setState(() {
                                             print('inside set state');
                                             isLoading = false;
+                                            print('loading off');
                                           });
-                                          showReferalDialog(context);
-                                          Navigator.of(context).pushReplacement(
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            print('navigator');
-                                            return const UserProfilePage();
-                                          }));
+                                          // showReferalDialog();
+                                          // print('Dialog ran');
+                                          // globalNavigatorKey.currentState.pushReplacement(MaterialPageRoute(builder: (){
+                                          //
+                                          // }));
+                                          globalNavigatorKey.currentState
+                                              ?.pushAndRemoveUntil(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          UserProfilePage(
+                                                              true, context)),
+                                                  (route) => false);
+                                          // Navigator.pushReplacement(
+                                          //   context,
+                                          //     MaterialPageRoute(builder: (BuildContext context) => UserProfilePage(),
+                                          //         )
+                                          // );
+                                          //  });
                                         } else {
                                           setState(() {
                                             isLoading = false;

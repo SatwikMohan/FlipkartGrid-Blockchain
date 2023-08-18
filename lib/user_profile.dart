@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flipgrid/login_signup/new_login.dart';
 import 'package:flipgrid/main.dart';
@@ -21,19 +22,140 @@ import 'package:web3dart/web3dart.dart';
 import 'follow_to_earn.dart';
 
 class UserProfilePage extends StatefulWidget {
-  const UserProfilePage({super.key, required});
+  //const UserProfilePage({super.key, required});
+  late bool isSignUp;
+  late BuildContext c;
+  UserProfilePage(bool isSignUp, BuildContext c, {super.key}) {
+    this.isSignUp = isSignUp;
+    this.c = c;
+  }
 
   @override
-  State<UserProfilePage> createState() => _UserProfilePageState();
+  State<UserProfilePage> createState() => _UserProfilePageState(isSignUp, c);
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
   Client? client;
   Web3Client? ethClient;
+  late bool isSignUp;
+  late BuildContext c;
+  _UserProfilePageState(bool isSignUp, BuildContext c) {
+    this.isSignUp = isSignUp;
+    this.c = c;
+  }
+  void isReferralPresent(String referralCode) async {
+    final QuerySnapshot<Map<String, dynamic>> response;
+    response = await FirebaseFirestore.instance
+        .collection("ReferalCodes")
+        .where("Code", isEqualTo: referralCode)
+        .get();
+    print(response.docs.toString());
+    print(response.docs.map((e) => e.data()));
+    //return response.docs.map((e) => e.data());
+  }
+
+  void showReferalDialog(BuildContext context) {
+    final TextEditingController controller = TextEditingController();
+    print('1');
+    QuickAlert.show(
+        context: context,
+        type: QuickAlertType.confirm,
+        barrierDismissible: false,
+        title: "Use Referral Code",
+        widget: Column(
+          children: [
+            TextInputWidget(
+              controller: controller,
+              texthint: 'Paste your referral code here',
+              textInputType: TextInputType.text,
+            )
+          ],
+        ),
+        confirmBtnText: "Claim Reward!",
+        onConfirmBtnTap: () {
+          isReferralPresent(controller.text);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.of(context).pop();
+          });
+        },
+        cancelBtnText: "Cancel",
+        onCancelBtnTap: () {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.of(context).pop();
+          });
+        });
+  }
+
+  void showReferralSheet() {
+    TextEditingController controller = TextEditingController();
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 200,
+          color: Colors.white,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Column(
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text('Use Referral Code'),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextField(
+                      controller: controller,
+                      decoration:
+                          const InputDecoration(hintText: 'Paste Code Here'),
+                    ),
+                    const SizedBox(
+                      height: 13,
+                    ),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: ElevatedButton(
+                            child: const Text('Confirm'),
+                            onPressed: () {
+                              isReferralPresent(controller.text);
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: ElevatedButton(
+                            child: const Text('Close'),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     client = Client();
     ethClient = Web3Client(infura_url, client!);
+    Future.delayed(Duration.zero).then((value) {
+      if (isSignUp) {
+        //showReferralSheet();
+        showReferalDialog(context);
+      }
+    });
     super.initState();
   }
 
