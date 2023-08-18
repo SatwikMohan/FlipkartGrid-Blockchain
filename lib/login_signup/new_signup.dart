@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flipgrid/login_signup/new_login.dart';
+import 'package:flipgrid/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,20 +39,36 @@ class _NewSignUpState extends State<NewSignUp> {
   Web3Client? ethClient;
   ServiceClass serviceClass = ServiceClass();
 
-  void showDailyCheckInDialog() async {
+  void isReferralPresent(String referralCode) async {
+    final QuerySnapshot<Map<String, dynamic>> response;
+    response = await FirebaseFirestore.instance
+        .collection("ReferalCodes")
+        .where("Code", isEqualTo: referralCode)
+        .get();
+    print(response.docs.toString());
+    print(response.docs.map((e) => e.data()));
+    //return response.docs.map((e) => e.data());
+  }
+
+  void showReferalDialog(BuildContext context) async {
+    TextEditingController controller=TextEditingController();
+    print('1');
     await QuickAlert.show(
       context: context,
-      type: QuickAlertType.success,
-      title: "Daily Check Reward",
-      widget: const Column(
+      type: QuickAlertType.confirm,
+      title: "Use Referral Code",
+      widget: Column(
         children: [
-          Text("5 days streak!"),
-          Text("You are awarded 1 SUPERCOINS"),
-          Text("Come back again for more!"),
+          TextInputWidget(
+            controller: controller,
+            texthint: 'Paste your referral code here',
+            textInputType: TextInputType.text,
+          )
         ],
       ),
       confirmBtnText: "Claim Reward!",
       onConfirmBtnTap: () {
+        isReferralPresent(controller.text);
         Navigator.pop(context);
       },
       barrierDismissible: false,
@@ -199,7 +216,9 @@ class _NewSignUpState extends State<NewSignUp> {
                                           instaFollowed: false,
                                           twitterFollowed: false,
                                         );
+                                        print('outside');
                                         if (!userCredential.isNull) {
+                                          print('inside');
                                           serviceClass.addCustomer(
                                               userNameTextController.text,
                                               emailTextController.text,
@@ -207,19 +226,28 @@ class _NewSignUpState extends State<NewSignUp> {
                                               ethidcontroller.text,
                                               ethClient!);
                                           user.setCurrentUser = newCustomer;
-                                          FirebaseFirestore.instance
+                                          await FirebaseFirestore.instance
                                               .collection("Customers")
                                               .doc(emailTextController.text)
                                               .set(newCustomer.toJson())
-                                              .then((value) =>
-                                                  Navigator.of(context)
-                                                      .pushReplacement(
-                                                          MaterialPageRoute(
-                                                              builder:
-                                                                  (context) {
-                                                    return const UserProfilePage();
-                                                  })));
-
+                                              .then((value){
+                                            setState(() {
+                                              print('inside set state');
+                                              isLoading = false;
+                                            });
+                                            showReferalDialog(context);
+                                            // Navigator.of(context)
+                                            //     .pushReplacement(
+                                            //     MaterialPageRoute(
+                                            //         builder:
+                                            //             (context) {
+                                            //           print('navigator');
+                                            //           return UserProfilePage();
+                                            //         })
+                                            // );
+                                          }
+                                          );
+                                        }else{
                                           setState(() {
                                             isLoading = false;
                                           });

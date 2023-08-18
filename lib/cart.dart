@@ -139,7 +139,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                       // and use it to show a SnackBar.
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
-                  }, child: Text("Use Tokens")),
+                  }, child: Text("Use Tokens to get Discount")),
                 ),
               ]),
               const SizedBox(height: 32),
