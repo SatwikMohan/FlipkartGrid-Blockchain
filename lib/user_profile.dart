@@ -21,7 +21,7 @@ import 'package:web3dart/web3dart.dart';
 
 import 'follow_to_earn.dart';
 
-class UserProfilePage extends StatefulWidget {
+class UserProfilePage extends ConsumerStatefulWidget {
   //const UserProfilePage({super.key, required});
   late bool isSignUp;
   late BuildContext c;
@@ -31,10 +31,10 @@ class UserProfilePage extends StatefulWidget {
   }
 
   @override
-  State<UserProfilePage> createState() => _UserProfilePageState(isSignUp,c);
+  ConsumerState<UserProfilePage> createState() => _UserProfilePageState(isSignUp,c);
 }
 
-class _UserProfilePageState extends State<UserProfilePage> {
+class _UserProfilePageState extends ConsumerState<UserProfilePage> {
   Client? client;
   Web3Client? ethClient;
   late bool isSignUp;
@@ -43,6 +43,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     this.isSignUp=isSignUp;
     this.c=c;
   }
+  ServiceClass serviceClass=ServiceClass();
   void isReferralPresent(String referralCode) async {
     final QuerySnapshot<Map<String, dynamic>> response;
     response = await FirebaseFirestore.instance
@@ -51,6 +52,22 @@ class _UserProfilePageState extends State<UserProfilePage> {
         .get();
     print(response.docs.toString());
     print(response.docs.map((e) => e.data()));
+    if(!response.docs.isEmpty){
+      final user = ref.read(currentUserStateProvider);
+      await serviceClass.mintDailyCheckInLoyaltyPoints(user.getCurrentUser.customerAddress, ethClient!);
+      final ethUserData =
+      await serviceClass.getUserData(
+          user.getCurrentUser.email,
+          ethClient!);
+      user.setCurrentUser =
+          user.getCurrentUser.copyWith(
+              tokens: int.parse(
+                  ethUserData[0][5]
+                      .toString()));
+      await FirebaseFirestore.instance.collection('Customers').doc(user.getCurrentUser.email).update({
+        'tokens':user.getCurrentUser.tokens
+      });
+    }
     //return response.docs.map((e) => e.data());
   }
 
