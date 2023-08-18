@@ -311,10 +311,9 @@ class _NewSignUpState extends State<NewSignUp> {
                                             // globalNavigatorKey.currentState.pushReplacement(MaterialPageRoute(builder: (){
                                             //
                                             // }));
-                                          globalNavigatorKey.currentState?.pushReplacement(
-                                            MaterialPageRoute(builder: (BuildContext context){
-                                              return UserProfilePage(true);
-                                            })
+                                          globalNavigatorKey.currentState?.pushAndRemoveUntil(
+                                              MaterialPageRoute(builder: (context) => UserProfilePage(true,context)),
+                                                  (route) => false
                                           );
                                             // Navigator.pushReplacement(
                                             //   context,

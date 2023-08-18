@@ -16,6 +16,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:web3dart/web3dart.dart';
 
 import 'follow_to_earn.dart';
@@ -23,20 +24,24 @@ import 'follow_to_earn.dart';
 class UserProfilePage extends StatefulWidget {
   //const UserProfilePage({super.key, required});
   late bool isSignUp;
-  UserProfilePage(bool isSignUp){
+  late BuildContext c;
+  UserProfilePage(bool isSignUp,BuildContext c){
     this.isSignUp=isSignUp;
+    this.c=c;
   }
 
   @override
-  State<UserProfilePage> createState() => _UserProfilePageState(isSignUp);
+  State<UserProfilePage> createState() => _UserProfilePageState(isSignUp,c);
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
   Client? client;
   Web3Client? ethClient;
   late bool isSignUp;
-  _UserProfilePageState(bool isSignUp){
+  late BuildContext c;
+  _UserProfilePageState(bool isSignUp,BuildContext c){
     this.isSignUp=isSignUp;
+    this.c=c;
   }
   void isReferralPresent(String referralCode) async {
     final QuerySnapshot<Map<String, dynamic>> response;
@@ -49,13 +54,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
     //return response.docs.map((e) => e.data());
   }
 
-  void showReferalDialog() async{
+  void showReferalDialog(BuildContext context){
     final TextEditingController controller=TextEditingController();
     print('1');
-    await QuickAlert.show(
+    QuickAlert.show(
         context: context,
         type: QuickAlertType.confirm,
-        barrierDismissible: true,
+        barrierDismissible: false,
         title: "Use Referral Code",
         widget: Column(
           children: [
@@ -80,13 +85,72 @@ class _UserProfilePageState extends State<UserProfilePage> {
           });
         }
     );
+
+  }
+
+  void showReferralSheet(){
+    TextEditingController controller=TextEditingController();
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 200,
+          color: Colors.white,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Column(
+                  children: [
+                    SizedBox(height: 20,),
+                    Text('Use Referral Code'),
+                    SizedBox(height: 20,),
+                    TextField(
+                      controller: controller,
+                      decoration: InputDecoration(
+                        hintText: 'Paste Code Here'
+                      ),
+                    ),
+                    SizedBox(height: 13,),
+                    Row(
+                      children: [
+                        Padding(padding: EdgeInsets.all(12),
+                          child: ElevatedButton(
+                            child: const Text('Confirm'),
+                            onPressed: () {
+                              isReferralPresent(controller.text);
+                            },
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.all(12),
+                          child: ElevatedButton(
+                            child: const Text('Close'),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
   void initState() {
     client = Client();
     ethClient = Web3Client(infura_url, client!);
-    //isSignUp?showReferalDialog(globalNavigatorKey.currentContext!):
+    Future.delayed(Duration.zero).then((value) {
+      if(isSignUp){
+        //showReferralSheet();
+        showReferalDialog(context);
+      }
+    });
     super.initState();
   }
 
@@ -127,7 +191,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       floatingActionButton: IconButton(
@@ -187,9 +250,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
             child: Consumer(
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
                 final user = ref.watch(currentUserStateProvider).getCurrentUser;
-                if(isSignUp){
-                  showReferalDialog();
-                }
                 return SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),

@@ -258,7 +258,7 @@ class _NewLoginState extends State<NewLogin> {
                                                 .pushReplacement(
                                                     MaterialPageRoute(
                                                         builder: (context) {
-                                              return UserProfilePage(false);
+                                              return UserProfilePage(false,context);
                                             }));
                                           });
 
