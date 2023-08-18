@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flipgrid/login_signup/new_login.dart';
 import 'package:flipgrid/main.dart';
 import 'package:flipgrid/models/test_models.dart';
+import 'package:flipgrid/my_coupons.dart';
 import 'package:flipgrid/product_list_view.dart';
 import 'package:flipgrid/services/functions.dart';
 import 'package:flipgrid/share_screen.dart';
@@ -89,26 +90,23 @@ class _UserProfilePageState extends State<UserProfilePage> {
         backgroundColor: Colors.blue,
         actions: [
           Consumer(
-            builder: (BuildContext context, WidgetRef ref, Widget? child) {
-              final user = ref
-                  .watch(currentUserStateProvider)
-                  .getCurrentUser;
-              return Padding(
-                padding: EdgeInsets.all(12),
-                child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                            return ProductListView(user.customerAddress);
-                          }));
-                    },
-                    child: const Text(
-                      "Start Shopping",
-                      style: TextStyle(fontSize: 16),
-                    )),
-              );
-            }
-          ),
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            final user = ref.watch(currentUserStateProvider).getCurrentUser;
+            return Padding(
+              padding: const EdgeInsets.all(12),
+              child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ProductListView(user.customerAddress);
+                    }));
+                  },
+                  child: const Text(
+                    "Start Shopping",
+                    style: TextStyle(fontSize: 16),
+                  )),
+            );
+          }),
         ],
       ),
       body: Stack(children: [
@@ -191,6 +189,23 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) {
+                                  return const MyCoupons();
+                                },
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Clain Coupons',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) {
                                   return const TransactionScreen();
                                 },
                               ),
@@ -208,7 +223,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) {
-                                  return ShareScreen(user.customerAddress,user.email);
+                                  return ShareScreen(
+                                      user.customerAddress, user.email);
                                 },
                               ),
                             );

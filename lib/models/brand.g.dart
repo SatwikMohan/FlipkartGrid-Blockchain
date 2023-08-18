@@ -15,7 +15,7 @@ _$_Brand _$$_BrandFromJson(Map<String, dynamic> json) => _$_Brand(
       currLoyalPoints: json['currLoyalPoints'] as int,
       isuserloyaltobrand: json['isuserloyaltobrand'] as bool?,
       description: json['description'] as String,
-      rating: json['rating'] as String
+      rating: json['rating'] as String,
     );
 
 Map<String, dynamic> _$$_BrandToJson(_$_Brand instance) => <String, dynamic>{
@@ -26,6 +26,6 @@ Map<String, dynamic> _$$_BrandToJson(_$_Brand instance) => <String, dynamic>{
       'CostETH': instance.CostETH,
       'currLoyalPoints': instance.currLoyalPoints,
       'isuserloyaltobrand': instance.isuserloyaltobrand,
-      'description':instance.description,
-      'rating':instance.rating
+      'description': instance.description,
+      'rating': instance.rating,
     };

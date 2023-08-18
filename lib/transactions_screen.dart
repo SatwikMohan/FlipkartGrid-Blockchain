@@ -31,6 +31,7 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
 
   @override
   void initState() {
+    getTransactionHistory();
     super.initState();
   }
 
@@ -45,16 +46,45 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
         itemCount: transactions.length,
         itemBuilder: (context, index) {
           final transaction = transactions[index];
-          return ListTile(
-            title: Text(transaction.title),
-            subtitle: Column(
-              children: transaction
-                  .toJson()
-                  .entries
-                  .map((e) => e.value != null
-                      ? Text("${e.key} : ${e.value}")
-                      : const SizedBox.shrink())
-                  .toList(),
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  Text(
+                    transaction.title,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Column(
+                    children: transaction
+                        .toJson()
+                        .entries
+                        .map((e) => e.value != null && e.key != "title"
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 15),
+                                child: Text("${e.key} : ${e.value}"))
+                            : const SizedBox.shrink())
+                        .toList(),
+                  ),
+                ],
+                // contentPadding: const EdgeInsets.all(15),
+                // title: Text(transaction.title),
+                // titleAlignment: ListTileTitleAlignment.center,
+                // titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
+                // subtitle: Column(
+                //   children: transaction
+                //       .toJson()
+                //       .entries
+                //       .map((e) => e.value != null && e.key != "title"
+                //           ? Text("${e.key} : ${e.value}")
+                //           : const SizedBox.shrink())
+                //       .toList(),
+                // ),
+              ),
             ),
           );
         },

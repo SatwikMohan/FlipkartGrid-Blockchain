@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flipgrid/login_signup/new_login.dart';
-import 'package:flipgrid/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -51,24 +50,25 @@ class _NewSignUpState extends State<NewSignUp> {
   }
 
   void showReferalDialog(BuildContext context) async {
-    TextEditingController controller=TextEditingController();
+    // TextEditingController controller=TextEditingController();
     print('1');
     await QuickAlert.show(
       context: context,
       type: QuickAlertType.confirm,
       title: "Use Referral Code",
-      widget: Column(
+      widget: const Column(
         children: [
-          TextInputWidget(
-            controller: controller,
-            texthint: 'Paste your referral code here',
-            textInputType: TextInputType.text,
-          )
+          Text("df"),
+          // TextInputWidget(
+          //   controller: controller,
+          //   texthint: 'Paste your referral code here',
+          //   textInputType: TextInputType.text,
+          // )
         ],
       ),
       confirmBtnText: "Claim Reward!",
       onConfirmBtnTap: () {
-        isReferralPresent(controller.text);
+        // isReferralPresent(controller.text);
         Navigator.pop(context);
       },
       barrierDismissible: false,
@@ -219,35 +219,30 @@ class _NewSignUpState extends State<NewSignUp> {
                                         print('outside');
                                         if (!userCredential.isNull) {
                                           print('inside');
-                                          serviceClass.addCustomer(
-                                              userNameTextController.text,
-                                              emailTextController.text,
-                                              passwordTextController.text,
-                                              ethidcontroller.text,
-                                              ethClient!);
+                                          // serviceClass.addCustomer(
+                                          //     userNameTextController.text,
+                                          //     emailTextController.text,
+                                          //     passwordTextController.text,
+                                          //     ethidcontroller.text,
+                                          //     ethClient!);
                                           user.setCurrentUser = newCustomer;
                                           await FirebaseFirestore.instance
                                               .collection("Customers")
                                               .doc(emailTextController.text)
-                                              .set(newCustomer.toJson())
-                                              .then((value){
-                                            setState(() {
-                                              print('inside set state');
-                                              isLoading = false;
-                                            });
-                                            showReferalDialog(context);
-                                            // Navigator.of(context)
-                                            //     .pushReplacement(
-                                            //     MaterialPageRoute(
-                                            //         builder:
-                                            //             (context) {
-                                            //           print('navigator');
-                                            //           return UserProfilePage();
-                                            //         })
-                                            // );
-                                          }
-                                          );
-                                        }else{
+                                              .set(newCustomer.toJson());
+
+                                          setState(() {
+                                            print('inside set state');
+                                            isLoading = false;
+                                          });
+                                          showReferalDialog(context);
+                                          Navigator.of(context).pushReplacement(
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                            print('navigator');
+                                            return const UserProfilePage();
+                                          }));
+                                        } else {
                                           setState(() {
                                             isLoading = false;
                                           });
