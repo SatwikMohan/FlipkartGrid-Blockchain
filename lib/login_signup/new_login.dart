@@ -45,7 +45,7 @@ class _NewLoginState extends State<NewLogin> {
       widget: const Column(
         children: [
           Text("5 days streak!"),
-          Text("You are awarded 1 SUPERCOINS"),
+          Text("You are awarded 1 Token"),
           Text("Come back again for more!"),
         ],
       ),
@@ -267,7 +267,8 @@ class _NewLoginState extends State<NewLogin> {
                                                 .pushReplacement(
                                                     MaterialPageRoute(
                                                         builder: (context) {
-                                              return UserProfilePage(false,context);
+                                              return UserProfilePage(
+                                                  false, context);
                                             }));
                                           });
 

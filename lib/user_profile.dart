@@ -27,13 +27,14 @@ class UserProfilePage extends ConsumerStatefulWidget {
   //const UserProfilePage({super.key, required});
   late bool isSignUp;
   late BuildContext c;
+
   UserProfilePage(bool isSignUp, BuildContext c, {super.key}) {
     this.isSignUp = isSignUp;
     this.c = c;
   }
 
   @override
-  ConsumerState<UserProfilePage> createState() => _UserProfilePageState(isSignUp,c);
+  ConsumerState<UserProfilePage> createState() => _UserProfilePageState(isSignUp, c);
 }
 
 class _UserProfilePageState extends ConsumerState<UserProfilePage> {
@@ -317,7 +318,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Loyalty Points: ${user.tokens}',
+                          'Your Tokens: ${user.tokens}',
                           style: const TextStyle(fontSize: 16),
                         ),
                         const SizedBox(height: 8),
@@ -335,7 +336,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                           onPressed: () {
                             showTransferDialog();
                           },
-                          child: const Text("Transfer Points"),
+                          child: const Text("Transfer Tokens"),
                         ),
                         const SizedBox(height: 10),
                         const FollowOnSocials(),
@@ -379,6 +380,23 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                           borderRadius: BorderRadius.circular(10),
                             width: 200,
                             height: 40,
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const MyCoupons();
+                                },
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Clain Coupons',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        ElevatedButton(
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
