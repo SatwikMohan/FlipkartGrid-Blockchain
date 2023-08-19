@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flipgrid/login_signup/new_login.dart';
 import 'package:flipgrid/main.dart';
-import 'package:flipgrid/models/test_models.dart';
 import 'package:flipgrid/my_coupons.dart';
 import 'package:flipgrid/product_list_view.dart';
 import 'package:flipgrid/services/EncryptionService.dart';
@@ -23,6 +22,7 @@ import 'package:web3dart/web3dart.dart';
 
 import 'follow_to_earn.dart';
 import 'models/transaction.dart';
+import 'models/user.dart';
 
 class UserProfilePage extends ConsumerStatefulWidget {
   //const UserProfilePage({super.key, required});
@@ -30,15 +30,15 @@ class UserProfilePage extends ConsumerStatefulWidget {
   late BuildContext c;
   late int dayDiff;
 
-  UserProfilePage(int dayDiff,bool isSignUp, BuildContext c, {super.key}) {
+  UserProfilePage(int dayDiff, bool isSignUp, BuildContext c, {super.key}) {
     this.isSignUp = isSignUp;
     this.c = c;
-    this.dayDiff=dayDiff;
+    this.dayDiff = dayDiff;
   }
 
   @override
   ConsumerState<UserProfilePage> createState() =>
-      _UserProfilePageState(dayDiff,isSignUp, c);
+      _UserProfilePageState(dayDiff, isSignUp, c);
 }
 
 class _UserProfilePageState extends ConsumerState<UserProfilePage> {
@@ -47,10 +47,11 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
   late bool isSignUp;
   late BuildContext c;
   late int dayDiff;
-  _UserProfilePageState(int dayDiff,bool isSignUp, BuildContext c) {
+  bool isReloading = false;
+  _UserProfilePageState(int dayDiff, bool isSignUp, BuildContext c) {
     this.isSignUp = isSignUp;
     this.c = c;
-    this.dayDiff=dayDiff;
+    this.dayDiff = dayDiff;
   }
   ServiceClass serviceClass = ServiceClass();
   EncryptionClass encryptionClass = EncryptionClass();
@@ -237,8 +238,8 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
         //showReferralSheet();
         showReferalDialog(context);
       }
-      if(dayDiff==1){
-          showDailyCheckInDialog();
+      if (dayDiff == 1) {
+        showDailyCheckInDialog();
       }
     });
     super.initState();
@@ -293,6 +294,34 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
           },
           icon: const Icon(Icons.logout)),
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.replay_outlined),
+          onPressed: () async {
+            try {
+              setState(() {
+                isReloading = true;
+              });
+              final user = ref.read(currentUserStateProvider);
+              final firebaseUserResponse = await FirebaseFirestore.instance
+                  .collection("Customers")
+                  .doc(user.getCurrentUser.email)
+                  .get();
+              final ethUserData = await serviceClass.getUserData(
+                  user.getCurrentUser.email, ethClient!);
+              final dbuserData = firebaseUserResponse.data();
+              user.setCurrentUser = Customer.fromJson(dbuserData!);
+              user.setCurrentUser = user.getCurrentUser
+                  .copyWith(tokens: int.parse(ethUserData[0][5].toString()));
+              setState(() {
+                isReloading = false;
+              });
+            } catch (e) {
+              setState(() {
+                isReloading = false;
+              });
+            }
+          },
+        ),
         title: const Text('User Profile'),
         backgroundColor: Colors.blue,
         actions: [
@@ -354,138 +383,157 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
         BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: SafeArea(
-            child: Consumer(
-              builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                final user = ref.watch(currentUserStateProvider).getCurrentUser;
-                return SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundImage: NetworkImage("https://pixabay.com/images/search/user/"),
-                        ),
-                        const SizedBox(height: 16),
-                        GlowText(
-                          user.name,
-                          style: const TextStyle(color: Colors.redAccent,
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 8),
-                        GlowText(
-                          'Ethereum Wallet: ${user.customerAddress}',
-                          style: const TextStyle(color: Colors.redAccent,fontSize: 16,fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 8),
-                        GlowText(
-                          'Your Tokens: ${user.tokens}',
-                          style: const TextStyle(color: Colors.redAccent,fontSize: 16,fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 8),
-                        GlowText(
-                          'Login Streak: ${user.loginStreak}',
-                          style: const TextStyle(color: Colors.redAccent,fontSize: 16,fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 32),
-                        // GlowButton(
-                        //   color: Colors.white,
-                        //   splashColor: Colors.purple,
-                        //   borderRadius: BorderRadius.circular(10),
-                        //   width: 200,
-                        //   height: 40,
-                        //   onPressed: () {
-                        //     showTransferDialog();
-                        //   },
-                        //   child: const Text("Transfer Tokens"),
-                        // ),
-                        // const SizedBox(height: 10),
-                        const FollowOnSocials(),
-                        // ElevatedButton(
-                        //     onPressed: () {
-                        //       Navigator.push(context,
-                        //           MaterialPageRoute(builder: (context) {
-                        //         return ProductListView(user.customerAddress);
-                        //       }));
-                        //     },
-                        //     child: const Text(
-                        //       "Buy with points!",
-                        //       style: TextStyle(fontSize: 16),
-                        //     )),
-                        const SizedBox(height: 8),
-                        GlowButton(
-                          color: Colors.white,
-                          splashColor: Colors.purple,
-                          borderRadius: BorderRadius.circular(10),
-                          width: 200,
-                          height: 40,
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return const MyCoupons();
-                                },
+            child: isReloading
+                ? const CircularProgressIndicator()
+                : Consumer(
+                    builder:
+                        (BuildContext context, WidgetRef ref, Widget? child) {
+                      final user =
+                          ref.watch(currentUserStateProvider).getCurrentUser;
+                      return SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const CircleAvatar(
+                                radius: 50,
+                                backgroundImage: NetworkImage(
+                                    "https://pixabay.com/images/search/user/"),
                               ),
-                            );
-                          },
-                          child: const Text(
-                            'My Coupons',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                              const SizedBox(height: 16),
+                              GlowText(
+                                user.name,
+                                style: const TextStyle(
+                                    color: Colors.redAccent,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 8),
+                              GlowText(
+                                'Ethereum Wallet: ${user.customerAddress}',
+                                style: const TextStyle(
+                                    color: Colors.redAccent,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 8),
+                              GlowText(
+                                'Your Tokens: ${user.tokens}',
+                                style: const TextStyle(
+                                    color: Colors.redAccent,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 8),
+                              GlowText(
+                                'Login Streak: ${user.loginStreak}',
+                                style: const TextStyle(
+                                    color: Colors.redAccent,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 32),
+                              // GlowButton(
+                              //   color: Colors.white,
+                              //   splashColor: Colors.purple,
+                              //   borderRadius: BorderRadius.circular(10),
+                              //   width: 200,
+                              //   height: 40,
+                              //   onPressed: () {
+                              //     showTransferDialog();
+                              //   },
+                              //   child: const Text("Transfer Tokens"),
+                              // ),
+                              // const SizedBox(height: 10),
+                              const FollowOnSocials(),
+                              // ElevatedButton(
+                              //     onPressed: () {
+                              //       Navigator.push(context,
+                              //           MaterialPageRoute(builder: (context) {
+                              //         return ProductListView(user.customerAddress);
+                              //       }));
+                              //     },
+                              //     child: const Text(
+                              //       "Buy with points!",
+                              //       style: TextStyle(fontSize: 16),
+                              //     )),
+                              const SizedBox(height: 8),
+                              GlowButton(
+                                color: Colors.white,
+                                splashColor: Colors.purple,
+                                borderRadius: BorderRadius.circular(10),
+                                width: 200,
+                                height: 40,
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return const MyCoupons();
+                                      },
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  'My Coupons',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              GlowButton(
+                                color: Colors.white,
+                                splashColor: Colors.purple,
+                                borderRadius: BorderRadius.circular(10),
+                                width: 200,
+                                height: 40,
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return const TransactionScreen();
+                                      },
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  'Transaction History',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              GlowButton(
+                                color: Colors.white,
+                                splashColor: Colors.purple,
+                                borderRadius: BorderRadius.circular(10),
+                                width: 200,
+                                height: 40,
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return ShareScreen(
+                                            user.customerAddress, user.email);
+                                      },
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  'Share with friends',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        GlowButton(
-                          color: Colors.white,
-                          splashColor: Colors.purple,
-                          borderRadius: BorderRadius.circular(10),
-                          width: 200,
-                          height: 40,
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return const TransactionScreen();
-                                },
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            'Transaction History',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        GlowButton(
-                          color: Colors.white,
-                          splashColor: Colors.purple,
-                          borderRadius: BorderRadius.circular(10),
-                          width: 200,
-                          height: 40,
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return ShareScreen(
-                                      user.customerAddress, user.email);
-                                },
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            'Share with friends',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
         ),
       ]),
