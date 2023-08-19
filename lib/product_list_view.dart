@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flipgrid/product_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_top_blocked_bouncing_scroll_physics/flutter_top_blocked_bouncing_scroll_physics.dart';
 
 import 'models/brand.dart';
 
@@ -20,6 +21,7 @@ class _ProductListViewState extends State<ProductListView> {
   _ProductListViewState(String customerAddress){
     this.customerAddress=customerAddress;
   }
+  FixedExtentScrollController fixedExtentScrollController=FixedExtentScrollController();
   List<Brand> products = [];
   void getProducts() async {
     final response =
@@ -40,22 +42,59 @@ class _ProductListViewState extends State<ProductListView> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
+
       appBar: AppBar(
         title: const Text("Products"),
+        backgroundColor: Colors.blue,
       ),
-      body: ListView.builder(
-        shrinkWrap: true,
-        // itemCount: productsTest.length,
-        itemCount: products.length,
-
-        itemBuilder: (context, index) {
-          return ProductCard(
-            product: products[index], onTapDelete: null,customerAddress: customerAddress,
-            // onTapDelete: null,
-          );
-          // return ProductCard(product: productsTest[index]);
-        },
+      // body: ListView.builder(
+      //   shrinkWrap: true,
+      //   // itemCount: productsTest.length,
+      //   itemCount: products.length,
+      //
+      //   itemBuilder: (context, index) {
+      //     return ProductCard(
+      //       product: products[index], onTapDelete: null,customerAddress: customerAddress,
+      //       // onTapDelete: null,
+      //     );
+      //     // return ProductCard(product: productsTest[index]);
+      //   },
+      // ),
+      body: Container(
+        width: width,
+        height: height,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          image: DecorationImage(
+            image: NetworkImage(
+                'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExczY2M3pwdTJ4bnpnanBycGF3eWp0cjZsNHh6c2JpN21ndzRkdjA4eCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/pOEbLRT4SwD35IELiQ/giphy.gif'),
+            fit: BoxFit.cover,
+            opacity: 1,
+          ),
+        ),
+        child: SafeArea(
+          child: ListWheelScrollView(
+            controller: fixedExtentScrollController,
+            physics: FixedExtentScrollPhysics(),
+            itemExtent: 200,
+            children: products.map((e) => Padding(
+              padding: EdgeInsets.all(20),
+              child: Container(
+                child: SafeArea(
+                  child: Column(
+                    children: [
+                      ProductCard(product: e, customerAddress: customerAddress),
+                    ],
+                  ),
+                ),
+              ),
+            )
+            ).toList(),
+          ),
+        ),
       ),
     );
   }

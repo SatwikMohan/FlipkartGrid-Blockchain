@@ -6,6 +6,7 @@ import 'package:flipgrid/login_signup/new_signup.dart';
 import 'package:flipgrid/main.dart';
 import 'package:flipgrid/models/transaction.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_glow/flutter_glow.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
@@ -55,6 +56,7 @@ class _NewLoginState extends State<NewLogin> {
       barrierDismissible: false,
     );
   }
+
 
   @override
   void initState() {
@@ -144,14 +146,18 @@ class _NewLoginState extends State<NewLogin> {
                                     WidgetRef ref, Widget? child) {
                                   final user =
                                       ref.watch(currentUserStateProvider);
-                                  return ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0)),
-                                          // backgroundColor: Colors.purple,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 131, vertical: 20)),
+                                  return GlowButton(
+                                    color: Colors.white,
+                                      splashColor: Colors.blue,
+                                      borderRadius: BorderRadius.circular(10),
+                                      width: 131,
+                                      // style: ElevatedButton.styleFrom(
+                                      //     shape: RoundedRectangleBorder(
+                                      //         borderRadius:
+                                      //             BorderRadius.circular(10.0)),
+                                      //     // backgroundColor: Colors.purple,
+                                      //     padding: const EdgeInsets.symmetric(
+                                      //         horizontal: 131, vertical: 20)),
                                       onPressed: () async {
                                         // setState(() {
                                         //   isLoading = true;
@@ -247,6 +253,9 @@ class _NewLoginState extends State<NewLogin> {
                                                   .doc()
                                                   .set(transaction.toJson());
                                               print(response);
+                                            }
+                                            if(dayDifference>=15){
+
                                             }
                                           }
                                           await FirebaseFirestore.instance

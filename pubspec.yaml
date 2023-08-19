@@ -59,6 +59,8 @@ dependencies:
   rflutter_alert: ^2.0.7
   scratcher: ^2.3.0
   confetti: ^0.7.0
+  flutter_glow: ^0.3.0
+  flutter_top_blocked_bouncing_scroll_physics: ^1.0.0
 
 dev_dependencies:
   flutter_test:

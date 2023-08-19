@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flipgrid/login_signup/new_login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_glow/flutter_glow.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
@@ -249,14 +250,18 @@ class _NewSignUpState extends State<NewSignUp> {
                                     WidgetRef ref, Widget? child) {
                                   final user =
                                       ref.watch(currentUserStateProvider);
-                                  return ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0)),
-                                          // backgroundColor: Colors.purple,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 131, vertical: 20)),
+                                  return GlowButton(
+                                      color: Colors.white,
+                                      splashColor: Colors.blue,
+                                      borderRadius: BorderRadius.circular(10),
+                                      width: 131,
+                                      // style: ElevatedButton.styleFrom(
+                                      //     shape: RoundedRectangleBorder(
+                                      //         borderRadius:
+                                      //             BorderRadius.circular(10.0)),
+                                      //     // backgroundColor: Colors.purple,
+                                      //     padding: const EdgeInsets.symmetric(
+                                      //         horizontal: 131, vertical: 20)),
                                       onPressed: () async {
                                         setState(() {
                                           isLoading = true;

@@ -5,6 +5,7 @@ import 'package:flipgrid/models/brand.dart';
 import 'package:flipgrid/services/functions.dart';
 import 'package:flipgrid/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_glow/flutter_glow.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:web3dart/web3dart.dart';
@@ -115,7 +116,11 @@ class _ProductDetailScreenState extends State<ProductDetailsScreen>{
                   Consumer(
                     builder:
                         (BuildContext context, WidgetRef ref, Widget? child) {
-                      return ElevatedButton(
+                      return GlowButton(
+                        color: Colors.grey,
+                        splashColor: Colors.purple,
+                        width: 140,
+                        height: 40,
                         onPressed: () {
                           ref.read(cartProductsProvider).add(product);
                           Navigator.of(context)

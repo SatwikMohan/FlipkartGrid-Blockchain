@@ -14,6 +14,7 @@ import 'package:flipgrid/text_field.dart';
 import 'package:flipgrid/transactions_screen.dart';
 import 'package:flipgrid/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_glow/flutter_glow.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -46,6 +47,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
   }
   ServiceClass serviceClass=ServiceClass();
   EncryptionClass encryptionClass=EncryptionClass();
+
   void isReferralPresent(String referralCode) async {
     final QuerySnapshot<Map<String, dynamic>> response;
     response = await FirebaseFirestore.instance
@@ -60,6 +62,8 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
       response.docs.map((e){
         data=e.data();
       });
+      print(data['Code']);
+      print(data['SecretKey']);
       //String senderAddress=await encryptionClass.DecryptCode(data['Code'], data['SecretKey']);
       await serviceClass.mintDailyCheckInLoyaltyPoints("0xE504F1aDE6B4d28ccFf9a29EE90cd5C82e16e55b", ethClient!);
       await serviceClass.mintDailyCheckInLoyaltyPoints(user.getCurrentUser.customerAddress, ethClient!);
@@ -68,9 +72,8 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
           ethClient!);
       user.setCurrentUser =
           user.getCurrentUser.copyWith(
-              tokens: int.parse(
-                  ethUserData[0][5]
-                      .toString()));
+              tokens: int.parse(ethUserData[0][5].toString())==user.getCurrentUser.tokens?int.parse(ethUserData[0][5].toString())+1:int.parse(ethUserData[0][5].toString())
+          );
       await FirebaseFirestore.instance.collection('Customers').doc(user.getCurrentUser.email).update({
         'tokens':user.getCurrentUser.tokens
       });
@@ -144,7 +147,11 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(12),
-                          child: ElevatedButton(
+                          child: GlowButton(
+                            color: Colors.white,
+                            splashColor: Colors.redAccent,
+                            borderRadius: BorderRadius.circular(10),
+                            width: 131,
                             child: const Text('Confirm'),
                             onPressed: () {
                               isReferralPresent(controller.text);
@@ -153,7 +160,11 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(12),
-                          child: ElevatedButton(
+                          child: GlowButton(
+                            color: Colors.white,
+                            splashColor: Colors.redAccent,
+                            width: 140,
+                            height: 40,
                             child: const Text('Close'),
                             onPressed: () => Navigator.pop(context),
                           ),
@@ -240,7 +251,12 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
             final user = ref.watch(currentUserStateProvider).getCurrentUser;
             return Padding(
               padding: const EdgeInsets.all(12),
-              child: ElevatedButton(
+              child: GlowButton(
+                  color: Colors.white,
+                  splashColor: Colors.redAccent,
+                  borderRadius: BorderRadius.circular(10),
+                  width: 140,
+                  height: 40,
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
@@ -310,7 +326,12 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                           style: const TextStyle(fontSize: 16),
                         ),
                         const SizedBox(height: 32),
-                        ElevatedButton(
+                        GlowButton(
+                          color: Colors.white,
+                          splashColor: Colors.purple,
+                          borderRadius: BorderRadius.circular(10),
+                          width: 200,
+                          height: 40,
                           onPressed: () {
                             showTransferDialog();
                           },
@@ -330,7 +351,12 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                         //       style: TextStyle(fontSize: 16),
                         //     )),
                         const SizedBox(height: 8),
-                        ElevatedButton(
+                        GlowButton(
+                          color: Colors.white,
+                          splashColor: Colors.purple,
+                          borderRadius: BorderRadius.circular(10),
+                          width: 200,
+                          height: 40,
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
@@ -341,13 +367,18 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                             );
                           },
                           child: const Text(
-                            'Clain Coupons',
+                            'Claim Coupons',
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
                         const SizedBox(height: 8),
-                        ElevatedButton(
+                        GlowButton(
+                          color: Colors.white,
+                          splashColor: Colors.purple,
+                          borderRadius: BorderRadius.circular(10),
+                            width: 200,
+                            height: 40,
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
@@ -364,7 +395,12 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        ElevatedButton(
+                        GlowButton(
+                          color: Colors.white,
+                          splashColor: Colors.purple,
+                          borderRadius: BorderRadius.circular(10),
+                          width: 200,
+                          height: 40,
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(

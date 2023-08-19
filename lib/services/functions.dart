@@ -135,4 +135,11 @@ class ServiceClass {
     return response;
   }
 
+  Future<String> decayTokens(String customerAddress,int points,Web3Client ethClient) async{
+    var response=await _callFunction('decayTokens',[EthereumAddress.fromHex(customerAddress),
+      points],ethClient,owner_private_key);
+    print('Function decayTokens Called Successfully');
+    return response;
+  }
+
 }
