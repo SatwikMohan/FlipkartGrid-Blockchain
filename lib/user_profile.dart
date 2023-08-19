@@ -277,7 +277,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Loyalty Points: ${user.tokens}',
+                          'Your Tokens: ${user.tokens}',
                           style: const TextStyle(fontSize: 16),
                         ),
                         const SizedBox(height: 8),
@@ -290,7 +290,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           onPressed: () {
                             showTransferDialog();
                           },
-                          child: const Text("Transfer Points"),
+                          child: const Text("Transfer Tokens"),
                         ),
                         const SizedBox(height: 10),
                         const FollowOnSocials(),
