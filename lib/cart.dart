@@ -31,6 +31,7 @@ class CartScreen extends ConsumerStatefulWidget {
 class _CartScreenState extends ConsumerState<CartScreen> {
   double totalAmount = 0;
   double userBalance = 0;
+  int discount = 0;
   TextEditingController discountAmountController = TextEditingController();
   Client? client;
   Web3Client? ethClient;
@@ -85,7 +86,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
             children: [
               ListView.builder(
                 shrinkWrap: true,
-                physics: TopBlockedBouncingScrollPhysics(),
+                physics: const TopBlockedBouncingScrollPhysics(),
                 // itemCount: productsTest.length,
                 itemCount: ref.read(cartProductsProvider).length,
                 itemBuilder: (context, index) {
@@ -148,6 +149,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                                 int.parse(discountAmountController.text);
                             userBalance -=
                                 int.parse(discountAmountController.text);
+                            discount = int.parse(discountAmountController.text);
                           });
                         } else {
                           const snackBar = SnackBar(
@@ -241,8 +243,8 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                         dateTime: DateTime.now(),
                         amountRecieved: null,
                         tokensRecieved: null,
-                        tokensSpent: totalAmount as int,
-                        amountSpent: null,
+                        tokensSpent: discount,
+                        amountSpent: totalAmount as int,
                         senderAdress: null,
                         recieverAress: user.getCurrentUser.customerAddress,
                         customerEmail: user.getCurrentUser.email,

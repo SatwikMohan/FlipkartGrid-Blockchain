@@ -22,6 +22,7 @@ import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:web3dart/web3dart.dart';
 
 import 'follow_to_earn.dart';
+import 'models/transaction.dart';
 
 class UserProfilePage extends ConsumerStatefulWidget {
   //const UserProfilePage({super.key, required});
@@ -34,9 +35,8 @@ class UserProfilePage extends ConsumerStatefulWidget {
   }
 
   @override
-
-  ConsumerState<UserProfilePage> createState() => _UserProfilePageState(isSignUp, c);
-
+  ConsumerState<UserProfilePage> createState() =>
+      _UserProfilePageState(isSignUp, c);
 }
 
 class _UserProfilePageState extends ConsumerState<UserProfilePage> {
@@ -48,8 +48,8 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
     this.isSignUp = isSignUp;
     this.c = c;
   }
-  ServiceClass serviceClass=ServiceClass();
-  EncryptionClass encryptionClass=EncryptionClass();
+  ServiceClass serviceClass = ServiceClass();
+  EncryptionClass encryptionClass = EncryptionClass();
 
   void isReferralPresent(String referralCode) async {
     final QuerySnapshot<Map<String, dynamic>> response;
@@ -59,27 +59,47 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
         .get();
     print(response.docs.toString());
     print(response.docs.map((e) => e.data()));
-    if(!response.docs.isEmpty){
+    if (response.docs.isNotEmpty) {
       final user = ref.read(currentUserStateProvider);
-      late Map<String,dynamic> data;
-      response.docs.map((e){
-        data=e.data();
+      late Map<String, dynamic> data;
+      response.docs.map((e) {
+        data = e.data();
       });
       print(data['Code']);
       print(data['SecretKey']);
       //String senderAddress=await encryptionClass.DecryptCode(data['Code'], data['SecretKey']);
-      await serviceClass.mintDailyCheckInLoyaltyPoints("0xE504F1aDE6B4d28ccFf9a29EE90cd5C82e16e55b", ethClient!);
-      await serviceClass.mintDailyCheckInLoyaltyPoints(user.getCurrentUser.customerAddress, ethClient!);
-      final ethUserData = await serviceClass.getUserData(
-          user.getCurrentUser.email,
-          ethClient!);
-      user.setCurrentUser =
-          user.getCurrentUser.copyWith(
-              tokens: int.parse(ethUserData[0][5].toString())==user.getCurrentUser.tokens?int.parse(ethUserData[0][5].toString())+1:int.parse(ethUserData[0][5].toString())
-          );
-      await FirebaseFirestore.instance.collection('Customers').doc(user.getCurrentUser.email).update({
-        'tokens':user.getCurrentUser.tokens
-      });
+      await serviceClass.mintDailyCheckInLoyaltyPoints(
+          "0xE504F1aDE6B4d28ccFf9a29EE90cd5C82e16e55b", ethClient!);
+      await serviceClass.mintDailyCheckInLoyaltyPoints(
+          user.getCurrentUser.customerAddress, ethClient!);
+      final ethUserData =
+          await serviceClass.getUserData(user.getCurrentUser.email, ethClient!);
+      user.setCurrentUser = user.getCurrentUser.copyWith(
+          tokens: int.parse(ethUserData[0][5].toString()) ==
+                  user.getCurrentUser.tokens
+              ? int.parse(ethUserData[0][5].toString()) + 1
+              : int.parse(ethUserData[0][5].toString()));
+      if (int.parse(ethUserData[0][5].toString()) ==
+          user.getCurrentUser.tokens) {
+        final transaction = TransactionAppModel(
+            dateTime: DateTime.now(),
+            amountRecieved: null,
+            tokensRecieved: 1,
+            tokensSpent: null,
+            amountSpent: null,
+            senderAdress: null,
+            recieverAress: user.getCurrentUser.customerAddress,
+            customerEmail: user.getCurrentUser.email,
+            title: 'daily login reward');
+        await FirebaseFirestore.instance
+            .collection("Transactions")
+            .doc()
+            .set(transaction.toJson());
+      }
+      await FirebaseFirestore.instance
+          .collection('Customers')
+          .doc(user.getCurrentUser.email)
+          .update({'tokens': user.getCurrentUser.tokens});
     }
     //return response.docs.map((e) => e.data());
   }

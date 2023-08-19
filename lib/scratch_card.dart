@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flipgrid/main.dart';
 import 'package:flipgrid/models/coupons_model.dart';
+import 'package:flipgrid/models/transaction.dart';
 import 'package:flipgrid/services/functions.dart';
 import 'package:flipgrid/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -97,12 +99,35 @@ class _MyScratchCardState extends State<MyScratchCard> {
                     fit: BoxFit.fill,
                   ),
                   onChange: (value) => print("Scratch progress: $value%"),
-                  onThreshold: () {
-                    ServiceClass().mintLoyaltyPoints(
-                      ref.read(currentUserStateProvider).getCurrentUser.email,
+                  onThreshold: () async {
+                    final currentUser = ref.read(currentUserStateProvider);
+                    await ServiceClass().mintLoyaltyPoints(
+                      currentUser.getCurrentUser.email,
                       widget.coupon.value,
                       ethClient!,
                     );
+                    currentUser.setCurrentUser = currentUser.getCurrentUser
+                        .copyWith(
+                            tokens: currentUser.getCurrentUser.tokens +
+                                widget.coupon.value);
+                    FirebaseFirestore.instance
+                        .doc(currentUser.getCurrentUser.email)
+                        .set(currentUser.getCurrentUser.toJson());
+                    final transaction = TransactionAppModel(
+                        title: "Coupon Reward",
+                        customerEmail: currentUser.getCurrentUser.email,
+                        dateTime: DateTime.now(),
+                        amountRecieved: null,
+                        tokensRecieved: widget.coupon.value,
+                        tokensSpent: null,
+                        amountSpent: null,
+                        senderAdress: null,
+                        recieverAress:
+                            currentUser.getCurrentUser.customerAddress);
+                    await FirebaseFirestore.instance
+                        .collection("Transactions")
+                        .doc()
+                        .set(transaction.toJson());
                     _controller.play();
                   },
                   child: Container(
