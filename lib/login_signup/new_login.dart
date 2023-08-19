@@ -276,26 +276,15 @@ class _NewLoginState extends State<NewLogin> {
                                                   user.getCurrentUser.copyWith(
                                                       lastLogin: currentDateTime
                                                           .toString());
-                                              if(user.getCurrentUser.tokens>2){
-                                                await serviceClass.decayTokens(user.getCurrentUser.customerAddress, BigInt.from(2), ethClient!);
-                                                decayTokenDialog();
-                                                user.setCurrentUser =
-                                                    user.getCurrentUser.copyWith(
-                                                        tokens: user
-                                                            .getCurrentUser
-                                                            .tokens -
-                                                            2);
-                                              }
-                                              else if(user.getCurrentUser.tokens==2||user.getCurrentUser.tokens==1){
-                                                await serviceClass.decayTokens(user.getCurrentUser.customerAddress, BigInt.from(1), ethClient!);
-                                                decayTokenDialog();
-                                                user.setCurrentUser =
-                                                    user.getCurrentUser.copyWith(
-                                                        tokens: user
-                                                            .getCurrentUser
-                                                            .tokens -
-                                                            1);
-                                              }
+                                              int loss=user.getCurrentUser.tokens/15 as int;
+                                              await serviceClass.decayTokens(user.getCurrentUser.customerAddress, BigInt.from(loss), ethClient!);
+                                              decayTokenDialog();
+                                              user.setCurrentUser =
+                                                  user.getCurrentUser.copyWith(
+                                                      tokens: user
+                                                          .getCurrentUser
+                                                          .tokens -
+                                                          loss);
                                             }
                                           }
                                           await FirebaseFirestore.instance
