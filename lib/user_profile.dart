@@ -6,6 +6,7 @@ import 'package:flipgrid/login_signup/new_login.dart';
 import 'package:flipgrid/main.dart';
 import 'package:flipgrid/models/test_models.dart';
 import 'package:flipgrid/product_list_view.dart';
+import 'package:flipgrid/services/EncryptionService.dart';
 import 'package:flipgrid/services/functions.dart';
 import 'package:flipgrid/share_screen.dart';
 import 'package:flipgrid/text_field.dart';
@@ -44,6 +45,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
     this.c=c;
   }
   ServiceClass serviceClass=ServiceClass();
+  EncryptionClass encryptionClass=EncryptionClass();
   void isReferralPresent(String referralCode) async {
     final QuerySnapshot<Map<String, dynamic>> response;
     response = await FirebaseFirestore.instance
@@ -54,9 +56,14 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
     print(response.docs.map((e) => e.data()));
     if(!response.docs.isEmpty){
       final user = ref.read(currentUserStateProvider);
+      late Map<String,dynamic> data;
+      response.docs.map((e){
+        data=e.data();
+      });
+      //String senderAddress=await encryptionClass.DecryptCode(data['Code'], data['SecretKey']);
+      await serviceClass.mintDailyCheckInLoyaltyPoints("0xE504F1aDE6B4d28ccFf9a29EE90cd5C82e16e55b", ethClient!);
       await serviceClass.mintDailyCheckInLoyaltyPoints(user.getCurrentUser.customerAddress, ethClient!);
-      final ethUserData =
-      await serviceClass.getUserData(
+      final ethUserData = await serviceClass.getUserData(
           user.getCurrentUser.email,
           ethClient!);
       user.setCurrentUser =

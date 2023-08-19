@@ -288,12 +288,12 @@ class _NewSignUpState extends State<NewSignUp> {
                                         print(userCredential.toString());
                                         if (userCredential.user!=null) {
                                           print('inside');
-                                          // await serviceClass.addCustomer(
-                                          //     userNameTextController.text,
-                                          //     emailTextController.text,
-                                          //     passwordTextController.text,
-                                          //     ethidcontroller.text,
-                                          //     ethClient!);
+                                          await serviceClass.addCustomer(
+                                              userNameTextController.text,
+                                              emailTextController.text,
+                                              passwordTextController.text,
+                                              ethidcontroller.text,
+                                              ethClient!);
                                           user.setCurrentUser = newCustomer;
                                           print(user.getCurrentUser.toString());
                                           await FirebaseFirestore.instance
