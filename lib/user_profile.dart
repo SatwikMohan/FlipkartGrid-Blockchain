@@ -390,7 +390,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                             );
                           },
                           child: const Text(
-                            'Claim Coupons',
+                            'My Coupons',
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),

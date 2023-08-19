@@ -9,6 +9,7 @@ class CouponsModel with _$CouponsModel {
     required int value,
     required bool isClaimed,
     required String creationDateTime,
+    required String imageUrl,
   }) = _CouponsModel;
 
   factory CouponsModel.fromJson(Map<String, dynamic> json) =>
