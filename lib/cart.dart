@@ -9,7 +9,9 @@ import 'package:flipgrid/services/functions.dart';
 import 'package:flipgrid/text_field.dart';
 import 'package:flipgrid/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_glow/flutter_glow.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_top_blocked_bouncing_scroll_physics/flutter_top_blocked_bouncing_scroll_physics.dart';
 import 'package:http/http.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
@@ -83,6 +85,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
             children: [
               ListView.builder(
                 shrinkWrap: true,
+                physics: TopBlockedBouncingScrollPhysics(),
                 // itemCount: productsTest.length,
                 itemCount: ref.read(cartProductsProvider).length,
                 itemBuilder: (context, index) {
@@ -132,7 +135,11 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 // TextInputWidget(controller: discountAmountController, texthint: "Enter Tokens Amount", textInputType: TextInputType.number),
                 Padding(
                   padding: const EdgeInsets.all(8),
-                  child: ElevatedButton(
+                  child: GlowButton(
+                      color: Colors.white,
+                      splashColor: Colors.greenAccent,
+                      borderRadius: BorderRadius.circular(10),
+                      width: 131,
                       onPressed: () {
                         if (userBalance >=
                             int.parse(discountAmountController.text)) {
@@ -156,7 +163,11 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 ),
               ]),
               const SizedBox(height: 32),
-              ElevatedButton(
+              GlowButton(
+                  color: Colors.white,
+                  splashColor: Colors.greenAccent,
+                  borderRadius: BorderRadius.circular(10),
+                  width: 131,
                   onPressed: () async {
                     ref.read(cartProductsProvider).forEach((element) async {
                       final response = await ServiceClass()

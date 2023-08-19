@@ -7,12 +7,14 @@ import 'package:flipgrid/main.dart';
 import 'package:flipgrid/models/test_models.dart';
 import 'package:flipgrid/my_coupons.dart';
 import 'package:flipgrid/product_list_view.dart';
+import 'package:flipgrid/services/EncryptionService.dart';
 import 'package:flipgrid/services/functions.dart';
 import 'package:flipgrid/share_screen.dart';
 import 'package:flipgrid/text_field.dart';
 import 'package:flipgrid/transactions_screen.dart';
 import 'package:flipgrid/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_glow/flutter_glow.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -21,20 +23,21 @@ import 'package:web3dart/web3dart.dart';
 
 import 'follow_to_earn.dart';
 
-class UserProfilePage extends StatefulWidget {
+class UserProfilePage extends ConsumerStatefulWidget {
   //const UserProfilePage({super.key, required});
   late bool isSignUp;
   late BuildContext c;
+
   UserProfilePage(bool isSignUp, BuildContext c, {super.key}) {
     this.isSignUp = isSignUp;
     this.c = c;
   }
 
   @override
-  State<UserProfilePage> createState() => _UserProfilePageState(isSignUp, c);
+  ConsumerState<UserProfilePage> createState() => _UserProfilePageState(isSignUp, c);
 }
 
-class _UserProfilePageState extends State<UserProfilePage> {
+class _UserProfilePageState extends ConsumerState<UserProfilePage> {
   Client? client;
   Web3Client? ethClient;
   late bool isSignUp;
@@ -43,6 +46,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
     this.isSignUp = isSignUp;
     this.c = c;
   }
+  ServiceClass serviceClass=ServiceClass();
+  EncryptionClass encryptionClass=EncryptionClass();
+
   void isReferralPresent(String referralCode) async {
     final QuerySnapshot<Map<String, dynamic>> response;
     response = await FirebaseFirestore.instance
@@ -51,6 +57,28 @@ class _UserProfilePageState extends State<UserProfilePage> {
         .get();
     print(response.docs.toString());
     print(response.docs.map((e) => e.data()));
+    if(!response.docs.isEmpty){
+      final user = ref.read(currentUserStateProvider);
+      late Map<String,dynamic> data;
+      response.docs.map((e){
+        data=e.data();
+      });
+      print(data['Code']);
+      print(data['SecretKey']);
+      //String senderAddress=await encryptionClass.DecryptCode(data['Code'], data['SecretKey']);
+      await serviceClass.mintDailyCheckInLoyaltyPoints("0xE504F1aDE6B4d28ccFf9a29EE90cd5C82e16e55b", ethClient!);
+      await serviceClass.mintDailyCheckInLoyaltyPoints(user.getCurrentUser.customerAddress, ethClient!);
+      final ethUserData = await serviceClass.getUserData(
+          user.getCurrentUser.email,
+          ethClient!);
+      user.setCurrentUser =
+          user.getCurrentUser.copyWith(
+              tokens: int.parse(ethUserData[0][5].toString())==user.getCurrentUser.tokens?int.parse(ethUserData[0][5].toString())+1:int.parse(ethUserData[0][5].toString())
+          );
+      await FirebaseFirestore.instance.collection('Customers').doc(user.getCurrentUser.email).update({
+        'tokens':user.getCurrentUser.tokens
+      });
+    }
     //return response.docs.map((e) => e.data());
   }
 
@@ -120,7 +148,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(12),
-                          child: ElevatedButton(
+                          child: GlowButton(
+                            color: Colors.white,
+                            splashColor: Colors.redAccent,
+                            borderRadius: BorderRadius.circular(10),
+                            width: 131,
                             child: const Text('Confirm'),
                             onPressed: () {
                               isReferralPresent(controller.text);
@@ -129,7 +161,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(12),
-                          child: ElevatedButton(
+                          child: GlowButton(
+                            color: Colors.white,
+                            splashColor: Colors.redAccent,
+                            width: 140,
+                            height: 40,
                             child: const Text('Close'),
                             onPressed: () => Navigator.pop(context),
                           ),
@@ -216,7 +252,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
             final user = ref.watch(currentUserStateProvider).getCurrentUser;
             return Padding(
               padding: const EdgeInsets.all(12),
-              child: ElevatedButton(
+              child: GlowButton(
+                  color: Colors.white,
+                  splashColor: Colors.redAccent,
+                  borderRadius: BorderRadius.circular(10),
+                  width: 140,
+                  height: 40,
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
@@ -286,7 +327,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           style: const TextStyle(fontSize: 16),
                         ),
                         const SizedBox(height: 32),
-                        ElevatedButton(
+                        GlowButton(
+                          color: Colors.white,
+                          splashColor: Colors.purple,
+                          borderRadius: BorderRadius.circular(10),
+                          width: 200,
+                          height: 40,
                           onPressed: () {
                             showTransferDialog();
                           },
@@ -305,6 +351,50 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         //       "Buy with points!",
                         //       style: TextStyle(fontSize: 16),
                         //     )),
+                        const SizedBox(height: 8),
+                        GlowButton(
+                          color: Colors.white,
+                          splashColor: Colors.purple,
+                          borderRadius: BorderRadius.circular(10),
+                          width: 200,
+                          height: 40,
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const MyCoupons();
+                                },
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Claim Coupons',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        GlowButton(
+                          color: Colors.white,
+                          splashColor: Colors.purple,
+                          borderRadius: BorderRadius.circular(10),
+                            width: 200,
+                            height: 40,
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const MyCoupons();
+                                },
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Clain Coupons',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
                         const SizedBox(height: 8),
                         ElevatedButton(
                           onPressed: () {
@@ -340,7 +430,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        ElevatedButton(
+                        GlowButton(
+                          color: Colors.white,
+                          splashColor: Colors.purple,
+                          borderRadius: BorderRadius.circular(10),
+                          width: 200,
+                          height: 40,
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(

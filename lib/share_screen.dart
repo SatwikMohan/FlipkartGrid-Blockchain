@@ -30,9 +30,10 @@ class _ShareScreenState extends State<ShareScreen> {
     return min + Random().nextInt(max - min);
   }
 
-  void sendCodeToFirebaseFirestore(String code) async{
+  void sendCodeToFirebaseFirestore(String code,String secretKey) async{
     await FirebaseFirestore.instance.collection('ReferalCodes').doc(email).set({
-      'Code':code
+      'Code':code,
+      'SecretKey':secretKey
     });
   }
 
@@ -42,7 +43,7 @@ class _ShareScreenState extends State<ShareScreen> {
     String code=await encryptionClass.EncryptedEthId(ethId, secretKey);
     setState(() {
       encryptedCode=code;
-      sendCodeToFirebaseFirestore(code);
+      sendCodeToFirebaseFirestore(code,secretKey);
     });
   }
 
