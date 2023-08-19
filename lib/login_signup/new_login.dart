@@ -272,13 +272,29 @@ class _NewLoginState extends State<NewLogin> {
                                               print(response);
                                             }
                                             if(dayDifference>=15){
+                                              user.setCurrentUser =
+                                                  user.getCurrentUser.copyWith(
+                                                      lastLogin: currentDateTime
+                                                          .toString());
                                               if(user.getCurrentUser.tokens>2){
                                                 await serviceClass.decayTokens(user.getCurrentUser.customerAddress, BigInt.from(2), ethClient!);
                                                 decayTokenDialog();
+                                                user.setCurrentUser =
+                                                    user.getCurrentUser.copyWith(
+                                                        tokens: user
+                                                            .getCurrentUser
+                                                            .tokens -
+                                                            2);
                                               }
                                               else if(user.getCurrentUser.tokens==2||user.getCurrentUser.tokens==1){
                                                 await serviceClass.decayTokens(user.getCurrentUser.customerAddress, BigInt.from(1), ethClient!);
                                                 decayTokenDialog();
+                                                user.setCurrentUser =
+                                                    user.getCurrentUser.copyWith(
+                                                        tokens: user
+                                                            .getCurrentUser
+                                                            .tokens -
+                                                            1);
                                               }
                                             }
                                           }
