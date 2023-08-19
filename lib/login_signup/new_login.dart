@@ -98,7 +98,8 @@ class _NewLoginState extends State<NewLogin> {
             // ),
             image: DecorationImage(
               image: NetworkImage(
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6_exHmF8VzFYReizoVMZAA3eDp6NSgY0-Xw&usqp=CAU'),
+                  'https://cdn.pixabay.com/photo/2022/06/25/13/33/landscape-7283516_640.jpg'),
+              // image: AssetImage('assets/background.jpeg'),
               fit: BoxFit.cover,
               opacity: 0.7,
             ),
@@ -271,7 +272,10 @@ class _NewLoginState extends State<NewLogin> {
                                                   .set(transaction.toJson());
                                               print(response);
                                             }
-                                            int loss = dayDifference ~/ 15;
+                                            int loss =
+                                                (user.getCurrentUser.tokens /
+                                                        15)
+                                                    .round();
                                             if (loss >= 1) {
                                               user.setCurrentUser =
                                                   user.getCurrentUser.copyWith(

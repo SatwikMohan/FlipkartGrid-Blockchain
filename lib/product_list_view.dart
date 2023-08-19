@@ -21,7 +21,7 @@ class _ProductListViewState extends State<ProductListView> {
   _ProductListViewState(String customerAddress){
     this.customerAddress=customerAddress;
   }
-  FixedExtentScrollController fixedExtentScrollController=FixedExtentScrollController();
+  //FixedExtentScrollController fixedExtentScrollController=FixedExtentScrollController();
   List<Brand> products = [];
   void getProducts() async {
     final response =
@@ -70,18 +70,19 @@ class _ProductListViewState extends State<ProductListView> {
           color: Colors.white,
           image: DecorationImage(
             image: NetworkImage(
-                'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExczY2M3pwdTJ4bnpnanBycGF3eWp0cjZsNHh6c2JpN21ndzRkdjA4eCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/pOEbLRT4SwD35IELiQ/giphy.gif'),
+                'https://cdn.pixabay.com/photo/2022/06/25/13/33/landscape-7283516_640.jpg'),
+            // image: AssetImage('assets/background.jpeg'),
             fit: BoxFit.cover,
-            opacity: 1,
+            opacity: 0.7,
           ),
         ),
         child: SafeArea(
-          child: ListWheelScrollView(
-            controller: fixedExtentScrollController,
-            physics: FixedExtentScrollPhysics(),
-            itemExtent: 200,
+          child: ListView(
+           // controller: fixedExtentScrollController,
+            physics:ClampingScrollPhysics(),
+            itemExtent: 160,
             children: products.map((e) => Padding(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(5),
               child: Container(
                 child: SafeArea(
                   child: Column(
