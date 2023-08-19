@@ -81,7 +81,7 @@ class _ProductListViewState extends State<ProductListView> {
             physics: FixedExtentScrollPhysics(),
             itemExtent: 200,
             children: products.map((e) => Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(10),
               child: Container(
                 child: SafeArea(
                   child: Column(

@@ -44,7 +44,7 @@ class _NewLoginState extends State<NewLogin> {
       title: "Daily Check Reward",
       widget: const Column(
         children: [
-          Text("5 days streak!"),
+          Text("Daily streak!"),
           Text("You are awarded 1 Token"),
           Text("Come back again for more!"),
         ],
@@ -57,6 +57,23 @@ class _NewLoginState extends State<NewLogin> {
     );
   }
 
+  void decayTokenDialog() async{
+    await QuickAlert.show(
+      context: context,
+      type: QuickAlertType.warning,
+      title: "Decay Token Alert",
+      widget: const Column(
+        children: [
+          Text("You lost a few tokens due to inactivity"),
+        ],
+      ),
+      confirmBtnText: "Ok",
+      onConfirmBtnTap: () {
+        Navigator.pop(context);
+      },
+      barrierDismissible: false,
+    );
+  }
 
   @override
   void initState() {
@@ -255,7 +272,14 @@ class _NewLoginState extends State<NewLogin> {
                                               print(response);
                                             }
                                             if(dayDifference>=15){
-
+                                              if(user.getCurrentUser.tokens>2){
+                                                await serviceClass.decayTokens(user.getCurrentUser.customerAddress, BigInt.from(2), ethClient!);
+                                                decayTokenDialog();
+                                              }
+                                              else if(user.getCurrentUser.tokens==2||user.getCurrentUser.tokens==1){
+                                                await serviceClass.decayTokens(user.getCurrentUser.customerAddress, BigInt.from(1), ethClient!);
+                                                decayTokenDialog();
+                                              }
                                             }
                                           }
                                           await FirebaseFirestore.instance

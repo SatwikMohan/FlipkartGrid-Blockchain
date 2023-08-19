@@ -34,7 +34,9 @@ class UserProfilePage extends ConsumerStatefulWidget {
   }
 
   @override
+
   ConsumerState<UserProfilePage> createState() => _UserProfilePageState(isSignUp, c);
+
 }
 
 class _UserProfilePageState extends ConsumerState<UserProfilePage> {
@@ -378,42 +380,8 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                           color: Colors.white,
                           splashColor: Colors.purple,
                           borderRadius: BorderRadius.circular(10),
-                            width: 200,
-                            height: 40,
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return const MyCoupons();
-                                },
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            'Clain Coupons',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return const MyCoupons();
-                                },
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            'Clain Coupons',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        ElevatedButton(
+                          width: 200,
+                          height: 40,
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
