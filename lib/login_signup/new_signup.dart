@@ -321,7 +321,7 @@ class _NewSignUpState extends State<NewSignUp> {
                                               ?.pushAndRemoveUntil(
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          UserProfilePage(
+                                                          UserProfilePage(0,
                                                               true, context)),
                                                   (route) => false);
                                           // Navigator.pushReplacement(

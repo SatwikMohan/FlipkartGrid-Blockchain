@@ -121,7 +121,7 @@ class _MyScratchCardState extends State<MyScratchCard> {
                         .set(transaction.toJson());
                     await ServiceClass().mintLoyaltyPoints(
                       currentUser.getCurrentUser.email,
-                      widget.coupon.value,
+                      BigInt.from(widget.coupon.value),
                       ethClient!,
                     );
                     currentUser.setCurrentUser = currentUser.getCurrentUser

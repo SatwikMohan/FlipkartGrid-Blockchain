@@ -28,15 +28,17 @@ class UserProfilePage extends ConsumerStatefulWidget {
   //const UserProfilePage({super.key, required});
   late bool isSignUp;
   late BuildContext c;
+  late int dayDiff;
 
-  UserProfilePage(bool isSignUp, BuildContext c, {super.key}) {
+  UserProfilePage(int dayDiff,bool isSignUp, BuildContext c, {super.key}) {
     this.isSignUp = isSignUp;
     this.c = c;
+    this.dayDiff=dayDiff;
   }
 
   @override
   ConsumerState<UserProfilePage> createState() =>
-      _UserProfilePageState(isSignUp, c);
+      _UserProfilePageState(dayDiff,isSignUp, c);
 }
 
 class _UserProfilePageState extends ConsumerState<UserProfilePage> {
@@ -44,9 +46,11 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
   Web3Client? ethClient;
   late bool isSignUp;
   late BuildContext c;
-  _UserProfilePageState(bool isSignUp, BuildContext c) {
+  late int dayDiff;
+  _UserProfilePageState(int dayDiff,bool isSignUp, BuildContext c) {
     this.isSignUp = isSignUp;
     this.c = c;
+    this.dayDiff=dayDiff;
   }
   ServiceClass serviceClass = ServiceClass();
   EncryptionClass encryptionClass = EncryptionClass();
@@ -102,6 +106,26 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
           .update({'tokens': user.getCurrentUser.tokens});
     }
     //return response.docs.map((e) => e.data());
+  }
+
+  void showDailyCheckInDialog() async {
+    await QuickAlert.show(
+      context: context,
+      type: QuickAlertType.success,
+      title: "Daily Check Reward",
+      widget: const Column(
+        children: [
+          Text("Daily streak!"),
+          Text("You are awarded 1 Token"),
+          Text("Come back again for more!"),
+        ],
+      ),
+      confirmBtnText: "OK",
+      onConfirmBtnTap: () {
+        Navigator.pop(context);
+      },
+      barrierDismissible: false,
+    );
   }
 
   void showReferalDialog(BuildContext context) {
@@ -212,6 +236,9 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
       if (isSignUp) {
         //showReferralSheet();
         showReferalDialog(context);
+      }
+      if(dayDiff==1){
+          showDailyCheckInDialog();
       }
     });
     super.initState();

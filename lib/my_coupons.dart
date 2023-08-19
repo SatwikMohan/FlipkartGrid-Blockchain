@@ -19,8 +19,11 @@ class _MyCouponsState extends ConsumerState<MyCoupons> {
         .doc(ref.read(currentUserStateProvider).getCurrentUser.email)
         .collection("UserCoupons")
         .get();
-    couponsList =
-        response.docs.map((e) => CouponsModel.fromJson(e.data())).toList();
+    setState(() {
+      couponsList =
+          response.docs.map((e) => CouponsModel.fromJson(e.data())).toList();
+    });
+    print(couponsList);
   }
 
   @override
@@ -31,13 +34,24 @@ class _MyCouponsState extends ConsumerState<MyCoupons> {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      itemCount: couponsList.length,
-      gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
-      itemBuilder: (BuildContext context, int index) {
-        return MyScratchCard(coupon: couponsList[index]);
-      },
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Your Coupons'),
+      ),
+      body: Container(
+        width: width,
+        height: height,
+        child: GridView.builder(
+          itemCount: couponsList.length,
+          gridDelegate:
+              const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+          itemBuilder: (BuildContext context, int index) {
+            return MyScratchCard(coupon: couponsList[index]);
+          },
+        ),
+      ),
     );
   }
 }

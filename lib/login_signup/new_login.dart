@@ -36,6 +36,7 @@ class _NewLoginState extends State<NewLogin> {
   Client? client;
   Web3Client? ethClient;
   ServiceClass serviceClass = ServiceClass();
+  int dayDifference=0;
 
   void showDailyCheckInDialog() async {
     await QuickAlert.show(
@@ -229,13 +230,12 @@ class _NewLoginState extends State<NewLogin> {
                                                 lastDateTimeString);
                                             final currentDateTime =
                                                 DateTime.now();
-                                            final dayDifference =
+                                            dayDifference =
                                                 currentDateTime
                                                     .difference(lastdatetime)
                                                     .inDays;
                                             print(dayDifference);
                                             if (dayDifference == 1) {
-                                              showDailyCheckInDialog();
                                               user.setCurrentUser =
                                                   user.getCurrentUser.copyWith(
                                                       tokens: user
@@ -271,6 +271,7 @@ class _NewLoginState extends State<NewLogin> {
                                                   .doc()
                                                   .set(transaction.toJson());
                                               print(response);
+                                              //showDailyCheckInDialog();
                                             }
                                             int loss =
                                                 (user.getCurrentUser.tokens /
@@ -325,6 +326,7 @@ class _NewLoginState extends State<NewLogin> {
                                                     MaterialPageRoute(
                                                         builder: (context) {
                                               return UserProfilePage(
+                                                dayDifference,
                                                   false, context);
                                             }));
                                           });

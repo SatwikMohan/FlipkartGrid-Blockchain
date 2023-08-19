@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flipgrid/firebase_options.dart';
+import 'package:flipgrid/login_signup/new_login.dart';
 import 'package:flipgrid/models/user.dart';
 import 'package:flipgrid/successful_payment_page.dart';
 import 'package:flutter/gestures.dart';
@@ -64,7 +65,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const PaymentSuccessfulPage(),
+      home: const NewLogin(),
     );
   }
 }

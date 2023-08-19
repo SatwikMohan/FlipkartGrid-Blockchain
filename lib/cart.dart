@@ -185,7 +185,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                           .getBrandAddress(element.email!, ethClient!);
                       element = element.copyWith(
                           brandAddress: response[0].toString());
-                      ServiceClass().updateMoneySpendOnBrand(
+                      await ServiceClass().updateMoneySpendOnBrand(
                           element.brandAddress,
                           ref
                               .read(currentUserStateProvider)
@@ -195,26 +195,25 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                           ethClient!);
                       if (element.isuserloyaltobrand ?? false) {
                         final user = ref.read(currentUserStateProvider);
-                        final rewardresponse = await ServiceClass()
+                        await ServiceClass()
                             .mintDailyCheckInLoyaltyPoints(
                                 ref
                                     .read(currentUserStateProvider)
                                     .getCurrentUser
                                     .customerAddress,
                                 ethClient!);
-                        if (bool.parse(rewardresponse[0].toString())) {
+                        //if (element.isuserloyaltobrand!) {
                           showDailyCheckInDialog();
                           user.setCurrentUser = user.getCurrentUser
                               .copyWith(tokens: user.getCurrentUser.tokens + 1);
                           int couponValue = random(1, 4);
-                          final response = await ServiceClass()
-                              .mintLoyaltyPoints(
-                                  user.getCurrentUser.customerAddress,
-                                  couponValue,
-                                  ethClient!);
-                          user.setCurrentUser = user.getCurrentUser.copyWith(
-                            tokens: user.getCurrentUser.tokens + couponValue,
-                          );
+                          // await ServiceClass().mintLoyaltyPoints(
+                          //         user.getCurrentUser.customerAddress,
+                          //         BigInt.from(couponValue),
+                          //         ethClient!);
+                          // user.setCurrentUser = user.getCurrentUser.copyWith(
+                          //   tokens: user.getCurrentUser.tokens + couponValue,
+                          // );
                           await FirebaseFirestore.instance
                               .collection("Customers")
                               .doc(user.getCurrentUser.email)
@@ -234,13 +233,8 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                                 imageUrl: couponImageLinks[couponValue],
                               ).toJson());
                         }
-                      }
+                      //}
                     });
-                    globalNavigatorKey.currentState
-                        ?.push(MaterialPageRoute(builder: (context) {
-                      return const PaymentSuccessfulPage();
-                    }));
-
                     List<dynamic> ethUserData;
                     final user = ref.read(currentUserStateProvider);
                     ethUserData = await ServiceClass()
@@ -264,11 +258,44 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                         recieverAress: user.getCurrentUser.customerAddress,
                         customerEmail: user.getCurrentUser.email,
                         title:
-                            'Bought ${ref.read(cartProductsProvider).fold("", (previousValue, element) => "$previousValue${element.name}, ")}');
+                        'Bought ${ref.read(cartProductsProvider).fold("", (previousValue, element) => "$previousValue${element.name}, ")}');
                     await FirebaseFirestore.instance
                         .collection("Transactions")
                         .doc()
                         .set(transaction.toJson());
+                    globalNavigatorKey.currentState
+                        ?.push(MaterialPageRoute(builder: (context) {
+                      return const PaymentSuccessfulPage();
+                    }));
+
+                    // List<dynamic> ethUserData;
+                    // final user = ref.read(currentUserStateProvider);
+                    // ethUserData = await ServiceClass()
+                    //     .getUserData(user.getCurrentUser.email, ethClient!);
+                    // user.setCurrentUser = user.getCurrentUser.copyWith(
+                    //     tokens: int.parse(ethUserData[0][5].toString()));
+                    // setState(() {
+                    //   ref.read(cartProductsProvider).clear();
+                    // });
+                    // await FirebaseFirestore.instance
+                    //     .collection("Customers")
+                    //     .doc(user.getCurrentUser.email)
+                    //     .set(user.getCurrentUser.toJson());
+                    // final transaction = TransactionAppModel(
+                    //     dateTime: DateTime.now(),
+                    //     amountRecieved: null,
+                    //     tokensRecieved: null,
+                    //     tokensSpent: discount,
+                    //     amountSpent: totalAmount as int,
+                    //     senderAdress: null,
+                    //     recieverAress: user.getCurrentUser.customerAddress,
+                    //     customerEmail: user.getCurrentUser.email,
+                    //     title:
+                    //         'Bought ${ref.read(cartProductsProvider).fold("", (previousValue, element) => "$previousValue${element.name}, ")}');
+                    // await FirebaseFirestore.instance
+                    //     .collection("Transactions")
+                    //     .doc()
+                    //     .set(transaction.toJson());
                   },
                   child: const Text('Buy Now')),
             ],

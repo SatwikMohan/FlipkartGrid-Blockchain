@@ -80,7 +80,7 @@ class ServiceClass {
   }
 
   Future<String> mintLoyaltyPoints(
-      String customerAddress, int points, Web3Client ethClient) async {
+      String customerAddress, BigInt points, Web3Client ethClient) async {
     var response = await _callFunction(
         'mintLoyaltyPoints',
         [EthereumAddress.fromHex(customerAddress), points],
