@@ -218,15 +218,17 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                               .collection("Customers")
                               .doc(user.getCurrentUser.email)
                               .set(user.getCurrentUser.toJson());
-                          await FirebaseFirestore.instance
+                          final coupondoc = await FirebaseFirestore.instance
                               .collection("Coupons")
                               .doc(ref
                                   .read(currentUserStateProvider)
                                   .getCurrentUser
                                   .email)
                               .collection("UserCoupons")
-                              .doc()
-                              .set(CouponsModel(
+                              .doc();
+
+                              coupondoc.set(CouponsModel(
+                                key: coupondoc.id,
                                 value: couponValue,
                                 isClaimed: false,
                                 creationDateTime: DateTime.now().toString(),

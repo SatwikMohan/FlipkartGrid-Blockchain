@@ -24,6 +24,7 @@ mixin _$CouponsModel {
   bool get isClaimed => throw _privateConstructorUsedError;
   String get creationDateTime => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
+  String get key => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -38,7 +39,11 @@ abstract class $CouponsModelCopyWith<$Res> {
       _$CouponsModelCopyWithImpl<$Res, CouponsModel>;
   @useResult
   $Res call(
-      {int value, bool isClaimed, String creationDateTime, String imageUrl});
+      {int value,
+      bool isClaimed,
+      String creationDateTime,
+      String imageUrl,
+      String key});
 }
 
 /// @nodoc
@@ -58,6 +63,7 @@ class _$CouponsModelCopyWithImpl<$Res, $Val extends CouponsModel>
     Object? isClaimed = null,
     Object? creationDateTime = null,
     Object? imageUrl = null,
+    Object? key = null,
   }) {
     return _then(_value.copyWith(
       value: null == value
@@ -76,6 +82,10 @@ class _$CouponsModelCopyWithImpl<$Res, $Val extends CouponsModel>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      key: null == key
+          ? _value.key
+          : key // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -89,7 +99,11 @@ abstract class _$$_CouponsModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int value, bool isClaimed, String creationDateTime, String imageUrl});
+      {int value,
+      bool isClaimed,
+      String creationDateTime,
+      String imageUrl,
+      String key});
 }
 
 /// @nodoc
@@ -107,6 +121,7 @@ class __$$_CouponsModelCopyWithImpl<$Res>
     Object? isClaimed = null,
     Object? creationDateTime = null,
     Object? imageUrl = null,
+    Object? key = null,
   }) {
     return _then(_$_CouponsModel(
       value: null == value
@@ -125,6 +140,10 @@ class __$$_CouponsModelCopyWithImpl<$Res>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      key: null == key
+          ? _value.key
+          : key // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -136,7 +155,8 @@ class _$_CouponsModel implements _CouponsModel {
       {required this.value,
       required this.isClaimed,
       required this.creationDateTime,
-      required this.imageUrl});
+      required this.imageUrl,
+      required this.key});
 
   factory _$_CouponsModel.fromJson(Map<String, dynamic> json) =>
       _$$_CouponsModelFromJson(json);
@@ -149,10 +169,12 @@ class _$_CouponsModel implements _CouponsModel {
   final String creationDateTime;
   @override
   final String imageUrl;
+  @override
+  final String key;
 
   @override
   String toString() {
-    return 'CouponsModel(value: $value, isClaimed: $isClaimed, creationDateTime: $creationDateTime, imageUrl: $imageUrl)';
+    return 'CouponsModel(value: $value, isClaimed: $isClaimed, creationDateTime: $creationDateTime, imageUrl: $imageUrl, key: $key)';
   }
 
   @override
@@ -166,13 +188,14 @@ class _$_CouponsModel implements _CouponsModel {
             (identical(other.creationDateTime, creationDateTime) ||
                 other.creationDateTime == creationDateTime) &&
             (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl));
+                other.imageUrl == imageUrl) &&
+            (identical(other.key, key) || other.key == key));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, value, isClaimed, creationDateTime, imageUrl);
+  int get hashCode => Object.hash(
+      runtimeType, value, isClaimed, creationDateTime, imageUrl, key);
 
   @JsonKey(ignore: true)
   @override
@@ -193,7 +216,8 @@ abstract class _CouponsModel implements CouponsModel {
       {required final int value,
       required final bool isClaimed,
       required final String creationDateTime,
-      required final String imageUrl}) = _$_CouponsModel;
+      required final String imageUrl,
+      required final String key}) = _$_CouponsModel;
 
   factory _CouponsModel.fromJson(Map<String, dynamic> json) =
       _$_CouponsModel.fromJson;
@@ -206,6 +230,8 @@ abstract class _CouponsModel implements CouponsModel {
   String get creationDateTime;
   @override
   String get imageUrl;
+  @override
+  String get key;
   @override
   @JsonKey(ignore: true)
   _$$_CouponsModelCopyWith<_$_CouponsModel> get copyWith =>

@@ -10,6 +10,7 @@ class CouponsModel with _$CouponsModel {
     required bool isClaimed,
     required String creationDateTime,
     required String imageUrl,
+    required String key,
   }) = _CouponsModel;
 
   factory CouponsModel.fromJson(Map<String, dynamic> json) =>

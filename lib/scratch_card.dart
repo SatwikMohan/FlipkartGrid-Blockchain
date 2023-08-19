@@ -109,8 +109,9 @@ class _MyScratchCardState extends State<MyScratchCard> {
                         .getCurrentUser
                         .email)
                         .collection("UserCoupons")
-                        .doc()
+                        .doc(widget.coupon.key)
                         .set(CouponsModel(
+                      key: widget.coupon.key,
                       value: widget.coupon.value,
                       isClaimed: true,
                       creationDateTime: DateTime.now().toString(),
