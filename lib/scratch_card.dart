@@ -100,8 +100,31 @@ class _MyScratchCardState extends State<MyScratchCard> {
                   ),
                   onChange: (value) => print("Scratch progress: $value%"),
                   onThreshold: () async {
+
+                    _controller.play();
+                    await FirebaseFirestore.instance
+                        .collection("Coupons")
+                        .doc(ref
+                        .read(currentUserStateProvider)
+                        .getCurrentUser
+                        .email)
+                        .collection("UserCoupons")
+                        .doc()
+                        .set(CouponsModel(
+                      value: widget.coupon.value,
+                      isClaimed: true,
+                      creationDateTime: DateTime.now().toString(),
+                      imageUrl: widget.coupon.imageUrl,
+                    ).toJson());
                     final currentUser = ref.read(currentUserStateProvider);
                     await FirebaseFirestore.instance
+                        .doc(currentUser.getCurrentUser.email)
+                        .set(currentUser.getCurrentUser.toJson());
+                    currentUser.setCurrentUser = currentUser.getCurrentUser
+                        .copyWith(
+                        tokens: currentUser.getCurrentUser.tokens +
+                            widget.coupon.value);
+                    await FirebaseFirestore.instance.collection("Customers")
                         .doc(currentUser.getCurrentUser.email)
                         .set(currentUser.getCurrentUser.toJson());
                     final transaction = TransactionAppModel(
@@ -124,12 +147,9 @@ class _MyScratchCardState extends State<MyScratchCard> {
                       BigInt.from(widget.coupon.value),
                       ethClient!,
                     );
-                    currentUser.setCurrentUser = currentUser.getCurrentUser
-                        .copyWith(
-                            tokens: currentUser.getCurrentUser.tokens +
-                                widget.coupon.value);
 
-                    _controller.play();
+
+
                   },
                   child: Container(
                     height: 300,

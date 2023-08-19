@@ -178,9 +178,11 @@ class _NewLoginState extends State<NewLogin> {
                                       //     padding: const EdgeInsets.symmetric(
                                       //         horizontal: 131, vertical: 20)),
                                       onPressed: () async {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
+                                        // Future.delayed(Duration.zero).then((value){
+                                        //   setState(() {
+                                        //     isLoading = true;
+                                        //   });
+                                        // });
                                         final credential = await FirebaseAuth
                                             .instance
                                             .signInWithEmailAndPassword(
@@ -321,9 +323,11 @@ class _NewLoginState extends State<NewLogin> {
                                               .doc(emailTextController.text)
                                               .set(user.getCurrentUser.toJson())
                                               .then((value) {
-                                            setState(() {
-                                              isLoading = false;
-                                            });
+                                            // Future.delayed(Duration.zero).then((value){
+                                            //   setState(() {
+                                            //     isLoading = false;
+                                            //   });
+                                            // });
                                             Navigator.of(context)
                                                 .pushReplacement(
                                                     MaterialPageRoute(
@@ -334,9 +338,11 @@ class _NewLoginState extends State<NewLogin> {
                                             }));
                                           });
                                         }
-                                        setState(() {
-                                          isLoading = false;
-                                        });
+                                        // Future.delayed(Duration.zero).then((value){
+                                        //   setState(() {
+                                        //     isLoading = false;
+                                        //   });
+                                       // });
                                       },
                                       child: const Text(
                                         'Log In',

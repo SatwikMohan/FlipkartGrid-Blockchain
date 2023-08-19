@@ -235,15 +235,9 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                         }
                       //}
                     });
-                    List<dynamic> ethUserData;
                     final user = ref.read(currentUserStateProvider);
-                    ethUserData = await ServiceClass()
-                        .getUserData(user.getCurrentUser.email, ethClient!);
-                    user.setCurrentUser = user.getCurrentUser.copyWith(
-                        tokens: int.parse(ethUserData[0][5].toString()));
-                    setState(() {
-                      ref.read(cartProductsProvider).clear();
-                    });
+                    user.setCurrentUser = user.getCurrentUser
+                        .copyWith(tokens: user.getCurrentUser.tokens-discount);
                     await FirebaseFirestore.instance
                         .collection("Customers")
                         .doc(user.getCurrentUser.email)
@@ -263,6 +257,15 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                         .collection("Transactions")
                         .doc()
                         .set(transaction.toJson());
+                    List<dynamic> ethUserData;
+                    ethUserData = await ServiceClass()
+                        .getUserData(user.getCurrentUser.email, ethClient!);
+                    // user.setCurrentUser = user.getCurrentUser.copyWith(
+                    //     tokens: int.parse(ethUserData[0][5].toString()));
+                    setState(() {
+                      ref.read(cartProductsProvider).clear();
+                    });
+
                     globalNavigatorKey.currentState
                         ?.push(MaterialPageRoute(builder: (context) {
                       return const PaymentSuccessfulPage();

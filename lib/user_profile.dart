@@ -306,12 +306,9 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                   .collection("Customers")
                   .doc(user.getCurrentUser.email)
                   .get();
-              final ethUserData = await serviceClass.getUserData(
-                  user.getCurrentUser.email, ethClient!);
+
               final dbuserData = firebaseUserResponse.data();
               user.setCurrentUser = Customer.fromJson(dbuserData!);
-              user.setCurrentUser = user.getCurrentUser
-                  .copyWith(tokens: int.parse(ethUserData[0][5].toString()));
               setState(() {
                 isReloading = false;
               });
