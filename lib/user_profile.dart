@@ -269,6 +269,18 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
         title: const Text('User Profile'),
         backgroundColor: Colors.blue,
         actions: [
+          GlowButton(
+            color: Colors.white,
+            splashColor: Colors.purple,
+            borderRadius: BorderRadius.circular(10),
+            width: 200,
+            height: 40,
+            onPressed: () {
+              showTransferDialog();
+            },
+            child: const Text("Transfer Tokens"),
+          ),
+          const SizedBox(width: 13),
           Consumer(
               builder: (BuildContext context, WidgetRef ref, Widget? child) {
             final user = ref.watch(currentUserStateProvider).getCurrentUser;
@@ -305,7 +317,8 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
             // ),
             image: DecorationImage(
               image: NetworkImage(
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6_exHmF8VzFYReizoVMZAA3eDp6NSgY0-Xw&usqp=CAU'),
+                  'https://cdn.pixabay.com/photo/2022/06/25/13/33/landscape-7283516_640.jpg'),
+              //image: AssetImage('assets/background.jpeg'),
               fit: BoxFit.cover,
               opacity: 0.7,
             ),
@@ -325,42 +338,42 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                       children: [
                         CircleAvatar(
                           radius: 50,
-                          backgroundImage: NetworkImage(userTest.userImage),
+                          backgroundImage: NetworkImage("https://pixabay.com/images/search/user/"),
                         ),
                         const SizedBox(height: 16),
-                        Text(
+                        GlowText(
                           user.name,
-                          style: const TextStyle(
+                          style: const TextStyle(color: Colors.redAccent,
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
-                        Text(
+                        GlowText(
                           'Ethereum Wallet: ${user.customerAddress}',
-                          style: const TextStyle(fontSize: 16),
+                          style: const TextStyle(color: Colors.redAccent,fontSize: 16,fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
-                        Text(
+                        GlowText(
                           'Your Tokens: ${user.tokens}',
-                          style: const TextStyle(fontSize: 16),
+                          style: const TextStyle(color: Colors.redAccent,fontSize: 16,fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
-                        Text(
+                        GlowText(
                           'Login Streak: ${user.loginStreak}',
-                          style: const TextStyle(fontSize: 16),
+                          style: const TextStyle(color: Colors.redAccent,fontSize: 16,fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 32),
-                        GlowButton(
-                          color: Colors.white,
-                          splashColor: Colors.purple,
-                          borderRadius: BorderRadius.circular(10),
-                          width: 200,
-                          height: 40,
-                          onPressed: () {
-                            showTransferDialog();
-                          },
-                          child: const Text("Transfer Tokens"),
-                        ),
-                        const SizedBox(height: 10),
+                        // GlowButton(
+                        //   color: Colors.white,
+                        //   splashColor: Colors.purple,
+                        //   borderRadius: BorderRadius.circular(10),
+                        //   width: 200,
+                        //   height: 40,
+                        //   onPressed: () {
+                        //     showTransferDialog();
+                        //   },
+                        //   child: const Text("Transfer Tokens"),
+                        // ),
+                        // const SizedBox(height: 10),
                         const FollowOnSocials(),
                         // ElevatedButton(
                         //     onPressed: () {
