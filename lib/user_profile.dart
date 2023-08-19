@@ -401,6 +401,23 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) {
+                                  return const MyCoupons();
+                                },
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Clain Coupons',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) {
                                   return const TransactionScreen();
                                 },
                               ),
