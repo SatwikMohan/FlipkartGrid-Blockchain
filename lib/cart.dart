@@ -6,6 +6,7 @@ import 'package:flipgrid/models/brand.dart';
 import 'package:flipgrid/models/coupons_model.dart';
 import 'package:flipgrid/product_list_view.dart';
 import 'package:flipgrid/services/functions.dart';
+import 'package:flipgrid/successful_payment_page.dart';
 import 'package:flipgrid/text_field.dart';
 import 'package:flipgrid/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -235,6 +236,10 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                         }
                       }
                     });
+                    globalNavigatorKey.currentState
+                        ?.push(MaterialPageRoute(builder: (context) {
+                      return const PaymentSuccessfulPage();
+                    }));
 
                     List<dynamic> ethUserData;
                     final user = ref.read(currentUserStateProvider);
