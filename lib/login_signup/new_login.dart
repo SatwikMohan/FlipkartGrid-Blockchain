@@ -57,7 +57,7 @@ class _NewLoginState extends State<NewLogin> {
     );
   }
 
-  void decayTokenDialog() async{
+  void decayTokenDialog() async {
     await QuickAlert.show(
       context: context,
       type: QuickAlertType.warning,
@@ -164,7 +164,7 @@ class _NewLoginState extends State<NewLogin> {
                                   final user =
                                       ref.watch(currentUserStateProvider);
                                   return GlowButton(
-                                    color: Colors.white,
+                                      color: Colors.white,
                                       splashColor: Colors.blue,
                                       borderRadius: BorderRadius.circular(10),
                                       width: 131,
@@ -271,20 +271,46 @@ class _NewLoginState extends State<NewLogin> {
                                                   .set(transaction.toJson());
                                               print(response);
                                             }
-                                            if(dayDifference>=15){
+                                            int loss =
+                                                user.getCurrentUser.tokens / 15
+                                                    as int;
+                                            if (loss >= 1) {
                                               user.setCurrentUser =
                                                   user.getCurrentUser.copyWith(
                                                       lastLogin: currentDateTime
                                                           .toString());
-                                              int loss=user.getCurrentUser.tokens/15 as int;
-                                              await serviceClass.decayTokens(user.getCurrentUser.customerAddress, BigInt.from(loss), ethClient!);
+
+                                              await serviceClass.decayTokens(
+                                                  user.getCurrentUser
+                                                      .customerAddress,
+                                                  BigInt.from(loss),
+                                                  ethClient!);
                                               decayTokenDialog();
                                               user.setCurrentUser =
                                                   user.getCurrentUser.copyWith(
                                                       tokens: user
-                                                          .getCurrentUser
-                                                          .tokens -
+                                                              .getCurrentUser
+                                                              .tokens -
                                                           loss);
+                                              final transaction =
+                                                  TransactionAppModel(
+                                                      dateTime: currentDateTime,
+                                                      amountRecieved: null,
+                                                      tokensRecieved: null,
+                                                      tokensSpent: loss,
+                                                      amountSpent: null,
+                                                      senderAdress: null,
+                                                      recieverAress: user
+                                                          .getCurrentUser
+                                                          .customerAddress,
+                                                      customerEmail: user
+                                                          .getCurrentUser.email,
+                                                      title:
+                                                          'daily login reward');
+                                              await FirebaseFirestore.instance
+                                                  .collection("Transactions")
+                                                  .doc()
+                                                  .set(transaction.toJson());
                                             }
                                           }
                                           await FirebaseFirestore.instance
