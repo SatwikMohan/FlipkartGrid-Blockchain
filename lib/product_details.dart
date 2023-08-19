@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flipgrid/cart.dart';
 import 'package:flipgrid/models/brand.dart';
 import 'package:flipgrid/services/functions.dart';
@@ -21,39 +19,38 @@ class ProductDetailsScreen extends StatefulWidget {
     this.customerAddress = customerAddress;
   }
   @override
-  State<ProductDetailsScreen> createState() => _ProductDetailScreenState(product,customerAddress);
+  State<ProductDetailsScreen> createState() =>
+      _ProductDetailScreenState(product, customerAddress);
 }
 
-class _ProductDetailScreenState extends State<ProductDetailsScreen>{
-
+class _ProductDetailScreenState extends State<ProductDetailsScreen> {
   late Brand product;
   late String customerAddress;
-  _ProductDetailScreenState(Brand product,String customerAddress){
-    this.product=product;
-    this.customerAddress=customerAddress;
+  _ProductDetailScreenState(Brand product, String customerAddress) {
+    this.product = product;
+    this.customerAddress = customerAddress;
   }
 
-  bool loyalty=false;
-  ServiceClass serviceClass=ServiceClass();
-  void process() async{
-    Client? client=Client();
-    Web3Client ethClient=Web3Client(infura_url, client);
-    var res=await serviceClass.getBrandAddress(product.email!, ethClient);
-    String brandAddress=res[0].toString();
-    var response=await serviceClass.isCustomerMyLoyalCustomer(brandAddress, customerAddress, ethClient);
+  bool loyalty = false;
+  ServiceClass serviceClass = ServiceClass();
+  void process() async {
+    Client? client = Client();
+    Web3Client ethClient = Web3Client(infura_url, client);
+    var res = await serviceClass.getBrandAddress(product.email!, ethClient);
+    String brandAddress = res[0].toString();
+    var response = await serviceClass.isCustomerMyLoyalCustomer(
+        brandAddress, customerAddress, ethClient);
     setState(() {
-      loyalty=bool.parse(response[0].toString());
-      product = product.copyWith(isuserloyaltobrand : loyalty);
+      loyalty = bool.parse(response[0].toString());
+      product = product.copyWith(isuserloyaltobrand: loyalty);
     });
   }
+
   @override
   void initState() {
-    // TODO: implement initState
     process();
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -95,23 +92,22 @@ class _ProductDetailScreenState extends State<ProductDetailsScreen>{
                   const SizedBox(height: 8),
                   Text(
                     product.description,
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                   ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(Icons.star, color: Colors.yellow),
+                      const Icon(Icons.star, color: Colors.yellow),
                       Text(product.rating),
                     ],
                   ),
                   const SizedBox(height: 9),
-
-                  !loyalty?Text('Become Our loyal customer by buying our products worth at leat \$ 10')
-                      :ElevatedButton(onPressed: (){
-
-                  },
-                      child:Text('Use tokens to get Discount') ),
-
+                  !loyalty
+                      ? const Text(
+                          'Become Our loyal customer by buying our products worth at leat \$ 10')
+                      : ElevatedButton(
+                          onPressed: () {},
+                          child: const Text('Use tokens to get Discount')),
                   const SizedBox(height: 16),
                   Consumer(
                     builder:

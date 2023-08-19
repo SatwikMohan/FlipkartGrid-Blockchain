@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flipgrid/firebase_options.dart';
 import 'package:flipgrid/login_signup/new_login.dart';
 import 'package:flipgrid/models/user.dart';
-import 'package:flipgrid/user_profile.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,12 +11,19 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // if (!kIsWeb) {
+  //   Stripe.publishableKey = publishableKey;
+  // }
   runApp(const ProviderScope(child: MyApp()));
 }
 
 final currentUserStateProvider =
     ChangeNotifierProvider((ref) => CurrentUserState());
-final GlobalKey<NavigatorState> globalNavigatorKey = new GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> globalNavigatorKey =
+    GlobalKey<NavigatorState>();
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
+
 class CurrentUserState extends ChangeNotifier {
   // late Customer _user;
   Customer _user = Customer(
@@ -51,6 +57,7 @@ class MyApp extends StatelessWidget {
     // SizeConfig().init(context);
     return MaterialApp(
       navigatorKey: globalNavigatorKey,
+      scaffoldMessengerKey: scaffoldMessengerKey,
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
