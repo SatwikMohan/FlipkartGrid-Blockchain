@@ -182,7 +182,8 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                     ref.read(cartProductsProvider).forEach((element) async {
                       final response = await ServiceClass()
                           .getBrandAddress(element.email!, ethClient!);
-                      element = element.copyWith(brandAddress: response[0]);
+                      element = element.copyWith(
+                          brandAddress: response[0].toString());
                       ServiceClass().updateMoneySpendOnBrand(
                           element.brandAddress,
                           ref

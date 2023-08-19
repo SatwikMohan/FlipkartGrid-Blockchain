@@ -271,9 +271,7 @@ class _NewLoginState extends State<NewLogin> {
                                                   .set(transaction.toJson());
                                               print(response);
                                             }
-                                            int loss =
-                                                user.getCurrentUser.tokens / 15
-                                                    as int;
+                                            int loss = dayDifference ~/ 15;
                                             if (loss >= 1) {
                                               user.setCurrentUser =
                                                   user.getCurrentUser.copyWith(

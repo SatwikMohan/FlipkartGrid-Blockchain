@@ -61,6 +61,8 @@ dependencies:
   confetti: ^0.7.0
   flutter_glow: ^0.3.0
   flutter_top_blocked_bouncing_scroll_physics: ^1.0.0
+  flutter_stripe: ^5.0.0
+  # razorpay_flutter: ^1.3.4
 
 dev_dependencies:
   flutter_test:
