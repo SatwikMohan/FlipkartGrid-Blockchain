@@ -27,8 +27,8 @@ mixin _$Brand {
   String get CostETH => throw _privateConstructorUsedError;
   int get currLoyalPoints => throw _privateConstructorUsedError;
   bool? get isuserloyaltobrand => throw _privateConstructorUsedError;
-  String get description=>throw _privateConstructorUsedError;
-  String get rating=>throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
+  String get rating => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,9 +48,8 @@ abstract class $BrandCopyWith<$Res> {
       String CostETH,
       int currLoyalPoints,
       bool? isuserloyaltobrand,
-        String description,
-        String rating
-      });
+      String description,
+      String rating});
 }
 
 /// @nodoc
@@ -73,8 +72,8 @@ class _$BrandCopyWithImpl<$Res, $Val extends Brand>
     Object? CostETH = null,
     Object? currLoyalPoints = null,
     Object? isuserloyaltobrand = freezed,
-    Object? description=null,
-    Object? rating=null
+    Object? description = null,
+    Object? rating = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -105,13 +104,15 @@ class _$BrandCopyWithImpl<$Res, $Val extends Brand>
           ? _value.isuserloyaltobrand
           : isuserloyaltobrand // ignore: cast_nullable_to_non_nullable
               as bool?,
-      description: null==description
-        ?_value.description:description
-        as String,
-      rating: null==rating?
-          _value.rating:rating as String
-    ) as $Val
-    );
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
+      rating: null == rating
+          ? _value.rating
+          : rating // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
   }
 }
 
@@ -129,9 +130,8 @@ abstract class _$$_BrandCopyWith<$Res> implements $BrandCopyWith<$Res> {
       String CostETH,
       int currLoyalPoints,
       bool? isuserloyaltobrand,
-        String description,
-        String rating
-      });
+      String description,
+      String rating});
 }
 
 /// @nodoc
@@ -150,8 +150,8 @@ class __$$_BrandCopyWithImpl<$Res> extends _$BrandCopyWithImpl<$Res, _$_Brand>
     Object? CostETH = null,
     Object? currLoyalPoints = null,
     Object? isuserloyaltobrand = freezed,
-    Object? description=null,
-    Object? rating=null
+    Object? description = null,
+    Object? rating = null,
   }) {
     return _then(_$_Brand(
       name: null == name
@@ -182,11 +182,14 @@ class __$$_BrandCopyWithImpl<$Res> extends _$BrandCopyWithImpl<$Res, _$_Brand>
           ? _value.isuserloyaltobrand
           : isuserloyaltobrand // ignore: cast_nullable_to_non_nullable
               as bool?,
-        description: null==description
-            ?_value.description:description
-        as String,
-        rating: null==rating?
-        _value.rating:rating as String
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
+      rating: null == rating
+          ? _value.rating
+          : rating // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -202,9 +205,8 @@ class _$_Brand implements _Brand {
       required this.CostETH,
       required this.currLoyalPoints,
       required this.isuserloyaltobrand,
-        required this.description,
-        required this.rating
-      });
+      required this.description,
+      required this.rating});
 
   factory _$_Brand.fromJson(Map<String, dynamic> json) =>
       _$$_BrandFromJson(json);
@@ -230,7 +232,7 @@ class _$_Brand implements _Brand {
 
   @override
   String toString() {
-    return 'Brand(name: $name, email: $email, brandAddress: $brandAddress, PicUrl: $PicUrl, CostETH: $CostETH, currLoyalPoints: $currLoyalPoints, isuserloyaltobrand: $isuserloyaltobrand, description:$description,rating:$rating)';
+    return 'Brand(name: $name, email: $email, brandAddress: $brandAddress, PicUrl: $PicUrl, CostETH: $CostETH, currLoyalPoints: $currLoyalPoints, isuserloyaltobrand: $isuserloyaltobrand, description: $description, rating: $rating)';
   }
 
   @override
@@ -247,17 +249,25 @@ class _$_Brand implements _Brand {
             (identical(other.currLoyalPoints, currLoyalPoints) ||
                 other.currLoyalPoints == currLoyalPoints) &&
             (identical(other.isuserloyaltobrand, isuserloyaltobrand) ||
-                other.isuserloyaltobrand == isuserloyaltobrand))&&
+                other.isuserloyaltobrand == isuserloyaltobrand) &&
             (identical(other.description, description) ||
                 other.description == description) &&
-            (identical(other.rating, rating) ||
-                other.rating == rating);
+            (identical(other.rating, rating) || other.rating == rating));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, name, email, brandAddress,
-      PicUrl, CostETH, currLoyalPoints, isuserloyaltobrand,description,rating);
+  int get hashCode => Object.hash(
+      runtimeType,
+      name,
+      email,
+      brandAddress,
+      PicUrl,
+      CostETH,
+      currLoyalPoints,
+      isuserloyaltobrand,
+      description,
+      rating);
 
   @JsonKey(ignore: true)
   @override
@@ -283,8 +293,7 @@ abstract class _Brand implements Brand {
       required final int currLoyalPoints,
       required final bool? isuserloyaltobrand,
       required final String description,
-        required final String rating
-      }) = _$_Brand;
+      required final String rating}) = _$_Brand;
 
   factory _Brand.fromJson(Map<String, dynamic> json) = _$_Brand.fromJson;
 

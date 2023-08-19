@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flipgrid/login_signup/new_login.dart';
 import 'package:flipgrid/main.dart';
 import 'package:flipgrid/models/test_models.dart';
+import 'package:flipgrid/my_coupons.dart';
 import 'package:flipgrid/product_list_view.dart';
 import 'package:flipgrid/services/EncryptionService.dart';
 import 'package:flipgrid/services/functions.dart';
@@ -17,7 +18,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:web3dart/web3dart.dart';
 
 import 'follow_to_earn.dart';
@@ -26,9 +26,9 @@ class UserProfilePage extends ConsumerStatefulWidget {
   //const UserProfilePage({super.key, required});
   late bool isSignUp;
   late BuildContext c;
-  UserProfilePage(bool isSignUp,BuildContext c){
-    this.isSignUp=isSignUp;
-    this.c=c;
+  UserProfilePage(bool isSignUp, BuildContext c, {super.key}) {
+    this.isSignUp = isSignUp;
+    this.c = c;
   }
 
   @override
@@ -40,9 +40,9 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
   Web3Client? ethClient;
   late bool isSignUp;
   late BuildContext c;
-  _UserProfilePageState(bool isSignUp,BuildContext c){
-    this.isSignUp=isSignUp;
-    this.c=c;
+  _UserProfilePageState(bool isSignUp, BuildContext c) {
+    this.isSignUp = isSignUp;
+    this.c = c;
   }
   ServiceClass serviceClass=ServiceClass();
   EncryptionClass encryptionClass=EncryptionClass();
@@ -78,8 +78,8 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
     //return response.docs.map((e) => e.data());
   }
 
-  void showReferalDialog(BuildContext context){
-    final TextEditingController controller=TextEditingController();
+  void showReferalDialog(BuildContext context) {
+    final TextEditingController controller = TextEditingController();
     print('1');
     QuickAlert.show(
         context: context,
@@ -103,17 +103,15 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
           });
         },
         cancelBtnText: "Cancel",
-        onCancelBtnTap: (){
+        onCancelBtnTap: () {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.of(context).pop();
           });
-        }
-    );
-
+        });
   }
 
-  void showReferralSheet(){
-    TextEditingController controller=TextEditingController();
+  void showReferralSheet() {
+    TextEditingController controller = TextEditingController();
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
@@ -127,19 +125,25 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
               children: <Widget>[
                 Column(
                   children: [
-                    SizedBox(height: 20,),
-                    Text('Use Referral Code'),
-                    SizedBox(height: 20,),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text('Use Referral Code'),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     TextField(
                       controller: controller,
-                      decoration: InputDecoration(
-                        hintText: 'Paste Code Here'
-                      ),
+                      decoration:
+                          const InputDecoration(hintText: 'Paste Code Here'),
                     ),
-                    SizedBox(height: 13,),
+                    const SizedBox(
+                      height: 13,
+                    ),
                     Row(
                       children: [
-                        Padding(padding: EdgeInsets.all(12),
+                        Padding(
+                          padding: const EdgeInsets.all(12),
                           child: ElevatedButton(
                             child: const Text('Confirm'),
                             onPressed: () {
@@ -147,7 +151,8 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                             },
                           ),
                         ),
-                        Padding(padding: EdgeInsets.all(12),
+                        Padding(
+                          padding: const EdgeInsets.all(12),
                           child: ElevatedButton(
                             child: const Text('Close'),
                             onPressed: () => Navigator.pop(context),
@@ -170,7 +175,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
     client = Client();
     ethClient = Web3Client(infura_url, client!);
     Future.delayed(Duration.zero).then((value) {
-      if(isSignUp){
+      if (isSignUp) {
         //showReferralSheet();
         showReferalDialog(context);
       }
@@ -231,24 +236,23 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
         backgroundColor: Colors.blue,
         actions: [
           Consumer(
-            builder: (BuildContext context, WidgetRef ref, Widget? child) {
-              final user = ref.watch(currentUserStateProvider).getCurrentUser;
-              return Padding(
-                padding: EdgeInsets.all(12),
-                child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                            return ProductListView(user.customerAddress);
-                          }));
-                    },
-                    child: const Text(
-                      "Start Shopping",
-                      style: TextStyle(fontSize: 16),
-                    )),
-              );
-            }
-          ),
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            final user = ref.watch(currentUserStateProvider).getCurrentUser;
+            return Padding(
+              padding: const EdgeInsets.all(12),
+              child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ProductListView(user.customerAddress);
+                    }));
+                  },
+                  child: const Text(
+                    "Start Shopping",
+                    style: TextStyle(fontSize: 16),
+                  )),
+            );
+          }),
         ],
       ),
       body: Stack(children: [
@@ -331,6 +335,23 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) {
+                                  return const MyCoupons();
+                                },
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Clain Coupons',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) {
                                   return const TransactionScreen();
                                 },
                               ),
@@ -348,7 +369,8 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) {
-                                  return ShareScreen(user.customerAddress,user.email);
+                                  return ShareScreen(
+                                      user.customerAddress, user.email);
                                 },
                               ),
                             );

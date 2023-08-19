@@ -1,9 +1,9 @@
-import 'dart:developer';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flipgrid/login_signup/auth_input_text.dart';
 import 'package:flipgrid/main.dart';
 import 'package:flipgrid/models/brand.dart';
+import 'package:flipgrid/models/coupons_model.dart';
 import 'package:flipgrid/product_list_view.dart';
 import 'package:flipgrid/services/functions.dart';
 import 'package:flipgrid/text_field.dart';
@@ -32,6 +32,11 @@ class _CartScreenState extends ConsumerState<CartScreen> {
   TextEditingController discountAmountController = TextEditingController();
   Client? client;
   Web3Client? ethClient;
+  int random(int min, int max) {
+    int r = min + Random().nextInt(max - min);
+    return r;
+  }
+
   void showDailyCheckInDialog() async {
     await QuickAlert.show(
       context: context,
@@ -39,8 +44,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
       title: "Loyal CustomerReward",
       widget: const Column(
         children: [
-
-          Text("You are awarded 1 SUPERCOINS"),
+          Text("You are awarded 1 Token"),
           Text("Buy again for more!"),
         ],
       ),
@@ -51,6 +55,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
       barrierDismissible: false,
     );
   }
+
   // List<Brand> cartProducts = [];
   @override
   void initState() {
@@ -90,7 +95,10 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                             .remove(ref.read(cartProductsProvider)[index]);
                       });
                     },
-                    customerAddress: ref.read(currentUserStateProvider).getCurrentUser.customerAddress,
+                    customerAddress: ref
+                        .read(currentUserStateProvider)
+                        .getCurrentUser
+                        .customerAddress,
                   );
                   // return ProductCard(product: productsTest[index]);
                 },
@@ -106,100 +114,135 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 style: const TextStyle(fontSize: 18),
               ),
               const SizedBox(height: 16),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 // AuthInputText(textEditingController: discountAmountController,
                 //   labelText: "Enter Tokens Amount",
                 //   hintText: ""),
-                Container(
+                SizedBox(
                   width: 100,
                   // height: 20,
-                  child: TextInputWidget(controller: discountAmountController, texthint: "Enter", textInputType: TextInputType.number),
+                  child: TextInputWidget(
+                      controller: discountAmountController,
+                      texthint: "Enter",
+                      textInputType: TextInputType.number),
                   // child: TextField(controller: discountAmountController,
                   //   keyboardType: TextInputType.number,
                   //   decoration: InputDecoration(hintText: "Enter tokens amount",),),
                 ),
                 // TextInputWidget(controller: discountAmountController, texthint: "Enter Tokens Amount", textInputType: TextInputType.number),
                 Padding(
-                  padding: EdgeInsets.all(8),
-                  child: ElevatedButton(onPressed: (){
-                    if(userBalance>=int.parse(discountAmountController.text)) {
-                      setState(() {
-                        totalAmount =
-                            totalAmount - int.parse(discountAmountController.text);
-                        userBalance -= int.parse(discountAmountController.text);
-                      });
-                    } else {
-                      final snackBar = SnackBar(
-                        content: const Text("Insufficient Tokens"),
-                      );
+                  padding: const EdgeInsets.all(8),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        if (userBalance >=
+                            int.parse(discountAmountController.text)) {
+                          setState(() {
+                            totalAmount = totalAmount -
+                                int.parse(discountAmountController.text);
+                            userBalance -=
+                                int.parse(discountAmountController.text);
+                          });
+                        } else {
+                          const snackBar = SnackBar(
+                            content: Text("Insufficient Tokens"),
+                          );
 
-                      // Find the ScaffoldMessenger in the widget tree
-                      // and use it to show a SnackBar.
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
-                  }, child: Text("Use Tokens to get Discount")),
+                          // Find the ScaffoldMessenger in the widget tree
+                          // and use it to show a SnackBar.
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      },
+                      child: const Text("Use Tokens to get Discount")),
                 ),
               ]),
               const SizedBox(height: 32),
               ElevatedButton(
-                onPressed:
-                    () async {
-                  ref.read(cartProductsProvider).forEach((element) async {
-                    final response = await ServiceClass().getBrandAddress(element.email!, ethClient!);
-                    element = element.copyWith(brandAddress: response[0]);
-                    ServiceClass().updateMoneySpendOnBrand(
-                        element.brandAddress,
-                        ref
-                            .read(currentUserStateProvider)
-                            .getCurrentUser
-                            .customerAddress,
-                        BigInt.parse((totalAmount as int).toString()),
-                        ethClient!);
-                    if(element.isuserloyaltobrand??false){
-                      final rewardresponse = await ServiceClass().mintDailyCheckInLoyaltyPoints(ref
-                          .read(currentUserStateProvider)
-                          .getCurrentUser
-                          .customerAddress, ethClient!);
-                      if(bool.parse(rewardresponse[0].toString())){
-                        showDailyCheckInDialog();
-                      }
-                    }
-                  });
-
-                        List<dynamic> ethUserData;
+                  onPressed: () async {
+                    ref.read(cartProductsProvider).forEach((element) async {
+                      final response = await ServiceClass()
+                          .getBrandAddress(element.email!, ethClient!);
+                      element = element.copyWith(brandAddress: response[0]);
+                      ServiceClass().updateMoneySpendOnBrand(
+                          element.brandAddress,
+                          ref
+                              .read(currentUserStateProvider)
+                              .getCurrentUser
+                              .customerAddress,
+                          BigInt.parse((totalAmount as int).toString()),
+                          ethClient!);
+                      if (element.isuserloyaltobrand ?? false) {
                         final user = ref.read(currentUserStateProvider);
-                        ethUserData = await ServiceClass()
-                            .getUserData(user.getCurrentUser.email, ethClient!);
-                        user.setCurrentUser = user.getCurrentUser.copyWith(
-                            tokens: int.parse(ethUserData[0][5].toString()));
-                        setState(() {
-                          ref.read(cartProductsProvider).clear();
-                        });
-                        await FirebaseFirestore.instance
-                            .collection("Customers")
-                            .doc(user.getCurrentUser.email)
-                            .set(user.getCurrentUser.toJson());
-                        final transaction = TransactionAppModel(
-                            dateTime: DateTime.now(),
-                            amountRecieved: null,
-                            tokensRecieved: null,
-                            tokensSpent: totalAmount as int,
-                            amountSpent: null,
-                            senderAdress: null,
-                            recieverAress: user.getCurrentUser.customerAddress,
-                            customerEmail: user.getCurrentUser.email,
-                            title:
-                                'Bought ${ref.read(cartProductsProvider).fold("", (previousValue, element) => "$previousValue${element.name}, ")}');
-                        await FirebaseFirestore.instance
-                            .collection("Transactions")
-                            .doc()
-                            .set(transaction.toJson());
-                      },
-                child:
-                     const Text('Buy Now')
-              ),
+                        final rewardresponse = await ServiceClass()
+                            .mintDailyCheckInLoyaltyPoints(
+                                ref
+                                    .read(currentUserStateProvider)
+                                    .getCurrentUser
+                                    .customerAddress,
+                                ethClient!);
+                        if (bool.parse(rewardresponse[0].toString())) {
+                          showDailyCheckInDialog();
+                          user.setCurrentUser = user.getCurrentUser
+                              .copyWith(tokens: user.getCurrentUser.tokens + 1);
+                          int couponValue = random(1, 4);
+                          final response = await ServiceClass()
+                              .mintLoyaltyPoints(
+                                  user.getCurrentUser.customerAddress,
+                                  couponValue,
+                                  ethClient!);
+                          user.setCurrentUser = user.getCurrentUser.copyWith(
+                            tokens: user.getCurrentUser.tokens + couponValue,
+                          );
+                          await FirebaseFirestore.instance
+                              .collection("Customers")
+                              .doc(user.getCurrentUser.email)
+                              .set(user.getCurrentUser.toJson());
+                          await FirebaseFirestore.instance
+                              .collection("Coupons")
+                              .doc(ref
+                                  .read(currentUserStateProvider)
+                                  .getCurrentUser
+                                  .email)
+                              .collection("UserCoupons")
+                              .doc()
+                              .set(CouponsModel(
+                                value: couponValue,
+                                isClaimed: false,
+                                creationDateTime: DateTime.now().toString(),
+                              ).toJson());
+                        }
+                      }
+                    });
+
+                    List<dynamic> ethUserData;
+                    final user = ref.read(currentUserStateProvider);
+                    ethUserData = await ServiceClass()
+                        .getUserData(user.getCurrentUser.email, ethClient!);
+                    user.setCurrentUser = user.getCurrentUser.copyWith(
+                        tokens: int.parse(ethUserData[0][5].toString()));
+                    setState(() {
+                      ref.read(cartProductsProvider).clear();
+                    });
+                    await FirebaseFirestore.instance
+                        .collection("Customers")
+                        .doc(user.getCurrentUser.email)
+                        .set(user.getCurrentUser.toJson());
+                    final transaction = TransactionAppModel(
+                        dateTime: DateTime.now(),
+                        amountRecieved: null,
+                        tokensRecieved: null,
+                        tokensSpent: totalAmount as int,
+                        amountSpent: null,
+                        senderAdress: null,
+                        recieverAress: user.getCurrentUser.customerAddress,
+                        customerEmail: user.getCurrentUser.email,
+                        title:
+                            'Bought ${ref.read(cartProductsProvider).fold("", (previousValue, element) => "$previousValue${element.name}, ")}');
+                    await FirebaseFirestore.instance
+                        .collection("Transactions")
+                        .doc()
+                        .set(transaction.toJson());
+                  },
+                  child: const Text('Buy Now')),
             ],
           ),
         ),

@@ -1,17 +1,12 @@
-import 'dart:js_interop';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flipgrid/login_signup/new_login.dart';
-import 'package:flipgrid/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:web3dart/web3dart.dart';
 
 import '../main.dart';
@@ -33,7 +28,7 @@ class _NewSignUpState extends State<NewSignUp> {
   final TextEditingController emailTextController = TextEditingController();
   final TextEditingController passwordTextController = TextEditingController();
   final TextEditingController ethidcontroller = TextEditingController();
-  final TextEditingController controller=TextEditingController();
+  final TextEditingController controller = TextEditingController();
   bool isLoading = false;
   // final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
   bool loadingState = false;
@@ -129,7 +124,6 @@ class _NewSignUpState extends State<NewSignUp> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-
     // void showReferalDialog() {
     //   final TextEditingController controller=TextEditingController();
     //   print('1');
@@ -158,7 +152,6 @@ class _NewSignUpState extends State<NewSignUp> {
     //     }
     //   );
     // }
-
 
     return Scaffold(
       body: Stack(children: [
@@ -252,9 +245,10 @@ class _NewSignUpState extends State<NewSignUp> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Consumer(
-                                    builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                                  final user = ref.watch(currentUserStateProvider);
+                                Consumer(builder: (BuildContext context,
+                                    WidgetRef ref, Widget? child) {
+                                  final user =
+                                      ref.watch(currentUserStateProvider);
                                   return ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
@@ -267,9 +261,14 @@ class _NewSignUpState extends State<NewSignUp> {
                                         setState(() {
                                           isLoading = true;
                                         });
-                                        final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                                                    email: emailTextController.text,
-                                                    password: passwordTextController.text);
+                                        final userCredential =
+                                            await FirebaseAuth.instance
+                                                .createUserWithEmailAndPassword(
+                                                    email: emailTextController
+                                                        .text,
+                                                    password:
+                                                        passwordTextController
+                                                            .text);
                                         //await userCredential.user?.updatePhotoURL("FakeETHid");
                                         final newCustomer = Customer(
                                           name: userNameTextController.text,
@@ -286,7 +285,7 @@ class _NewSignUpState extends State<NewSignUp> {
                                         print('outside');
                                         print(userCredential.user.toString());
                                         print(userCredential.toString());
-                                        if (userCredential.user!=null) {
+                                        if (userCredential.user != null) {
                                           print('inside');
                                           await serviceClass.addCustomer(
                                               userNameTextController.text,
@@ -299,29 +298,33 @@ class _NewSignUpState extends State<NewSignUp> {
                                           await FirebaseFirestore.instance
                                               .collection("Customers")
                                               .doc(emailTextController.text)
-                                              .set(user.getCurrentUser.toJson());
-                                              //.then((value){
-                                            setState(() {
-                                              print('inside set state');
-                                              isLoading = false;
-                                              print('loading off');
-                                            });
-                                            // showReferalDialog();
-                                            // print('Dialog ran');
-                                            // globalNavigatorKey.currentState.pushReplacement(MaterialPageRoute(builder: (){
-                                            //
-                                            // }));
-                                          globalNavigatorKey.currentState?.pushAndRemoveUntil(
-                                              MaterialPageRoute(builder: (context) => UserProfilePage(true,context)),
-                                                  (route) => false
-                                          );
-                                            // Navigator.pushReplacement(
-                                            //   context,
-                                            //     MaterialPageRoute(builder: (BuildContext context) => UserProfilePage(),
-                                            //         )
-                                            // );
-                                        //  });
-                                        }else{
+                                              .set(
+                                                  user.getCurrentUser.toJson());
+                                          //.then((value){
+                                          setState(() {
+                                            print('inside set state');
+                                            isLoading = false;
+                                            print('loading off');
+                                          });
+                                          // showReferalDialog();
+                                          // print('Dialog ran');
+                                          // globalNavigatorKey.currentState.pushReplacement(MaterialPageRoute(builder: (){
+                                          //
+                                          // }));
+                                          globalNavigatorKey.currentState
+                                              ?.pushAndRemoveUntil(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          UserProfilePage(
+                                                              true, context)),
+                                                  (route) => false);
+                                          // Navigator.pushReplacement(
+                                          //   context,
+                                          //     MaterialPageRoute(builder: (BuildContext context) => UserProfilePage(),
+                                          //         )
+                                          // );
+                                          //  });
+                                        } else {
                                           setState(() {
                                             isLoading = false;
                                           });
