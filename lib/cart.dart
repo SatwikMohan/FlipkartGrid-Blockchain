@@ -40,6 +40,14 @@ class _CartScreenState extends ConsumerState<CartScreen> {
     return r;
   }
 
+  final List<String> couponImageLinks = [
+    "https://cdn.pixabay.com/photo/2017/07/21/23/35/map-2527419_1280.jpg",
+    "https://cdn.pixabay.com/photo/2017/07/21/23/34/map-2527414_1280.jpg",
+    "https://cdn.pixabay.com/photo/2014/10/03/14/34/gift-471778_1280.jpg",
+    "https://cdn.pixabay.com/photo/2014/10/03/14/34/gift-471778_1280.jpg",
+    "https://cdn.pixabay.com/photo/2015/08/11/08/21/coupon-883641_1280.jpg"
+  ];
+
   void showDailyCheckInDialog() async {
     await QuickAlert.show(
       context: context,
@@ -221,6 +229,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                                 value: couponValue,
                                 isClaimed: false,
                                 creationDateTime: DateTime.now().toString(),
+                                imageUrl: couponImageLinks[couponValue],
                               ).toJson());
                         }
                       }

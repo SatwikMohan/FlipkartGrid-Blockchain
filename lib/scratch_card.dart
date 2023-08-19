@@ -46,7 +46,7 @@ class _MyScratchCardState extends State<MyScratchCard> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.network(
-                  "https://images.unsplash.com/photo-1574169208507-84376144848b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=600&q=60",
+                  widget.coupon.imageUrl,
                   fit: BoxFit.contain,
                   width: 150,
                   height: 150,
@@ -95,22 +95,13 @@ class _MyScratchCardState extends State<MyScratchCard> {
                   threshold: 60,
                   color: Colors.red,
                   image: Image.network(
-                    "https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&w=1000&q=80",
+                    widget.coupon.imageUrl,
                     fit: BoxFit.fill,
                   ),
                   onChange: (value) => print("Scratch progress: $value%"),
                   onThreshold: () async {
                     final currentUser = ref.read(currentUserStateProvider);
-                    await ServiceClass().mintLoyaltyPoints(
-                      currentUser.getCurrentUser.email,
-                      widget.coupon.value,
-                      ethClient!,
-                    );
-                    currentUser.setCurrentUser = currentUser.getCurrentUser
-                        .copyWith(
-                            tokens: currentUser.getCurrentUser.tokens +
-                                widget.coupon.value);
-                    FirebaseFirestore.instance
+                    await FirebaseFirestore.instance
                         .doc(currentUser.getCurrentUser.email)
                         .set(currentUser.getCurrentUser.toJson());
                     final transaction = TransactionAppModel(
@@ -128,6 +119,16 @@ class _MyScratchCardState extends State<MyScratchCard> {
                         .collection("Transactions")
                         .doc()
                         .set(transaction.toJson());
+                    await ServiceClass().mintLoyaltyPoints(
+                      currentUser.getCurrentUser.email,
+                      widget.coupon.value,
+                      ethClient!,
+                    );
+                    currentUser.setCurrentUser = currentUser.getCurrentUser
+                        .copyWith(
+                            tokens: currentUser.getCurrentUser.tokens +
+                                widget.coupon.value);
+
                     _controller.play();
                   },
                   child: Container(
@@ -139,7 +140,7 @@ class _MyScratchCardState extends State<MyScratchCard> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Image.network(
-                          "https://images.unsplash.com/photo-1574169208507-84376144848b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=600&q=60",
+                          widget.coupon.imageUrl,
                           fit: BoxFit.contain,
                           width: 150,
                           height: 150,
