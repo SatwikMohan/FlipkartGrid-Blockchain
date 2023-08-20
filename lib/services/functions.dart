@@ -102,7 +102,7 @@ class ServiceClass {
   }
 
   Future<String> transferToMyLoyalCustomer(
-      String customerAddress, int points, Web3Client ethClient) async {
+      String customerAddress, BigInt points, Web3Client ethClient) async {
     var response = await _callFunction(
         'transferToMyLoyalCustomer',
         [EthereumAddress.fromHex(customerAddress), points],

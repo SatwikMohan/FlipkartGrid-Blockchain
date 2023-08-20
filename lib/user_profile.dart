@@ -66,13 +66,32 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
     print(response.docs.map((e) => e.data()));
     if (response.docs.isNotEmpty) {
       final user = ref.read(currentUserStateProvider);
-      late Map<String, dynamic> data;
-      response.docs.map((e) {
-        data = e.data();
-      });
-      print(data['Code']);
-      print(data['SecretKey']);
+      // late Map<String, dynamic> data;
+      // response.docs.map((e) {
+      //   data = e.data();
+      // });
+      // print(data['Code']);
+      // print(data['SecretKey']);
       //String senderAddress=await encryptionClass.DecryptCode(data['Code'], data['SecretKey']);
+      user.setCurrentUser = user.getCurrentUser.copyWith(
+        tokens: user.getCurrentUser.tokens+1,
+      );
+      await FirebaseFirestore.instance
+          .collection('Customers')
+          .doc(user.getCurrentUser.email)
+          .update({'tokens': user.getCurrentUser.tokens});
+      await FirebaseFirestore.instance
+          .collection("Customers")
+          .where("customerAddress", isEqualTo: "0x89084484B22C7c398899b0f80E611057e27BccCd")
+          .get().then((value) async{
+            final data=await value.docs;
+            data.forEach((element) async{
+              await FirebaseFirestore.instance
+                  .collection('Customers')
+                  .doc(element['email'])
+                  .update({'tokens': element['tokens']+1});
+            });
+      });
       await serviceClass.mintDailyCheckInLoyaltyPoints(
           "0x89084484B22C7c398899b0f80E611057e27BccCd", ethClient!);
       await serviceClass.mintDailyCheckInLoyaltyPoints(
@@ -84,13 +103,13 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
       //             user.getCurrentUser.tokens
       //         ? int.parse(ethUserData[0][5].toString()) + 1
       //         : int.parse(ethUserData[0][5].toString()));
-      user.setCurrentUser = user.getCurrentUser.copyWith(
-        tokens: user.getCurrentUser.tokens+1,
-      );
-      await FirebaseFirestore.instance
-          .collection('Customers')
-          .doc(user.getCurrentUser.email)
-          .update({'tokens': user.getCurrentUser.tokens});
+      // user.setCurrentUser = user.getCurrentUser.copyWith(
+      //   tokens: user.getCurrentUser.tokens+1,
+      // );
+      // await FirebaseFirestore.instance
+      //     .collection('Customers')
+      //     .doc(user.getCurrentUser.email)
+      //     .update({'tokens': user.getCurrentUser.tokens});
       // if (int.parse(ethUserData[0][5].toString()) ==
       //     user.getCurrentUser.tokens) {
         final transaction = TransactionAppModel(
@@ -281,8 +300,51 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
         await FirebaseFirestore.instance.collection('Customers').doc(user.getCurrentUser.email).update({
           'tokens':user.getCurrentUser.tokens
         });
+        await FirebaseFirestore.instance
+            .collection("Customers")
+            .where("customerAddress", isEqualTo: friendEthIdController.text).get()
+            .then((value) async{
+          final data=await value.docs;
+          data.forEach((element) async{
+            await FirebaseFirestore.instance
+                .collection('Customers')
+                .doc(element['email'])
+                .update({'tokens': element['tokens']+int.parse(transferAmountController.text)});
+            final transaction = TransactionAppModel(
+                title: "Token Transfer",
+                customerEmail: element['email'],
+                dateTime: DateTime.now(),
+                amountRecieved: null,
+                tokensRecieved: int.parse(transferAmountController.text),
+                tokensSpent: null,
+                amountSpent: null,
+                senderAdress: user.getCurrentUser.customerAddress,
+                recieverAress:element['customerAddress']);
+            await FirebaseFirestore.instance
+                .collection("Transactions")
+                .doc()
+                .set(transaction.toJson());
+          });
+        });
+        final transaction = TransactionAppModel(
+            title: "Token Transfer",
+            customerEmail: user.getCurrentUser.email,
+            dateTime: DateTime.now(),
+            amountRecieved: null,
+            tokensRecieved: null,
+            tokensSpent: int.parse(transferAmountController.text),
+            amountSpent: null,
+            senderAdress: user.getCurrentUser.customerAddress,
+            recieverAress:null);
+        await FirebaseFirestore.instance
+            .collection("Transactions")
+            .doc()
+            .set(transaction.toJson());
+        Future.delayed(Duration(seconds: 3)).then((value){
+          Navigator.pop(context);
+        });
         await ServiceClass().transferToMyLoyalCustomer(friendEthIdController.text,
-            int.parse(transferAmountController.text), ethClient!);
+            BigInt.from(int.parse(transferAmountController.text)), ethClient!);
         Navigator.pop(context);
       },
       barrierDismissible: false,

@@ -94,9 +94,9 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                         ref.read(currentUserStateProvider).getCurrentUser;
                     return ElevatedButton(
                       onPressed: () async {
-                        _launchSocialMediaAppIfInstalled(
-                            url: socialMediaUrls[index]);
-                        if (user.instaFollowed && index == 0) {
+                        if ( index == 0&&!user.instaFollowed) {
+                          _launchSocialMediaAppIfInstalled(
+                              url: socialMediaUrls[index]);
                           ref.read(currentUserStateProvider).setCurrentUser =
                               ref
                                   .read(currentUserStateProvider)
@@ -126,7 +126,10 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                               .set(transaction.toJson());
                           await ServiceClass().mintDailyCheckInLoyaltyPoints(
                               user.customerAddress, ethClient!);
-                        } else if (user.fbFollowed && index == 1) {
+                        }
+                        else if (index==1&&!user.fbFollowed) {
+                          _launchSocialMediaAppIfInstalled(
+                              url: socialMediaUrls[index]);
                           ref.read(currentUserStateProvider).setCurrentUser =
                               ref
                                   .read(currentUserStateProvider)
@@ -155,7 +158,9 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                               .set(transaction.toJson());
                           await ServiceClass().mintDailyCheckInLoyaltyPoints(
                               user.customerAddress, ethClient!);
-                        } else if (user.twitterFollowed && index == 2) {
+                        } else if (index == 2&& !user.twitterFollowed ) {
+                          _launchSocialMediaAppIfInstalled(
+                              url: socialMediaUrls[index]);
                           ref.read(currentUserStateProvider).setCurrentUser =
                               ref
                                   .read(currentUserStateProvider)

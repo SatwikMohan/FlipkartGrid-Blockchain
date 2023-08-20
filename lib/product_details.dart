@@ -104,7 +104,7 @@ class _ProductDetailScreenState extends State<ProductDetailsScreen> {
                   const SizedBox(height: 9),
                   !loyalty
                       ? const Text(
-                          'Become Our loyal customer by buying our products worth at leat \$ 10')
+                          'Become Our loyal customer by buying our products worth at least \$ 10')
                       : ElevatedButton(
                           onPressed: () {},
                           child: const Text('Use tokens to get Discount')),
