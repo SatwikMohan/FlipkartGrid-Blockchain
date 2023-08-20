@@ -252,7 +252,8 @@ class _NewLoginState extends State<NewLogin> {
                                               user.setCurrentUser =
                                                   user.getCurrentUser.copyWith(
                                                       lastLogin: currentDateTime
-                                                          .toString());
+                                                          .toString(),
+                                                      loginStreak: user.getCurrentUser.loginStreak+1);
                                               final transaction =
                                                   TransactionAppModel(
                                                       dateTime: currentDateTime,
@@ -276,7 +277,7 @@ class _NewLoginState extends State<NewLogin> {
                                               //showDailyCheckInDialog();
                                             }
                                             int loss =
-                                                (user.getCurrentUser.tokens /
+                                                (dayDifference /
                                                         15)
                                                     .round();
                                             if (loss >= 1) {
@@ -284,13 +285,7 @@ class _NewLoginState extends State<NewLogin> {
                                                   user.getCurrentUser.copyWith(
                                                       lastLogin: currentDateTime
                                                           .toString());
-
-                                              await serviceClass.decayTokens(
-                                                  user.getCurrentUser
-                                                      .customerAddress,
-                                                  BigInt.from(loss),
-                                                  ethClient!);
-                                              decayTokenDialog();
+                                              //decayTokenDialog();
                                               user.setCurrentUser =
                                                   user.getCurrentUser.copyWith(
                                                       tokens: user
@@ -311,11 +306,16 @@ class _NewLoginState extends State<NewLogin> {
                                                       customerEmail: user
                                                           .getCurrentUser.email,
                                                       title:
-                                                          'daily login reward');
+                                                          'Token Decay due to inactivity');
                                               await FirebaseFirestore.instance
                                                   .collection("Transactions")
                                                   .doc()
                                                   .set(transaction.toJson());
+                                              await serviceClass.decayTokens(
+                                                  user.getCurrentUser
+                                                      .customerAddress,
+                                                  BigInt.from(loss),
+                                                  ethClient!);
                                             }
                                           }
                                           await FirebaseFirestore.instance

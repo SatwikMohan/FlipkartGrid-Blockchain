@@ -3,6 +3,8 @@ import 'package:flipgrid/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
+import 'package:quickalert/quickalert.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -68,6 +70,24 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
   Client? client;
   Web3Client? ethClient;
 
+  void showSocialMediaReward() async {
+    await QuickAlert.show(
+      context: context,
+      type: QuickAlertType.info,
+      title: "Social Media Interaction",
+      widget: const Column(
+        children: [
+          Text("You are awarded 1 Token"),
+        ],
+      ),
+      confirmBtnText: "Claim Reward!",
+      onConfirmBtnTap: () {
+        Navigator.pop(context);
+      },
+      barrierDismissible: false,
+    );
+  }
+
   @override
   void initState() {
     client = Client();
@@ -124,6 +144,7 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                               .collection("Transactions")
                               .doc()
                               .set(transaction.toJson());
+                           showSocialMediaReward();
                           await ServiceClass().mintDailyCheckInLoyaltyPoints(
                               user.getCurrentUser.customerAddress, ethClient!);
                         }
@@ -156,6 +177,7 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                               .collection("Transactions")
                               .doc()
                               .set(transaction.toJson());
+                          showSocialMediaReward();
                           await ServiceClass().mintDailyCheckInLoyaltyPoints(
                               user.getCurrentUser.customerAddress, ethClient!);
                         } else if (index == 2&& !user.getCurrentUser.twitterFollowed ) {
@@ -187,6 +209,7 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                               .collection("Transactions")
                               .doc()
                               .set(transaction.toJson());
+                          showSocialMediaReward();
                           await ServiceClass().mintDailyCheckInLoyaltyPoints(
                               user.getCurrentUser.customerAddress, ethClient!);
                         }

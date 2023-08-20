@@ -251,6 +251,24 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
     );
   }
 
+  void decayTokenDialog() async {
+    await QuickAlert.show(
+      context: context,
+      type: QuickAlertType.warning,
+      title: "Decay Token Alert",
+      widget: const Column(
+        children: [
+          Text("You lost a few tokens due to inactivity"),
+        ],
+      ),
+      confirmBtnText: "Ok",
+      onConfirmBtnTap: () {
+        Navigator.pop(context);
+      },
+      barrierDismissible: false,
+    );
+  }
+
   @override
   void initState() {
     client = Client();
@@ -262,6 +280,9 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
       }
       if (dayDiff == 1) {
         showDailyCheckInDialog();
+      }
+      if(dayDiff>=15){
+        decayTokenDialog();
       }
     });
     super.initState();
