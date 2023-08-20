@@ -30,8 +30,8 @@ class CartScreen extends ConsumerStatefulWidget {
 }
 
 class _CartScreenState extends ConsumerState<CartScreen> {
-  double totalAmount = 0;
-  double userBalance = 0;
+  int totalAmount = 0;
+  int userBalance = 0;
   int discount = 0;
   TextEditingController discountAmountController = TextEditingController();
   Client? client;
@@ -77,7 +77,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
     totalAmount = ref.read(cartProductsProvider).fold(0,
         (previousValue, element) => previousValue + int.parse(element.CostETH));
     userBalance =
-        (ref.read(currentUserStateProvider).getCurrentUser.tokens) as double;
+        (ref.read(currentUserStateProvider).getCurrentUser.tokens);
     super.initState();
   }
 
@@ -107,6 +107,10 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                             .read(cartProductsProvider)
                             .remove(ref.read(cartProductsProvider)[index]);
                       });
+                      totalAmount = ref.read(cartProductsProvider).fold(0,
+                              (previousValue, element) => previousValue + int.parse(element.CostETH)) - discount;
+                      userBalance =
+                      (ref.read(currentUserStateProvider).getCurrentUser.tokens) - discount;
                     },
                     customerAddress: ref
                         .read(currentUserStateProvider)
@@ -185,6 +189,9 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                           .getBrandAddress(element.email!, ethClient!);
                       element = element.copyWith(
                           brandAddress: response[0].toString());
+                      if(totalAmount>10){
+                        element = element.copyWith(isuserloyaltobrand: true);
+                      }
                       await ServiceClass().updateMoneySpendOnBrand(
                           element.brandAddress,
                           ref
@@ -262,12 +269,14 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                     List<dynamic> ethUserData;
                     ethUserData = await ServiceClass()
                         .getUserData(user.getCurrentUser.email, ethClient!);
+                    // update tokens value according to blockchain
                     // user.setCurrentUser = user.getCurrentUser.copyWith(
                     //     tokens: int.parse(ethUserData[0][5].toString()));
                     setState(() {
                       ref.read(cartProductsProvider).clear();
                     });
-
+                    totalAmount = 0;
+                    discount = 0;
                     globalNavigatorKey.currentState
                         ?.push(MaterialPageRoute(builder: (context) {
                       return const PaymentSuccessfulPage();

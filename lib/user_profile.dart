@@ -79,13 +79,20 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
           user.getCurrentUser.customerAddress, ethClient!);
       final ethUserData =
           await serviceClass.getUserData(user.getCurrentUser.email, ethClient!);
+      // user.setCurrentUser = user.getCurrentUser.copyWith(
+      //     tokens: int.parse(ethUserData[0][5].toString()) ==
+      //             user.getCurrentUser.tokens
+      //         ? int.parse(ethUserData[0][5].toString()) + 1
+      //         : int.parse(ethUserData[0][5].toString()));
       user.setCurrentUser = user.getCurrentUser.copyWith(
-          tokens: int.parse(ethUserData[0][5].toString()) ==
-                  user.getCurrentUser.tokens
-              ? int.parse(ethUserData[0][5].toString()) + 1
-              : int.parse(ethUserData[0][5].toString()));
-      if (int.parse(ethUserData[0][5].toString()) ==
-          user.getCurrentUser.tokens) {
+        tokens: user.getCurrentUser.tokens+1,
+      );
+      await FirebaseFirestore.instance
+          .collection('Customers')
+          .doc(user.getCurrentUser.email)
+          .update({'tokens': user.getCurrentUser.tokens});
+      // if (int.parse(ethUserData[0][5].toString()) ==
+      //     user.getCurrentUser.tokens) {
         final transaction = TransactionAppModel(
             dateTime: DateTime.now(),
             amountRecieved: null,
@@ -100,11 +107,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
             .collection("Transactions")
             .doc()
             .set(transaction.toJson());
-      }
-      await FirebaseFirestore.instance
-          .collection('Customers')
-          .doc(user.getCurrentUser.email)
-          .update({'tokens': user.getCurrentUser.tokens});
+      // }
     }
     //return response.docs.map((e) => e.data());
   }

@@ -196,7 +196,6 @@ class _NewLoginState extends State<NewLogin> {
                                                   .collection("Customers")
                                                   .doc(emailTextController.text)
                                                   .get();
-
                                           final dbuserData =
                                               firebaseUserResponse.data();
                                           if (dbuserData?.isNotEmpty ?? false) {
@@ -217,11 +216,12 @@ class _NewLoginState extends State<NewLogin> {
                                               await serviceClass.getUserData(
                                                   emailTextController.text,
                                                   ethClient!);
-                                          user.setCurrentUser =
-                                              user.getCurrentUser.copyWith(
-                                                  tokens: int.parse(
-                                                      ethUserData[0][5]
-                                                          .toString()));
+                                          //Later update tokens data with eth
+                                          // user.setCurrentUser =
+                                          //     user.getCurrentUser.copyWith(
+                                          //         tokens: int.parse(
+                                          //             ethUserData[0][5]
+                                          //                 .toString()));
 
                                           print(ethUserData[0].toString());
 

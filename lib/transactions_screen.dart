@@ -23,6 +23,15 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
       transactions = response.docs
           .map((e) => TransactionAppModel.fromJson(e.data()))
           .toList();
+      transactions.sort((a,b){
+        DateTime dateTime1=a.dateTime;
+        DateTime dateTime2=b.dateTime;
+        if(dateTime1.compareTo(dateTime2)<=0){
+          return 1;
+        }else{
+          return 0;
+        }
+      });
       for (var element in transactions) {
         print(element.toJson());
       }

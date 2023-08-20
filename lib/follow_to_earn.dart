@@ -26,9 +26,9 @@ Future<void> _launchSocialMediaAppIfInstalled({
 }
 
 const List<String> socialMediaUrls = [
-  "https://www.facebook.com/avinave.agrwal/",
-  "https://www.facebook.com/avinave.agrwal/",
-  "https://www.facebook.com/avinave.agrwal/",
+  "https://www.instagram.com/flipkart/?hl=en",
+  "https://www.facebook.com/flipkart/",
+  "https://twitter.com/flipkart?lang=en",
 ];
 const List<String> socialMediaPlatforms = ["Instagram", "Facebook", "Twitter"];
 
@@ -101,9 +101,11 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                               ref
                                   .read(currentUserStateProvider)
                                   .getCurrentUser
-                                  .copyWith(instaFollowed: true);
-                          ServiceClass().mintDailyCheckInLoyaltyPoints(
-                              user.customerAddress, ethClient!);
+                                  .copyWith(instaFollowed: true,
+                                  tokens: ref
+                                  .read(currentUserStateProvider)
+                                  .getCurrentUser.tokens+1
+                              );
                           await FirebaseFirestore.instance
                               .collection("Customers")
                               .doc(user.email)
@@ -122,14 +124,17 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                               .collection("Transactions")
                               .doc()
                               .set(transaction.toJson());
+                          await ServiceClass().mintDailyCheckInLoyaltyPoints(
+                              user.customerAddress, ethClient!);
                         } else if (user.fbFollowed && index == 1) {
                           ref.read(currentUserStateProvider).setCurrentUser =
                               ref
                                   .read(currentUserStateProvider)
                                   .getCurrentUser
-                                  .copyWith(fbFollowed: true);
-                          ServiceClass().mintDailyCheckInLoyaltyPoints(
-                              user.customerAddress, ethClient!);
+                                  .copyWith(fbFollowed: true,
+                                  tokens: ref
+                                      .read(currentUserStateProvider)
+                                      .getCurrentUser.tokens+1);
                           await FirebaseFirestore.instance
                               .collection("Customers")
                               .doc(user.email)
@@ -148,14 +153,17 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                               .collection("Transactions")
                               .doc()
                               .set(transaction.toJson());
+                          await ServiceClass().mintDailyCheckInLoyaltyPoints(
+                              user.customerAddress, ethClient!);
                         } else if (user.twitterFollowed && index == 2) {
                           ref.read(currentUserStateProvider).setCurrentUser =
                               ref
                                   .read(currentUserStateProvider)
                                   .getCurrentUser
-                                  .copyWith(twitterFollowed: true);
-                          ServiceClass().mintDailyCheckInLoyaltyPoints(
-                              user.customerAddress, ethClient!);
+                                  .copyWith(twitterFollowed: true,
+                                  tokens: ref
+                                      .read(currentUserStateProvider)
+                                      .getCurrentUser.tokens+1);
                           await FirebaseFirestore.instance
                               .collection("Customers")
                               .doc(user.email)
@@ -174,6 +182,8 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                               .collection("Transactions")
                               .doc()
                               .set(transaction.toJson());
+                          await ServiceClass().mintDailyCheckInLoyaltyPoints(
+                              user.customerAddress, ethClient!);
                         }
                       },
                       child: Text(socialMediaPlatforms[index]),
