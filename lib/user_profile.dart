@@ -74,11 +74,11 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
       print(data['SecretKey']);
       //String senderAddress=await encryptionClass.DecryptCode(data['Code'], data['SecretKey']);
       await serviceClass.mintDailyCheckInLoyaltyPoints(
-          "0xE504F1aDE6B4d28ccFf9a29EE90cd5C82e16e55b", ethClient!);
+          "0x89084484B22C7c398899b0f80E611057e27BccCd", ethClient!);
       await serviceClass.mintDailyCheckInLoyaltyPoints(
           user.getCurrentUser.customerAddress, ethClient!);
-      final ethUserData =
-          await serviceClass.getUserData(user.getCurrentUser.email, ethClient!);
+      // final ethUserData =
+      //     await serviceClass.getUserData(user.getCurrentUser.email, ethClient!);
       // user.setCurrentUser = user.getCurrentUser.copyWith(
       //     tokens: int.parse(ethUserData[0][5].toString()) ==
       //             user.getCurrentUser.tokens
@@ -272,8 +272,16 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
         ],
       ),
       confirmBtnText: "Send Gift!",
-      onConfirmBtnTap: () {
-        ServiceClass().transferToMyLoyalCustomer(friendEthIdController.text,
+      onConfirmBtnTap: ()async {
+        final user = ref.read(currentUserStateProvider);
+        user.setCurrentUser = user.getCurrentUser
+            .copyWith(
+            tokens:user.getCurrentUser.tokens -
+                int.parse(transferAmountController.text) );
+        await FirebaseFirestore.instance.collection('Customers').doc(user.getCurrentUser.email).update({
+          'tokens':user.getCurrentUser.tokens
+        });
+        await ServiceClass().transferToMyLoyalCustomer(friendEthIdController.text,
             int.parse(transferAmountController.text), ethClient!);
         Navigator.pop(context);
       },

@@ -118,9 +118,9 @@ class _MyScratchCardState extends State<MyScratchCard> {
                       imageUrl: widget.coupon.imageUrl,
                     ).toJson());
                     final currentUser = ref.read(currentUserStateProvider);
-                    await FirebaseFirestore.instance
-                        .doc(currentUser.getCurrentUser.email)
-                        .set(currentUser.getCurrentUser.toJson());
+                    // await FirebaseFirestore.instance
+                    //     .doc(currentUser.getCurrentUser.email)
+                    //     .set(currentUser.getCurrentUser.toJson());
                     currentUser.setCurrentUser = currentUser.getCurrentUser
                         .copyWith(
                         tokens: currentUser.getCurrentUser.tokens +
