@@ -18,10 +18,10 @@ Future<void> _launchSocialMediaAppIfInstalled({
         await launch(url, forceSafariVC: false); // Launch the app if installed!
 
     if (!launched) {
-      launch(url); // Launch web view if app is not installed!
+      await launch(url); // Launch web view if app is not installed!
     }
   } catch (e) {
-    launch(url); // Launch web view if app is not installed!
+    await launch(url); // Launch web view if app is not installed!
   }
 }
 
@@ -91,25 +91,25 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                   builder:
                       (BuildContext context, WidgetRef ref, Widget? child) {
                     final user =
-                        ref.read(currentUserStateProvider).getCurrentUser;
+                        ref.watch(currentUserStateProvider);
                     return ElevatedButton(
                       onPressed: () async {
-                        if ( index == 0&&!user.instaFollowed) {
-                          _launchSocialMediaAppIfInstalled(
+                        if ( index == 0&&!user.getCurrentUser.instaFollowed) {
+                           print("follow insta");
+                          await _launchSocialMediaAppIfInstalled(
                               url: socialMediaUrls[index]);
-                          ref.read(currentUserStateProvider).setCurrentUser =
-                              ref
-                                  .read(currentUserStateProvider)
+                          user.setCurrentUser =
+                              user
                                   .getCurrentUser
                                   .copyWith(instaFollowed: true,
-                                  tokens: ref
-                                  .read(currentUserStateProvider)
+                                  tokens: user
                                   .getCurrentUser.tokens+1
                               );
+                          print(user.getCurrentUser.toJson());
                           await FirebaseFirestore.instance
                               .collection("Customers")
-                              .doc(user.email)
-                              .set(user.toJson());
+                              .doc(user.getCurrentUser.email)
+                              .set(user.getCurrentUser.toJson());
                           final transaction = TransactionAppModel(
                               dateTime: DateTime.now(),
                               amountRecieved: null,
@@ -117,31 +117,31 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                               tokensSpent: null,
                               amountSpent: null,
                               senderAdress: null,
-                              recieverAress: user.customerAddress,
-                              customerEmail: user.email,
+                              recieverAress: user.getCurrentUser.customerAddress,
+                              customerEmail: user.getCurrentUser.email,
                               title: 'followed us on insta');
                           await FirebaseFirestore.instance
                               .collection("Transactions")
                               .doc()
                               .set(transaction.toJson());
                           await ServiceClass().mintDailyCheckInLoyaltyPoints(
-                              user.customerAddress, ethClient!);
+                              user.getCurrentUser.customerAddress, ethClient!);
                         }
-                        else if (index==1&&!user.fbFollowed) {
-                          _launchSocialMediaAppIfInstalled(
+                        else if (index==1&&!user.getCurrentUser.fbFollowed) {
+                          await _launchSocialMediaAppIfInstalled(
                               url: socialMediaUrls[index]);
-                          ref.read(currentUserStateProvider).setCurrentUser =
-                              ref
-                                  .read(currentUserStateProvider)
+                          user.setCurrentUser =
+                              user
                                   .getCurrentUser
                                   .copyWith(fbFollowed: true,
-                                  tokens: ref
-                                      .read(currentUserStateProvider)
-                                      .getCurrentUser.tokens+1);
+                                  tokens: user
+                                      .getCurrentUser.tokens+1
+                              );
+                          print(user.getCurrentUser.toJson());
                           await FirebaseFirestore.instance
                               .collection("Customers")
-                              .doc(user.email)
-                              .set(user.toJson());
+                              .doc(user.getCurrentUser.email)
+                              .set(user.getCurrentUser.toJson());
                           final transaction = TransactionAppModel(
                               dateTime: DateTime.now(),
                               amountRecieved: null,
@@ -149,30 +149,30 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                               tokensSpent: null,
                               amountSpent: null,
                               senderAdress: null,
-                              recieverAress: user.customerAddress,
-                              customerEmail: user.email,
-                              title: "Followed us on fb");
+                              recieverAress: user.getCurrentUser.customerAddress,
+                              customerEmail: user.getCurrentUser.email,
+                              title: 'followed us on fb');
                           await FirebaseFirestore.instance
                               .collection("Transactions")
                               .doc()
                               .set(transaction.toJson());
                           await ServiceClass().mintDailyCheckInLoyaltyPoints(
-                              user.customerAddress, ethClient!);
-                        } else if (index == 2&& !user.twitterFollowed ) {
-                          _launchSocialMediaAppIfInstalled(
+                              user.getCurrentUser.customerAddress, ethClient!);
+                        } else if (index == 2&& !user.getCurrentUser.twitterFollowed ) {
+                          await _launchSocialMediaAppIfInstalled(
                               url: socialMediaUrls[index]);
-                          ref.read(currentUserStateProvider).setCurrentUser =
-                              ref
-                                  .read(currentUserStateProvider)
+                          user.setCurrentUser =
+                              user
                                   .getCurrentUser
                                   .copyWith(twitterFollowed: true,
-                                  tokens: ref
-                                      .read(currentUserStateProvider)
-                                      .getCurrentUser.tokens+1);
+                                  tokens: user
+                                      .getCurrentUser.tokens+1
+                              );
+                          print(user.getCurrentUser.toJson());
                           await FirebaseFirestore.instance
                               .collection("Customers")
-                              .doc(user.email)
-                              .set(user.toJson());
+                              .doc(user.getCurrentUser.email)
+                              .set(user.getCurrentUser.toJson());
                           final transaction = TransactionAppModel(
                               dateTime: DateTime.now(),
                               amountRecieved: null,
@@ -180,15 +180,15 @@ class _FollowOnSocialsState extends State<FollowOnSocials> {
                               tokensSpent: null,
                               amountSpent: null,
                               senderAdress: null,
-                              recieverAress: user.customerAddress,
-                              customerEmail: user.email,
+                              recieverAress: user.getCurrentUser.customerAddress,
+                              customerEmail: user.getCurrentUser.email,
                               title: 'followed us on twitter');
                           await FirebaseFirestore.instance
                               .collection("Transactions")
                               .doc()
                               .set(transaction.toJson());
                           await ServiceClass().mintDailyCheckInLoyaltyPoints(
-                              user.customerAddress, ethClient!);
+                              user.getCurrentUser.customerAddress, ethClient!);
                         }
                       },
                       child: Text(socialMediaPlatforms[index]),
