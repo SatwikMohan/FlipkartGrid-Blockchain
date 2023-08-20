@@ -101,14 +101,14 @@ class ServiceClass {
     return response;
   }
 
-  Future<String> transferToMyLoyalCustomer(
+  Future<String> transferToMyFriend(String sender,
       String customerAddress, BigInt points, Web3Client ethClient) async {
     var response = await _callFunction(
-        'transferToMyLoyalCustomer',
-        [EthereumAddress.fromHex(customerAddress), points],
+        'transferToMyFriend',
+        [EthereumAddress.fromHex(sender),EthereumAddress.fromHex(customerAddress), points],
         ethClient,
         owner_private_key);
-    print('Function transferToMyLoyalCustomer Called Successfully');
+    print('Function transferToMyFriend Called Successfully');
     return response;
   }
 

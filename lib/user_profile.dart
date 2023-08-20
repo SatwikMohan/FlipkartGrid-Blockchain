@@ -364,7 +364,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
         Future.delayed(Duration(seconds: 3)).then((value){
           Navigator.pop(context);
         });
-        await ServiceClass().transferToMyLoyalCustomer(friendEthIdController.text,
+        await ServiceClass().transferToMyFriend(user.getCurrentUser.customerAddress,friendEthIdController.text,
             BigInt.from(int.parse(transferAmountController.text)), ethClient!);
         Navigator.pop(context);
       },
