@@ -109,6 +109,6 @@
         2. Sachin Shekhawat
         3. Abhinav Kanogia
 
-                    INSTITUTE : Indian Institute of Technology (Indian School of Mines) Dhanbaad.
+                    INSTITUTE : Indian Institute of Technology (Indian School of Mines) Dhanbad.
 
 
