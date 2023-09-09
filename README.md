@@ -4,6 +4,16 @@
 
                     PROBLEM STATEMENT : Blockchain-Based :: Loyalty and Rewards Program using Fungible Tokens
 
+                    **Team-Details :**
+
+                                                      Team-Name : Vortex
+    
+                          1. Satwik Mohan (Leader)
+                          2. Sachin Shekhawat
+                          3. Abhinav Kanogia
+
+                    INSTITUTE : Indian Institute of Technology (Indian School of Mines) Dhanbad.
+
 
   The objective is to leverage the advantages of blockchain technology to enhance security, transparency, and user engagement in the loyalty and rewards program.
   
@@ -100,15 +110,4 @@
         (a) The BlockChain is written in Solidity programming language using Remix-Ethereum IDE and Deployed using the INFURA-URL.
         (b) The Web-Application is build using the Flutter-SDK which uses Dart programming language.
         (c) The Ethereum Wallet is maid on Meta-Mask which uses Sipolia-ETH test Ethers.
-
-14. **Team-Details :**
-
-                                         Team-Name : Vortex
-    
-        1. Satwik Mohan (Leader)
-        2. Sachin Shekhawat
-        3. Abhinav Kanogia
-
-                    INSTITUTE : Indian Institute of Technology (Indian School of Mines) Dhanbad.
-
 
