@@ -4,9 +4,7 @@
 
                     PROBLEM STATEMENT : Blockchain-Based :: Loyalty and Rewards Program using Fungible Tokens
 
-                    **Team-Details :**
-
-                                                      Team-Name : Vortex
+                    Team-Details :
     
                           1. Satwik Mohan (Leader)
                           2. Sachin Shekhawat
